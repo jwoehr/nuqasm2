@@ -3,6 +3,16 @@ New qasm2 translator : qasm2 to Python dict form AST
 
 Based on [Open Quantum Assembly Language](https://arxiv.org/pdf/1707.03429.pdf)
 
+Translates QASM2 source into a Python dictionary.
+* Filepath, datetime, and full source recorded for entire qasm program.
+* The `ast` key is the entire program and is a list of element dictionaries, one per element of the program.
+  * Within each line dict there are keys and values for
+    * Line number
+    * Original source
+    * Element type
+    * Parameter values
+    * Any other approriate translation elements
+
 _Lines are artificially split here for display in the example below._
 
 ```
