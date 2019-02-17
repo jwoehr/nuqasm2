@@ -302,11 +302,12 @@ class QasmTranslator():
             line = line.strip()
 
             if parsing_gate:
+                print(str(i) + ': ' + line)  # debug
                 if not seen_open_curly:
                     x = re.search(r".*\{.*", line)
                     if not x:
-                        raise Qasm_Incomplete_Gate(i, gate_start_line,
-                                                   gate_start_linenum)
+                        raise Qasm_Gate_Missing_Open_Curly(i, gate_start_line,
+                                                           gate_start_linenum)
                     else:
                         seen_open_curly = True
                         gate_def = gate_def + line + ' '
@@ -365,7 +366,7 @@ class QasmTranslator():
                 gate_start_line = line
                 gate_start_linenum = i
                 gate_def = line + ' '
-                x = re.search(r".*\{..*", line)
+                x = re.search(r".*\{.*", line)
                 if x:
                     seen_open_curly = True
                     x = re.search(r".*\}.*", line)
@@ -376,6 +377,7 @@ class QasmTranslator():
                         gate_start_line = None
                         gate_start_linenum = None
                         seen_open_curly = False
+                i = i + 1
                 continue
 
             elif astType == ASTType.OP:
@@ -435,6 +437,25 @@ class Qasm_Incomplete_Gate(Qasm_Error):
         super(Qasm_Incomplete_Gate, self).__init__(linenum, line)
         self.start_linenum = start_linenum
         self.message = "Gate definition incomplete"
+        self.errcode = 40
+
+    def errpacket(self):
+        ex = {'message': self.message,
+              'linenum': self.linenum,
+              'line': self.line,
+              'start_linenum': self.start_linenum,
+              'errcode': self.errcode
+              }
+        return ex
+
+
+class Qasm_Gate_Missing_Open_Curly(Qasm_Error):
+    """Gate definition incomplete"""
+
+    def __init__(self, linenum, line, start_linenum):
+        super(Qasm_Gate_Missing_Open_Curly, self).__init__(linenum, line)
+        self.start_linenum = start_linenum
+        self.message = "Gate definition missing open curly brace"
         self.errcode = 40
 
     def errpacket(self):

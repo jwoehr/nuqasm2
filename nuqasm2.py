@@ -10,7 +10,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
 """
 from qasmast import (QasmTranslator, Qasm_Declaration_Absent_Exception,
-                     Qasm_Unknown_Element, Qasm_Incomplete_Gate)
+                     Qasm_Unknown_Element, Qasm_Gate_Missing_Open_Curly,
+                     Qasm_Incomplete_Gate)
 import argparse
 import sys
 import datetime
@@ -78,6 +79,8 @@ for filepath in args.filepaths:
     except Qasm_Unknown_Element as ex:
         handle_error(ex, filepath)
     except Qasm_Incomplete_Gate as ex:
+        handle_error(ex, filepath)
+    except Qasm_Gate_Missing_Open_Curly as ex:
         handle_error(ex, filepath)
 
     pp.pprint(qt.get_translation())
