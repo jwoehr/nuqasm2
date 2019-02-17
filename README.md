@@ -12,7 +12,10 @@ Translates QASM2 source into a Python dictionary.
     * Element type
     * Parameter values
     * Any other appropriate translation elements
-* Does not currently handle `gate {}` definitions.
+
+* This is a proof of concept.
+* The AST is intended to illustrate and suggest more than to prescribe.
+* Issues welcome including comments or suggestions.
 
 ```
 $ cat yiqing.qasm
