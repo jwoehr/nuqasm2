@@ -14,8 +14,8 @@ Translates QASM2 source into a Python dictionary.
     * Any other appropriate translation elements
 
 * This is a proof of concept.
-* The AST is intended to illustrate and suggest more than to prescribe.
-* Issues welcome including comments or suggestions.
+  * The AST is intended to illustrate more than to prescribe.
+  * Issues welcome, including comments and suggestions.
 
 ```
 $ cat yiqing.qasm
