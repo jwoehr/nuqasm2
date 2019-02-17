@@ -14,6 +14,7 @@ import argparse
 import sys
 import datetime
 import time
+import pprint
 
 description = """Implement qasm2 translation to python data structures
 Working from _Open Quantum Assembly Language_
@@ -56,9 +57,10 @@ for filepath in args.filepaths:
     for line in f:
         qasmsourcelines.append(line.strip())
     qt = QasmTranslator(qasmsourcelines, filepath=filepath,
-                         datetime=datetime.datetime.now().isoformat())
+                        datetime=datetime.datetime.now().isoformat())
     qt.translate()
-    fout.write(str(qt.get_translation()) + '\n')
+    pp = pprint.PrettyPrinter(indent=4, stream=fout)
+    pp.pprint(qt.get_translation())
 
 if fout is not sys.stdout:
     fout.close()

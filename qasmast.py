@@ -55,6 +55,7 @@ class ASTType(Enum):
             return cls.OP
         return cls.UNKNOWN
 
+
 class ASTElement():
     """
     ASTElement
@@ -63,6 +64,7 @@ class ASTElement():
     linenum is source array line number
     source is source code
     """
+
     def __init__(self, linenum, ast_type, source):
         self.linenum = linenum
         self.ast_type = ast_type
@@ -71,14 +73,18 @@ class ASTElement():
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type, 'source': self.source}
 
+
 class ASTElementUnknown(ASTElement):
     """
     ASTElementUnknown
     An unknown ASTElement, unimplemented or error
     Knows linenum, ast_type, source
     """
+
     def __init__(self, linenum, source):
-        super(ASTElementUnknown, self).__init__(linenum, ASTType.UNKNOWN, source)
+        super(ASTElementUnknown, self).__init__(
+            linenum, ASTType.UNKNOWN, source)
+
 
 class ASTElementComment(ASTElement):
     """
@@ -86,8 +92,11 @@ class ASTElementComment(ASTElement):
     A programmer comment element
     Knows linenum, ast_type, source
     """
+
     def __init__(self, linenum, source):
-        super(ASTElementComment, self).__init__(linenum, ASTType.COMMENT, source)
+        super(ASTElementComment, self).__init__(
+            linenum, ASTType.COMMENT, source)
+
 
 class ASTElementDeclarationQasm2_0(ASTElement):
     """
@@ -95,8 +104,11 @@ class ASTElementDeclarationQasm2_0(ASTElement):
     Obligatory declaration
     Knows linenum, ast_type, source
     """
+
     def __init__(self, linenum, source):
-        super(ASTElementDeclarationQasm2_0, self).__init__(linenum, ASTType.DECLARATION_QASM_2_0, source)
+        super(ASTElementDeclarationQasm2_0, self).__init__(
+            linenum, ASTType.DECLARATION_QASM_2_0, source)
+
 
 class ASTElementInclude(ASTElement):
     """
@@ -104,14 +116,17 @@ class ASTElementInclude(ASTElement):
     A programmer comment element
     Knows linenum, ast_type, source, include
     """
+
     def __init__(self, linenum, source):
-        super(ASTElementInclude, self).__init__(linenum, ASTType.INCLUDE, source)
+        super(ASTElementInclude, self).__init__(
+            linenum, ASTType.INCLUDE, source)
         x = re.search(r".*\"(\S+)\"\s*;", source)
         self.include = x.group(1)
 
     def out(self):
-         return {'linenum': self.linenum, 'type': self.ast_type,
-        'source': self.source, 'include': self.include}
+        return {'linenum': self.linenum, 'type': self.ast_type,
+                'source': self.source, 'include': self.include}
+
 
 class ASTElementQReg(ASTElement):
     """
@@ -119,6 +134,7 @@ class ASTElementQReg(ASTElement):
     A QReg declaration
     Knows linenum, ast_type, source, qreg_name, qreg_num
     """
+
     def __init__(self, linenum, source):
         super(ASTElementQReg, self).__init__(linenum, ASTType.QREG, source)
         x = re.match(r".*(\S+)\[(\d+)\].*", self.source)
@@ -127,7 +143,8 @@ class ASTElementQReg(ASTElement):
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-        'source': self.source, 'qreg_name': self.qreg_name, 'qreg_num': self.qreg_num}
+                'source': self.source, 'qreg_name': self.qreg_name, 'qreg_num': self.qreg_num}
+
 
 class ASTElementCReg(ASTElement):
     """
@@ -135,6 +152,7 @@ class ASTElementCReg(ASTElement):
     A CReg declaration
     Knows linenum, ast_type, source, creg_name, creg_num
     """
+
     def __init__(self, linenum, source):
         super(ASTElementCReg, self).__init__(linenum, ASTType.CREG, source)
         x = re.match(r".*(\S+)\[(\d+)\].*", self.source)
@@ -143,7 +161,8 @@ class ASTElementCReg(ASTElement):
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-        'source': self.source, 'creg_name': self.creg_name, 'creg_num': self.creg_num}
+                'source': self.source, 'creg_name': self.creg_name, 'creg_num': self.creg_num}
+
 
 class ASTElementMeasure(ASTElement):
     """
@@ -151,15 +170,18 @@ class ASTElementMeasure(ASTElement):
     A measurement
     Knows linenum, ast_type, source, source_reg, target_reg
     """
+
     def __init__(self, linenum, source):
-        super(ASTElementMeasure, self).__init__(linenum, ASTType.MEASURE, source)
+        super(ASTElementMeasure, self).__init__(
+            linenum, ASTType.MEASURE, source)
         x = re.match(r"^\s*measure\s+(\S+)\s+\-\>\s+(\S+)\s*;", self.source)
         self.source_reg = x.group(1)
         self.target_reg = x.group(2)
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-        'source': self.source, 'source_reg': self.source_reg, 'target_reg': self.target_reg}
+                'source': self.source, 'source_reg': self.source_reg, 'target_reg': self.target_reg}
+
 
 class ASTElementBarrier(ASTElement):
     """
@@ -167,14 +189,17 @@ class ASTElementBarrier(ASTElement):
     A barrier
     Knows linenum, ast_type, source, reg_list
     """
+
     def __init__(self, linenum, source):
-        super(ASTElementBarrier, self).__init__(linenum, ASTType.BARRIER, source)
+        super(ASTElementBarrier, self).__init__(
+            linenum, ASTType.BARRIER, source)
         x = re.findall(r"\S+\[\d+\]", self.source)
         self.reg_list = x[0].split(',')
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-        'source': self.source, 'reg_list': self.reg_list}
+                'source': self.source, 'reg_list': self.reg_list}
+
 
 class ASTElementOp(ASTElement):
     """
@@ -182,6 +207,7 @@ class ASTElementOp(ASTElement):
     An operator
     Knows linenum, ast_type, source, op, reg_list
     """
+
     def __init__(self, linenum, source):
         super(ASTElementOp, self).__init__(linenum, ASTType.OP, source)
         x = re.match(r"^\s*(\S+)\s+.*", self.source)
@@ -191,13 +217,15 @@ class ASTElementOp(ASTElement):
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-        'source': self.source, 'op': self.op, 'reg_list': self.reg_list}
+                'source': self.source, 'op': self.op, 'reg_list': self.reg_list}
+
 
 class QasmTranslator():
 
     def __init__(self, qasmsourcelines, filepath=None, datetime=None):
-        self.qasmsourcelines=qasmsourcelines
-        self.translation={'filepath':filepath, 'datetime':datetime, 'source':qasmsourcelines, 'ast': [] }
+        self.qasmsourcelines = qasmsourcelines
+        self.translation = {
+            'filepath': filepath, 'datetime': datetime, 'source': qasmsourcelines, 'ast': []}
 
     def get_filepath(self):
         return self.translation['filepath']
@@ -231,7 +259,7 @@ class QasmTranslator():
 
     def translate(self):
         seen_noncomment = False
-        i=1
+        i = 1
         for line in self.qasmsourcelines:
             line = line.strip()
             astElement = ASTElementUnknown(i, line)
@@ -262,14 +290,16 @@ class QasmTranslator():
             elif astType == ASTType.OP:
                 astElement = ASTElementOp(i, line)
             self.append_ast(astElement.out())
-            i=i+1
+            i = i + 1
 
     def get_translation(self):
         return self.translation
 
+
 class Qasm_Error(Exception):
     """Base class for Qasm exceptions"""
     pass
+
 
 class Qasm_Declaration_Absent_Exception(Qasm_Error):
     """QASM2.0 Declaration not first non-blank non-comment line"""
