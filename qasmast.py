@@ -20,20 +20,27 @@ class ASTType(Enum):
     CREG = 3
     BLANK = 1000
     DECLARATION_QASM_2_0 = 2000
+    INCLUDE = 3000
 
     @classmethod
-    def astType(cls, txt):
-        txt.strip()
-        if txt == '':
+    def astType(cls, source):
+        if source == '':
             return cls.BLANK
-        if txt == "OPENQASM 2.0;":
+        if source == "OPENQASM 2.0;":
             return cls.DECLARATION_QASM_2_0
-        x = re.search(r"^\s*//", txt)
+        x = re.search(r"^\s*//", source)
         if x:
             return cls.COMMENT
-        x = re.search(r"^\s*qreg\s+\S*.*\[\d+\]\s*;", txt)
+        x = re.search(r"^\s*include\s+\"\S+\"\s*;", source)
+        if x:
+            return cls.INCLUDE
+        x = re.search(r"^\s*qreg\s+\S*\[\d+\]\s*;", source)
         if x:
             return cls.QREG
+        x = re.search(r"^\s*creg\s+\S*\[\d+\]\s*;", source)
+        if x:
+            return cls.CREG
+
         return cls.UNKNOWN
 
 class ASTElement():
@@ -69,7 +76,7 @@ class ASTElementComment(ASTElement):
     """
     def __init__(self, linenum, source):
         super(ASTElementComment, self).__init__(linenum, ASTType.COMMENT, source)
-        
+
 class ASTElementDeclarationQasm2_0(ASTElement):
     """
     ASTElementDeclarationQasm2_0
@@ -78,7 +85,22 @@ class ASTElementDeclarationQasm2_0(ASTElement):
     """
     def __init__(self, linenum, source):
         super(ASTElementDeclarationQasm2_0, self).__init__(linenum, ASTType.DECLARATION_QASM_2_0, source)
-        
+
+class ASTElementInclude(ASTElement):
+    """
+    ASTElementInclude
+    A programmer comment element
+    Knows linenum, ast_type, source, include
+    """
+    def __init__(self, linenum, source):
+        super(ASTElementInclude, self).__init__(linenum, ASTType.INCLUDE, source)
+        x = re.search(r".*\"(\S+)\"\s*;", source)
+        self.include = x.group(1)
+
+    def out(self):
+         return {'linenum': self.linenum, 'type': self.ast_type,
+        'source': self.source, 'include': self.include}
+
 class ASTElementQReg(ASTElement):
     """
     ASTElementQReg
@@ -87,13 +109,29 @@ class ASTElementQReg(ASTElement):
     """
     def __init__(self, linenum, source):
         super(ASTElementQReg, self).__init__(linenum, ASTType.QREG, source)
-        x = re.search(r"\S\[\d+\]", source)
-        self.qreg_name = 'x'
-        self.qreg_num = 0
-        
+        x = re.match(r".*(\S+)\[(\d+)\].*", self.source)
+        self.qreg_name = x.group(1)
+        self.qreg_num = x.group(2)
+
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
         'source': self.source, 'qreg_name': self.qreg_name, 'qreg_num': self.qreg_num}
+
+class ASTElementCReg(ASTElement):
+    """
+    ASTElementCReg
+    A CReg declaration
+    Knows linenum, ast_type, source, creg_name, creg_num
+    """
+    def __init__(self, linenum, source):
+        super(ASTElementCReg, self).__init__(linenum, ASTType.CREG, source)
+        x = re.match(r".*(\S+)\[(\d+)\].*", self.source)
+        self.creg_name = x.group(1)
+        self.creg_num = x.group(2)
+
+    def out(self):
+        return {'linenum': self.linenum, 'type': self.ast_type,
+        'source': self.source, 'creg_name': self.creg_name, 'creg_num': self.creg_num}
 
 class QasmTranslator():
 
@@ -135,6 +173,7 @@ class QasmTranslator():
         seen_noncomment = False
         i=1
         for line in self.qasmsourcelines:
+            line = line.strip()
             astElement = ASTElementUnknown(i, line)
             astType = ASTType.astType(line)
             if astType == ASTType.BLANK:
@@ -144,14 +183,18 @@ class QasmTranslator():
                     seen_noncomment = True
                 else:
                     raise Qasm_Declaration_Absent_Exception()
-           
-            # Now step thru types           
+
+            # Now step thru types
             if astType == ASTType.COMMENT:
                 astElement = ASTElementComment(i, line)
             elif astType == ASTType.DECLARATION_QASM_2_0:
-            	astElement = ASTElementDeclarationQasm2_0(i, line)
+                astElement = ASTElementDeclarationQasm2_0(i, line)
+            if astType == ASTType.INCLUDE:
+                astElement = ASTElementInclude(i, line)
             elif astType == ASTType.QREG:
                 astElement = ASTElementQReg(i, line)
+            elif astType == ASTType.CREG:
+                astElement = ASTElementCReg(i, line)
             self.append_ast(astElement.out())
             i=i+1
 
