@@ -13,6 +13,34 @@ from enum import Enum
 import re
 
 
+class QTRegEx():
+    COMMENT = re.compile(r"^\s*//")
+    INCLUDE = re.compile(r"^\s*include\s+\"\S+\"\s*;")
+    QREG = re.compile(r"^\s*qreg\s+\S*\[\d+\]\s*;")
+    CREG = re.compile(r"^\s*creg\s+\S*\[\d+\]\s*;")
+    MEASURE = re.compile(r"^\s*measure\s+\S+\s+\-\>\s+\S+\s*;")
+    BARRIER = re.compile(r"^\s*barrier\s+.*;")
+    GATE = re.compile(r"^\s*gate\s+.*")
+    OP = re.compile(r"^\s*\S+\s+\S+\[\d+\]\s*;")
+
+    INCLUDE_TARGET = re.compile(r".*\"(\S+)\"\s*;")
+    REG_DECL = re.compile(r".*(\S+)\[(\d+)\].*")
+    MEASURE_DECL = re.compile(r"^\s*measure\s+(\S+)\s+\-\>\s+(\S+)\s*;")
+    BARRIER_DECL = re.compile(r"\S+\[\d+\]")
+    OP_AND_ARGS = re.compile(r"^\s*(\S+)\s+.*")
+    OP_PARAM_LIST = re.compile(r"(\S+)\((.*)\)")
+    OP_REG_LIST = re.compile(r"\S+\[\d+\]")
+
+    START_CURLY = re.compile(r".*\{.*")
+    END_CURLY = re.compile(r".*\}.*")
+    GATE_DECL = re.compile(r"gate\s+(\S+)\s+(\S*).*")
+    GATE_OPS = re.compile(r"gate\s+.*\{(.*)\}")
+    GATE_OPS_LIST = re.compile(r"\S+\s+\S+;")
+    GATE_OP = re.compile(r"(\w+).*")
+    GATE_OP_PARAMS = re.compile(r"\S+\((.*)\).*")
+    GATE_OP_REGS = re.compile(r".*\s+(\S+);")
+
+
 class ASTType(Enum):
     UNKNOWN = 0
     COMMENT = 100
@@ -32,28 +60,28 @@ class ASTType(Enum):
             return cls.BLANK
         if source == "OPENQASM 2.0;":
             return cls.DECLARATION_QASM_2_0
-        x = re.search(r"^\s*//", source)
+        x = QTRegEx.COMMENT.search(source)
         if x:
             return cls.COMMENT
-        x = re.search(r"^\s*include\s+\"\S+\"\s*;", source)
+        x = QTRegEx.INCLUDE.search(source)
         if x:
             return cls.INCLUDE
-        x = re.search(r"^\s*qreg\s+\S*\[\d+\]\s*;", source)
+        x = QTRegEx.QREG.search(source)
         if x:
             return cls.QREG
-        x = re.search(r"^\s*creg\s+\S*\[\d+\]\s*;", source)
+        x = QTRegEx.CREG.search(source)
         if x:
             return cls.CREG
-        x = re.search(r"^\s*measure\s+\S+\s+\-\>\s+\S+\s*;", source)
+        x = QTRegEx.MEASURE.search(source)
         if x:
             return cls.MEASURE
-        x = re.search(r"^\s*barrier\s+.*;", source)
+        x = QTRegEx.BARRIER.search(source)
         if x:
             return cls.BARRIER
-        x = re.search(r"^\s*gate\s+.*", source)
+        x = QTRegEx.GATE.search(source)
         if x:
             return cls.GATE
-        x = re.search(r"^\s*\S+\s+\S+\[\d+\]\s*;", source)
+        x = QTRegEx.OP.search(source)
         if x:
             return cls.OP
         return cls.UNKNOWN
@@ -123,7 +151,7 @@ class ASTElementInclude(ASTElement):
     def __init__(self, linenum, source):
         super(ASTElementInclude, self).__init__(
             linenum, ASTType.INCLUDE, source)
-        x = re.search(r".*\"(\S+)\"\s*;", source)
+        x = QTRegEx.INCLUDE_TARGET.search(source)
         self.include = x.group(1)
 
     def out(self):
@@ -140,7 +168,7 @@ class ASTElementQReg(ASTElement):
 
     def __init__(self, linenum, source):
         super(ASTElementQReg, self).__init__(linenum, ASTType.QREG, source)
-        x = re.match(r".*(\S+)\[(\d+)\].*", self.source)
+        x = QTRegEx.REG_DECL.match(self.source)
         self.qreg_name = x.group(1)
         self.qreg_num = x.group(2)
 
@@ -158,7 +186,7 @@ class ASTElementCReg(ASTElement):
 
     def __init__(self, linenum, source):
         super(ASTElementCReg, self).__init__(linenum, ASTType.CREG, source)
-        x = re.match(r".*(\S+)\[(\d+)\].*", self.source)
+        x = QTRegEx.REG_DECL.match(self.source)
         self.creg_name = x.group(1)
         self.creg_num = x.group(2)
 
@@ -177,7 +205,7 @@ class ASTElementMeasure(ASTElement):
     def __init__(self, linenum, source):
         super(ASTElementMeasure, self).__init__(
             linenum, ASTType.MEASURE, source)
-        x = re.match(r"^\s*measure\s+(\S+)\s+\-\>\s+(\S+)\s*;", self.source)
+        x = QTRegEx.MEASURE_DECL.match(self.source)
         self.source_reg = x.group(1)
         self.target_reg = x.group(2)
 
@@ -196,7 +224,7 @@ class ASTElementBarrier(ASTElement):
     def __init__(self, linenum, source):
         super(ASTElementBarrier, self).__init__(
             linenum, ASTType.BARRIER, source)
-        x = re.findall(r"\S+\[\d+\]", self.source)
+        x = QTRegEx.BARRIER_DECL.findall(self.source)
         self.reg_list = x[0].split(',')
 
     def out(self):
@@ -213,9 +241,9 @@ class ASTElementOp(ASTElement):
 
     def __init__(self, linenum, source):
         super(ASTElementOp, self).__init__(linenum, ASTType.OP, source)
-        x = re.match(r"^\s*(\S+)\s+.*", self.source)
+        x = QTRegEx.OP_AND_ARGS.match(self.source)
         op_and_args = x.group(1)
-        x = re.match(r"(\S+)\((.*)\)", op_and_args)
+        x = QTRegEx.OP_PARAM_LIST.match(op_and_args)
 
         self.param_list = None
         if x:
@@ -224,7 +252,7 @@ class ASTElementOp(ASTElement):
         else:
             self.op = op_and_args
 
-        x = re.findall(r"\S+\[\d+\]", self.source)
+        x = QTRegEx.OP_REG_LIST.findall(self.source)
         self.reg_list = x[0].split(',')
 
     def out(self):
@@ -285,7 +313,33 @@ class QasmTranslator():
 
     def user_gate_definition(self, linenum, txt):
         txt = txt.strip()
-        gate = {'source': txt, 'linenum': linenum}
+        gate_decl = QTRegEx.GATE_DECL.match(txt)
+        gate_name = gate_decl.group(1)
+        gate_params = gate_decl.group(2)
+        gate_param_list = gate_params.split(',')
+        gate_ops = QTRegEx.GATE_OPS.match(txt)
+        gate_ops_raw_list = QTRegEx.GATE_OPS_LIST.findall(gate_ops.group(1))
+        gate_ops_list = []
+        for op_raw in gate_ops_raw_list:
+            op_raw = op_raw.strip()
+            op = QTRegEx.GATE_OP.match(op_raw).group(1)
+            op_params = QTRegEx.GATE_OP_PARAMS.match(op_raw)
+            if op_params:
+                op_param_list = op_params.group(1).split(',')
+            else:
+                op_param_list = None
+            op_regs = QTRegEx.GATE_OP_REGS.match(op_raw)
+            if op_regs:
+                op_reg_list = op_regs.group(1).split(',')
+            else:
+                op_reg_list = None
+            gate_ops_list.append({'op': op,
+                                  'op_param_list': op_param_list,
+                                  'op_reg_list': op_reg_list})
+        gate = {'source': txt, 'linenum': linenum, 'gate_name': gate_name,
+                'gate_param_list': gate_param_list,
+                'gate_ops_raw_list': gate_ops_raw_list,
+                'gate_ops_list': gate_ops_list}
         self.append_user_gate(gate)
 
     def translate(self):
@@ -302,16 +356,15 @@ class QasmTranslator():
             line = line.strip()
 
             if parsing_gate:
-                print(str(i) + ': ' + line)  # debug
                 if not seen_open_curly:
-                    x = re.search(r".*\{.*", line)
+                    x = QTRegEx.START_CURLY.search(line)
                     if not x:
                         raise Qasm_Gate_Missing_Open_Curly(i, gate_start_line,
                                                            gate_start_linenum)
                     else:
                         seen_open_curly = True
                         gate_def = gate_def + line + ' '
-                        x = re.search(r".*\}.*", line)
+                        x = QTRegEx.END_CURLY.search(line)
                         if x:
                             self.user_gate_definition(
                                 gate_start_linenum, gate_def)
@@ -322,7 +375,7 @@ class QasmTranslator():
                             seen_open_curly = False
                 else:
                     gate_def = gate_def + line + ' '
-                    x = re.search(r".*\}.*", line)
+                    x = QTRegEx.END_CURLY.search(line)
                     if x:
                         self.user_gate_definition(gate_start_linenum, gate_def)
                         parsing_gate = False
@@ -366,10 +419,10 @@ class QasmTranslator():
                 gate_start_line = line
                 gate_start_linenum = i
                 gate_def = line + ' '
-                x = re.search(r".*\{.*", line)
+                x = QTRegEx.START_CURLY.search(line)
                 if x:
                     seen_open_curly = True
-                    x = re.search(r".*\}.*", line)
+                    x = QTRegEx.END_CURLY.search(line)
                     if x:
                         self.user_gate_definition(gate_start_linenum, gate_def)
                         parsing_gate = False
