@@ -239,7 +239,9 @@ class QasmTranslator():
                  no_unknown=False):
         self.qasmsourcelines = qasmsourcelines
         self.translation = {
-            'filepath': filepath, 'datetime': datetime, 'source': qasmsourcelines, 'ast': []}
+            'filepath': filepath, 'datetime': datetime,
+            'source': qasmsourcelines, 'user_gates': [],
+            'ast': []}
         self.no_unknown = no_unknown
 
     def get_filepath(self):
@@ -272,12 +274,65 @@ class QasmTranslator():
     def append_ast(self, ast):
         self.translation['ast'].append(ast)
 
+    def get_user_gates(self):
+        return self.translation['user_gates']
+
+    def get_nth_user_gate(self, index):
+        return self.get_user_gates()[index]
+
+    def append_user_gate(self, user_gate):
+        self.translation['user_gates'].append(user_gate)
+
+    def user_gate_definition(self, linenum, txt):
+        txt = txt.strip()
+        gate = {'source': txt, 'linenum': linenum}
+        self.append_user_gate(gate)
+
     def translate(self):
         seen_noncomment = False
         parsing_gate = False
+        gate_def = ''
+        gate_start_line = None
+        gate_start_linenum = None
+        seen_open_curly = False
         i = 1
         for line in self.qasmsourcelines:
+
+            astElement = None
             line = line.strip()
+
+            if parsing_gate:
+                if not seen_open_curly:
+                    x = re.search(r".*\{.*", line)
+                    if not x:
+                        raise Qasm_Incomplete_Gate(i, gate_start_line,
+                                                   gate_start_linenum)
+                    else:
+                        seen_open_curly = True
+                        gate_def = gate_def + line + ' '
+                        x = re.search(r".*\}.*", line)
+                        if x:
+                            self.user_gate_definition(
+                                gate_start_linenum, gate_def)
+                            parsing_gate = False
+                            gate_def = ''
+                            gate_start_line = None
+                            gate_start_linenum = None
+                            seen_open_curly = False
+                else:
+                    gate_def = gate_def + line + ' '
+                    x = re.search(r".*\}.*", line)
+                    if x:
+                        self.user_gate_definition(gate_start_linenum, gate_def)
+                        parsing_gate = False
+                        gate_def = ''
+                        gate_start_line = None
+                        gate_start_linenum = None
+                        seen_open_curly = False
+
+                i = i + 1
+                continue
+
             astElement = ASTElementUnknown(i, line)
             astType = ASTType.astType(line)
             if astType == ASTType.BLANK:
@@ -304,10 +359,25 @@ class QasmTranslator():
                 astElement = ASTElementMeasure(i, line)
             elif astType == ASTType.BARRIER:
                 astElement = ASTElementBarrier(i, line)
+
             elif astType == ASTType.GATE:
                 parsing_gate = True
                 gate_start_line = line
                 gate_start_linenum = i
+                gate_def = line + ' '
+                x = re.search(r".*\{..*", line)
+                if x:
+                    seen_open_curly = True
+                    x = re.search(r".*\}.*", line)
+                    if x:
+                        self.user_gate_definition(gate_start_linenum, gate_def)
+                        parsing_gate = False
+                        gate_def = ''
+                        gate_start_line = None
+                        gate_start_linenum = None
+                        seen_open_curly = False
+                continue
+
             elif astType == ASTType.OP:
                 astElement = ASTElementOp(i, line)
             if type(astElement) is ASTElementUnknown and self.no_unknown:

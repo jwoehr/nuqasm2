@@ -12,6 +12,8 @@ h q[0];
 h q[1];
 h q[2];
 u(pi/2,a,b) q[0];
+// Pauli gate: bit and phase flip
+gate y a { u3(pi,pi/2,pi/2) a; }
 barrier q[0],q[1],q[2];
 sdg q[0];
 sdg q[1];
