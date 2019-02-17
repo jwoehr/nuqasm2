@@ -15,9 +15,13 @@ import re
 
 class ASTType(Enum):
     UNKNOWN = 0
-    COMMENT = 1
-    QREG = 2
-    CREG = 3
+    COMMENT = 100
+    QREG = 20
+    CREG = 30
+    MEASURE = 40
+    BARRIER = 50
+    GATE = 60
+    OP = 70
     BLANK = 1000
     DECLARATION_QASM_2_0 = 2000
     INCLUDE = 3000
@@ -40,7 +44,12 @@ class ASTType(Enum):
         x = re.search(r"^\s*creg\s+\S*\[\d+\]\s*;", source)
         if x:
             return cls.CREG
-
+        x = re.search(r"^\s*measure\s+\S+\s+\-\>\s+\S+\s*;", source)
+        if x:
+            return cls.MEASURE
+        x = re.search(r"^\s*barrier\s+.*;", source)
+        if x:
+            return cls.BARRIER
         return cls.UNKNOWN
 
 class ASTElement():
@@ -133,6 +142,38 @@ class ASTElementCReg(ASTElement):
         return {'linenum': self.linenum, 'type': self.ast_type,
         'source': self.source, 'creg_name': self.creg_name, 'creg_num': self.creg_num}
 
+class ASTElementMeasure(ASTElement):
+    """
+    ASTElementMeasure
+    A measurement
+    Knows linenum, ast_type, source, source_reg, target_reg
+    """
+    def __init__(self, linenum, source):
+        super(ASTElementMeasure, self).__init__(linenum, ASTType.MEASURE, source)
+        x = re.match(r"^\s*measure\s+(\S+)\s+\-\>\s+(\S+)\s*;", self.source)
+        self.source_reg = x.group(1)
+        self.target_reg = x.group(2)
+
+    def out(self):
+        return {'linenum': self.linenum, 'type': self.ast_type,
+        'source': self.source, 'source_reg': self.source_reg, 'target_reg': self.target_reg}
+
+class ASTElementBarrier(ASTElement):
+    """
+    ASTElementBarrier
+    A barrier
+    Knows linenum, ast_type, source, reg_list
+    """
+    def __init__(self, linenum, source):
+        super(ASTElementBarrier, self).__init__(linenum, ASTType.BARRIER, source)
+        x = re.findall(r"\S+\[\d+\]", self.source)
+        self.reg_list = x[0].split(',')
+
+    def out(self):
+        return {'linenum': self.linenum, 'type': self.ast_type,
+        'source': self.source, 'reg_list': self.reg_list}
+
+
 class QasmTranslator():
 
     def __init__(self, qasmsourcelines, filepath=None, datetime=None):
@@ -195,6 +236,10 @@ class QasmTranslator():
                 astElement = ASTElementQReg(i, line)
             elif astType == ASTType.CREG:
                 astElement = ASTElementCReg(i, line)
+            elif astType == ASTType.MEASURE:
+                astElement = ASTElementMeasure(i, line)
+            elif astType == ASTType.BARRIER:
+                astElement = ASTElementBarrier(i, line)
             self.append_ast(astElement.out())
             i=i+1
 
