@@ -5,14 +5,18 @@ Based on [Open Quantum Assembly Language](https://arxiv.org/pdf/1707.03429.pdf)
 
 Translates QASM2 source into a Python dictionary.
 * Filepath, datetime, and full source recorded for entire qasm program.
-* The `ast` key is the entire program and is a list of element dictionaries, one per element of the program.
-  * Within each line dict there are keys and values for
+* The `user_gates` key is the list definitions (if any) of user-defined gates.
+* The `ast` key is the program and is a list of element dictionaries, one per element of the program.
+  * Within each dict in `ast` there are keys and values for
     * Line number
     * Original source
     * Element type
     * Parameter values
     * Any other appropriate translation elements
-* Does not currently handle `gate {}` definitions.
+
+* This is a proof of concept.
+  * The AST is intended to illustrate more than to prescribe.
+  * Issues welcome, including comments and suggestions.
 
 ```
 $ cat yiqing.qasm
