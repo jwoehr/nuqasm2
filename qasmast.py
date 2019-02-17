@@ -50,6 +50,9 @@ class ASTType(Enum):
         x = re.search(r"^\s*barrier\s+.*;", source)
         if x:
             return cls.BARRIER
+        x = re.search(r"^\s*gate\s+.*", source)
+        if x:
+            return cls.GATE
         x = re.search(r"^\s*\S+\s+\S+\[\d+\]\s*;", source)
         if x:
             return cls.OP
@@ -205,19 +208,29 @@ class ASTElementOp(ASTElement):
     """
     ASTElementOp
     An operator
-    Knows linenum, ast_type, source, op, reg_list
+    Knows linenum, ast_type, source, op, param_list, reg_list
     """
 
     def __init__(self, linenum, source):
         super(ASTElementOp, self).__init__(linenum, ASTType.OP, source)
         x = re.match(r"^\s*(\S+)\s+.*", self.source)
-        self.op = x.group(1)
+        op_and_args = x.group(1)
+        x = re.match(r"(\S+)\((.*)\)", op_and_args)
+
+        self.param_list = None
+        if x:
+            self.op = x.group(1)
+            self.param_list = x.group(2).split(',')
+        else:
+            self.op = op_and_args
+
         x = re.findall(r"\S+\[\d+\]", self.source)
         self.reg_list = x[0].split(',')
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-                'source': self.source, 'op': self.op, 'reg_list': self.reg_list}
+                'source': self.source, 'op': self.op,
+                'param_list': self.param_list, 'reg_list': self.reg_list}
 
 
 class QasmTranslator():
@@ -261,6 +274,7 @@ class QasmTranslator():
 
     def translate(self):
         seen_noncomment = False
+        parsing_gate = False
         i = 1
         for line in self.qasmsourcelines:
             line = line.strip()
