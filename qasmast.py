@@ -265,6 +265,7 @@ class QasmTranslator():
             astElement = ASTElementUnknown(i, line)
             astType = ASTType.astType(line)
             if astType == ASTType.BLANK:
+                i = i + 1
                 continue
             if not seen_noncomment and astType != ASTType.COMMENT:
                 if astType == ASTType.DECLARATION_QASM_2_0:
