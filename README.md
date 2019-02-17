@@ -11,7 +11,7 @@ Translates QASM2 source into a Python dictionary.
     * Original source
     * Element type
     * Parameter values
-    * Any other approriate translation elements
+    * Any other appropriate translation elements
 * Does not currently handle `gate {}` definitions.
 
 ```
