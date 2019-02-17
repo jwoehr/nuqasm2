@@ -304,12 +304,19 @@ class QasmTranslator():
                 astElement = ASTElementMeasure(i, line)
             elif astType == ASTType.BARRIER:
                 astElement = ASTElementBarrier(i, line)
+            elif astType == ASTType.GATE:
+                parsing_gate = True
+                gate_start_line = line
+                gate_start_linenum = i
             elif astType == ASTType.OP:
                 astElement = ASTElementOp(i, line)
             if type(astElement) is ASTElementUnknown and self.no_unknown:
                 raise Qasm_Unknown_Element(i, line)
             self.append_ast(astElement.out())
             i = i + 1
+
+        if parsing_gate:
+            raise Qasm_Incomplete_Gate(i, gate_start_line, gate_start_linenum)
 
     def get_translation(self):
         return self.translation
@@ -349,3 +356,22 @@ class Qasm_Unknown_Element(Qasm_Error):
         super(Qasm_Unknown_Element, self).__init__(linenum, line)
         self.message = "Unknown element"
         self.errcode = 30
+
+
+class Qasm_Incomplete_Gate(Qasm_Error):
+    """Gate definition incomplete"""
+
+    def __init__(self, linenum, line, start_linenum):
+        super(Qasm_Incomplete_Gate, self).__init__(linenum, line)
+        self.start_linenum = start_linenum
+        self.message = "Gate definition incomplete"
+        self.errcode = 40
+
+    def errpacket(self):
+        ex = {'message': self.message,
+              'linenum': self.linenum,
+              'line': self.line,
+              'start_linenum': self.start_linenum,
+              'errcode': self.errcode
+              }
+        return ex
