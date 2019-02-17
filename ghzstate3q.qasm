@@ -1,4 +1,4 @@
-// Name of Experiment: 3Q GHZ State XYY-Measurement v1
+// Name of Experiment: 3Q GHZ State 
 
 OPENQASM 2.0;
 include "qelib1.inc";
