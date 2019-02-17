@@ -222,10 +222,12 @@ class ASTElementOp(ASTElement):
 
 class QasmTranslator():
 
-    def __init__(self, qasmsourcelines, filepath=None, datetime=None):
+    def __init__(self, qasmsourcelines, filepath=None, datetime=None,
+                 no_unknown=False):
         self.qasmsourcelines = qasmsourcelines
         self.translation = {
             'filepath': filepath, 'datetime': datetime, 'source': qasmsourcelines, 'ast': []}
+        self.no_unknown = no_unknown
 
     def get_filepath(self):
         return self.translation['filepath']
@@ -271,7 +273,7 @@ class QasmTranslator():
                 if astType == ASTType.DECLARATION_QASM_2_0:
                     seen_noncomment = True
                 else:
-                    raise Qasm_Declaration_Absent_Exception()
+                    raise Qasm_Declaration_Absent_Exception(i, line)
 
             # Now step thru types
             if astType == ASTType.COMMENT:
@@ -290,6 +292,8 @@ class QasmTranslator():
                 astElement = ASTElementBarrier(i, line)
             elif astType == ASTType.OP:
                 astElement = ASTElementOp(i, line)
+            if type(astElement) is ASTElementUnknown and self.no_unknown:
+                raise Qasm_Unknown_Element(i, line)
             self.append_ast(astElement.out())
             i = i + 1
 
@@ -299,9 +303,35 @@ class QasmTranslator():
 
 class Qasm_Error(Exception):
     """Base class for Qasm exceptions"""
-    pass
+
+    def __init__(self, linenum, line):
+        self.linenum = linenum
+        self.line = line
+        self.message = "Qasm_Error"
+        self.errcode = 10
+
+    def errpacket(self):
+        ex = {'message': self.message,
+              'linenum': self.linenum,
+              'line': self.line,
+              'errcode': self.errcode
+              }
+        return ex
 
 
 class Qasm_Declaration_Absent_Exception(Qasm_Error):
     """QASM2.0 Declaration not first non-blank non-comment line"""
-    pass
+
+    def __init__(self, linenum, line):
+        super(Qasm_Declaration_Absent_Exception, self).__init__(linenum, line)
+        self.message = "QASM2.0 Declaration not first non-blank non-comment line"
+        self.errcode = 20
+
+
+class Qasm_Unknown_Element(Qasm_Error):
+    """Unknown element"""
+
+    def __init__(self, linenum, line):
+        super(Qasm_Unknown_Element, self).__init__(linenum, line)
+        self.message = "Unknown element"
+        self.errcode = 30
