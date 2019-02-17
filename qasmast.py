@@ -50,6 +50,9 @@ class ASTType(Enum):
         x = re.search(r"^\s*barrier\s+.*;", source)
         if x:
             return cls.BARRIER
+        x = re.search(r"^\s*\S+\s+\S+\[\d+\]\s*;", source)
+        if x:
+            return cls.OP
         return cls.UNKNOWN
 
 class ASTElement():
@@ -173,6 +176,22 @@ class ASTElementBarrier(ASTElement):
         return {'linenum': self.linenum, 'type': self.ast_type,
         'source': self.source, 'reg_list': self.reg_list}
 
+class ASTElementOp(ASTElement):
+    """
+    ASTElementOp
+    An operator
+    Knows linenum, ast_type, source, op, reg_list
+    """
+    def __init__(self, linenum, source):
+        super(ASTElementOp, self).__init__(linenum, ASTType.OP, source)
+        x = re.match(r"^\s*(\S+)\s+.*", self.source)
+        self.op = x.group(1)
+        x = re.findall(r"\S+\[\d+\]", self.source)
+        self.reg_list = x[0].split(',')
+
+    def out(self):
+        return {'linenum': self.linenum, 'type': self.ast_type,
+        'source': self.source, 'op': self.op, 'reg_list': self.reg_list}
 
 class QasmTranslator():
 
@@ -240,6 +259,8 @@ class QasmTranslator():
                 astElement = ASTElementMeasure(i, line)
             elif astType == ASTType.BARRIER:
                 astElement = ASTElementBarrier(i, line)
+            elif astType == ASTType.OP:
+                astElement = ASTElementOp(i, line)
             self.append_ast(astElement.out())
             i=i+1
 
