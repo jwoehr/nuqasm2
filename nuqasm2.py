@@ -5,11 +5,11 @@ Working from _Open Quantum Assembly Language_
 https://arxiv.org/pdf/1707.03429.pdf
 jack j. woehr jwoehr@softwoehr.com po box 51 golden co 80402-0051
 Copyright 2019 Jack Woehr jwoehr@softwoehr.com PO Box 51, Golden, CO 80402-0051.
-BSD-3 license -- See LICENSE which you should have received with this code.
+Apache-2.0 license -- See LICENSE which you should have received with this code.
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
 """
-from qasmast import QasmTranslation
+from qasmast import QasmTranslator
 import argparse
 import sys
 import datetime
@@ -39,9 +39,11 @@ args = parser.parse_args()
 
 # Verbose script
 
+
 def verbosity(text, count):
     if args.verbose >= count:
         print(text)
+
 
 if args.outfile:
     fout = open(args.outfile, 'w')
@@ -53,7 +55,8 @@ for filepath in args.filepaths:
     qasmsourcelines = []
     for line in f:
         qasmsourcelines.append(line.strip())
-    qt = QasmTranslation(qasmsourcelines, filepath=filepath, datetime=datetime.datetime.now().isoformat())
+    qt = QasmTranslator(qasmsourcelines, filepath=filepath,
+                         datetime=datetime.datetime.now().isoformat())
     qt.translate()
     fout.write(str(qt.get_translation()) + '\n')
 
