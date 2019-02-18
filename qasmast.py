@@ -105,13 +105,15 @@ class ASTElement():
     source is source code
     """
 
-    def __init__(self, linenum, ast_type, source):
+    def __init__(self, linenum, ast_type, source, save_element_source=False):
         self.linenum = linenum
         self.ast_type = ast_type
         self.source = source
+        self.save_element_source = save_element_source
 
     def out(self):
-        return {'linenum': self.linenum, 'type': self.ast_type, 'source': self.source}
+        return {'linenum': self.linenum, 'type': self.ast_type,
+                'source': self.source if self.save_element_source else None}
 
 
 class ASTElementUnknown(ASTElement):
@@ -121,9 +123,9 @@ class ASTElementUnknown(ASTElement):
     Knows linenum, ast_type, source
     """
 
-    def __init__(self, linenum, source):
+    def __init__(self, linenum, source, save_element_source=False):
         super(ASTElementUnknown, self).__init__(
-            linenum, ASTType.UNKNOWN, source)
+            linenum, ASTType.UNKNOWN, source, save_element_source)
 
 
 class ASTElementComment(ASTElement):
@@ -133,9 +135,9 @@ class ASTElementComment(ASTElement):
     Knows linenum, ast_type, source
     """
 
-    def __init__(self, linenum, source):
+    def __init__(self, linenum, source, save_element_source=False):
         super(ASTElementComment, self).__init__(
-            linenum, ASTType.COMMENT, source)
+            linenum, ASTType.COMMENT, source, save_element_source)
 
 
 class ASTElementDeclarationQasm2_0(ASTElement):
@@ -145,9 +147,9 @@ class ASTElementDeclarationQasm2_0(ASTElement):
     Knows linenum, ast_type, source
     """
 
-    def __init__(self, linenum, source):
+    def __init__(self, linenum, source, save_element_source=False):
         super(ASTElementDeclarationQasm2_0, self).__init__(
-            linenum, ASTType.DECLARATION_QASM_2_0, source)
+            linenum, ASTType.DECLARATION_QASM_2_0, source, save_element_source)
 
 
 class ASTElementInclude(ASTElement):
@@ -157,15 +159,16 @@ class ASTElementInclude(ASTElement):
     Knows linenum, ast_type, source, include
     """
 
-    def __init__(self, linenum, source):
+    def __init__(self, linenum, source, save_element_source=False):
         super(ASTElementInclude, self).__init__(
-            linenum, ASTType.INCLUDE, source)
+            linenum, ASTType.INCLUDE, source, save_element_source)
         x = QTRegEx.INCLUDE_TARGET.search(source)
         self.include = x.group(1)
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-                'source': self.source, 'include': self.include}
+                'source': self.source if self.save_element_source else None,
+                'include': self.include}
 
 
 class ASTElementQReg(ASTElement):
@@ -175,15 +178,17 @@ class ASTElementQReg(ASTElement):
     Knows linenum, ast_type, source, qreg_name, qreg_num
     """
 
-    def __init__(self, linenum, source):
-        super(ASTElementQReg, self).__init__(linenum, ASTType.QREG, source)
+    def __init__(self, linenum, source, save_element_source=False):
+        super(ASTElementQReg, self).__init__(
+            linenum, ASTType.QREG, source, save_element_source)
         x = QTRegEx.REG_DECL.match(self.source)
         self.qreg_name = x.group(1)
         self.qreg_num = x.group(2)
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-                'source': self.source, 'qreg_name': self.qreg_name, 'qreg_num': self.qreg_num}
+                'source': self.source if self.save_element_source else None,
+                'qreg_name': self.qreg_name, 'qreg_num': self.qreg_num}
 
 
 class ASTElementCReg(ASTElement):
@@ -193,15 +198,17 @@ class ASTElementCReg(ASTElement):
     Knows linenum, ast_type, source, creg_name, creg_num
     """
 
-    def __init__(self, linenum, source):
-        super(ASTElementCReg, self).__init__(linenum, ASTType.CREG, source)
+    def __init__(self, linenum, source, save_element_source=False):
+        super(ASTElementCReg, self).__init__(
+            linenum, ASTType.CREG, source, save_element_source)
         x = QTRegEx.REG_DECL.match(self.source)
         self.creg_name = x.group(1)
         self.creg_num = x.group(2)
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-                'source': self.source, 'creg_name': self.creg_name, 'creg_num': self.creg_num}
+                'source': self.source if self.save_element_source else None,
+                'creg_name': self.creg_name, 'creg_num': self.creg_num}
 
 
 class ASTElementMeasure(ASTElement):
@@ -211,16 +218,17 @@ class ASTElementMeasure(ASTElement):
     Knows linenum, ast_type, source, source_reg, target_reg
     """
 
-    def __init__(self, linenum, source):
+    def __init__(self, linenum, source, save_element_source=False):
         super(ASTElementMeasure, self).__init__(
-            linenum, ASTType.MEASURE, source)
+            linenum, ASTType.MEASURE, source, save_element_source)
         x = QTRegEx.MEASURE_DECL.match(self.source)
         self.source_reg = x.group(1)
         self.target_reg = x.group(2)
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-                'source': self.source, 'source_reg': self.source_reg, 'target_reg': self.target_reg}
+                'source': self.source if self.save_element_source else None,
+                'source_reg': self.source_reg, 'target_reg': self.target_reg}
 
 
 class ASTElementBarrier(ASTElement):
@@ -230,15 +238,16 @@ class ASTElementBarrier(ASTElement):
     Knows linenum, ast_type, source, reg_list
     """
 
-    def __init__(self, linenum, source):
+    def __init__(self, linenum, source, save_element_source=False):
         super(ASTElementBarrier, self).__init__(
-            linenum, ASTType.BARRIER, source)
+            linenum, ASTType.BARRIER, source, save_element_source)
         x = QTRegEx.BARRIER_DECL.findall(self.source)
         self.reg_list = x[0].split(',')
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-                'source': self.source, 'reg_list': self.reg_list}
+                'source': self.source if self.save_element_source else None,
+                'reg_list': self.reg_list}
 
 
 class ASTElementOp(ASTElement):
@@ -248,8 +257,9 @@ class ASTElementOp(ASTElement):
     Knows linenum, ast_type, source, op, param_list, reg_list
     """
 
-    def __init__(self, linenum, source):
-        super(ASTElementOp, self).__init__(linenum, ASTType.OP, source)
+    def __init__(self, linenum, source, save_element_source=False):
+        super(ASTElementOp, self).__init__(
+            linenum, ASTType.OP, source, save_element_source)
         x = QTRegEx.OP_AND_ARGS.match(self.source)
         op_and_args = x.group(1)
         x = QTRegEx.OP_PARAM_LIST.match(op_and_args)
@@ -266,7 +276,8 @@ class ASTElementOp(ASTElement):
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-                'source': self.source, 'op': self.op,
+                'source': self.source if self.save_element_source else None,
+                'op': self.op,
                 'param_list': self.param_list, 'reg_list': self.reg_list}
 
 
@@ -278,8 +289,9 @@ class ASTElementCtl2(ASTElement):
     expression_param_list, op, param_list, reg_list
     """
 
-    def __init__(self, linenum, source):
-        super(ASTElementCtl2, self).__init__(linenum, ASTType.CTL_2, source)
+    def __init__(self, linenum, source, save_element_source=False):
+        super(ASTElementCtl2, self).__init__(
+            linenum, ASTType.CTL_2, source, save_element_source)
         x = QTRegEx.CTL_2.match(self.source)
         self.ctl = x.group(1)
         self.expression_op = x.group(3)
@@ -300,7 +312,8 @@ class ASTElementCtl2(ASTElement):
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
-                'source': self.source, 'ctl': self.ctl,
+                'source': self.source if self.save_element_source else None,
+                'ctl': self.ctl,
                 'expression_op': self.expression_op,
                 'expression_param_list': self.expression_param_list,
                 'op': self.op,
@@ -310,13 +323,21 @@ class ASTElementCtl2(ASTElement):
 class QasmTranslator():
 
     def __init__(self, qasmsourcelines, filepath=None, datetime=None,
-                 no_unknown=False):
+                 no_unknown=False,
+                 save_pgm_source=False, save_element_source=False,
+                 save_gate_source=False):
         self.qasmsourcelines = qasmsourcelines
-        self.translation = {
-            'filepath': filepath, 'datetime': datetime,
-            'source': qasmsourcelines, 'user_gates': [],
-            'ast': []}
         self.no_unknown = no_unknown
+        self.filepath = filepath
+        self.datetime = datetime
+        self.save_pgm_source = save_pgm_source
+        self.save_element_source = save_element_source
+        self.save_gate_source = save_gate_source
+
+        self.translation = {
+            'filepath': self.filepath, 'datetime': self.datetime,
+            'source': self.qasmsourcelines if self.save_pgm_source else None,
+            'user_gates': [], 'ast': []}
 
     def get_filepath(self):
         return self.translation['filepath']
@@ -382,7 +403,8 @@ class QasmTranslator():
             gate_ops_list.append({'op': op,
                                   'op_param_list': op_param_list,
                                   'op_reg_list': op_reg_list})
-        gate = {'source': txt, 'linenum': linenum, 'gate_name': gate_name,
+        gate = {'source': txt if self.save_gate_source else None,
+                'linenum': linenum, 'gate_name': gate_name,
                 'gate_param_list': gate_param_list,
                 'gate_ops_raw_list': gate_ops_raw_list,
                 'gate_ops_list': gate_ops_list}
@@ -446,21 +468,26 @@ class QasmTranslator():
 
             # Now step thru types
             if astType == ASTType.COMMENT:
-                astElement = ASTElementComment(i, line)
+                astElement = ASTElementComment(
+                    i, line, self.save_element_source)
             elif astType == ASTType.DECLARATION_QASM_2_0:
-                astElement = ASTElementDeclarationQasm2_0(i, line)
+                astElement = ASTElementDeclarationQasm2_0(
+                    i, line, self.save_element_source)
             if astType == ASTType.INCLUDE:
-                astElement = ASTElementInclude(i, line)
+                astElement = ASTElementInclude(
+                    i, line, self.save_element_source)
             elif astType == ASTType.CTL_2:
-                astElement = ASTElementCtl2(i, line)
+                astElement = ASTElementCtl2(i, line, self.save_element_source)
             elif astType == ASTType.QREG:
-                astElement = ASTElementQReg(i, line)
+                astElement = ASTElementQReg(i, line, self.save_element_source)
             elif astType == ASTType.CREG:
-                astElement = ASTElementCReg(i, line)
+                astElement = ASTElementCReg(i, line, self.save_element_source)
             elif astType == ASTType.MEASURE:
-                astElement = ASTElementMeasure(i, line)
+                astElement = ASTElementMeasure(
+                    i, line, self.save_element_source)
             elif astType == ASTType.BARRIER:
-                astElement = ASTElementBarrier(i, line)
+                astElement = ASTElementBarrier(
+                    i, line, self.save_element_source)
 
             elif astType == ASTType.GATE:
                 parsing_gate = True
@@ -482,7 +509,7 @@ class QasmTranslator():
                 continue
 
             elif astType == ASTType.OP:
-                astElement = ASTElementOp(i, line)
+                astElement = ASTElementOp(i, line, self.save_element_source)
             if type(astElement) is ASTElementUnknown and self.no_unknown:
                 raise Qasm_Unknown_Element(i, line)
             self.append_ast(astElement.out())
