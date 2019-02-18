@@ -46,7 +46,7 @@ parser.add_argument("--save_element_source", action="store_true",
                     help="Save element source in output")
 parser.add_argument("--save_gate_source", action="store_true",
                     help="Save gate source in output")
-parser.add_argument("filepaths", nargs='+',
+parser.add_argument("filepaths", nargs='*',
                     help="Filepath(s) to one more .qasm file(s), required")
 
 args = parser.parse_args()
@@ -73,12 +73,40 @@ else:
 
 pp = pprint.PrettyPrinter(indent=4, stream=fout)
 
-for filepath in args.filepaths:
-    f = open(filepath, 'r')
+if args.filepaths:
+    for filepath in args.filepaths:
+        f = open(filepath, 'r')
+        qasmsourcelines = []
+        for line in f:
+            qasmsourcelines.append(line.strip())
+        qt = QasmTranslator(qasmsourcelines, filepath=filepath,
+                            no_unknown=args.unknown,
+                            datetime=datetime.datetime.now().isoformat(),
+                            save_pgm_source=args.save_pgm_source,
+                            save_element_source=args.save_element_source,
+                            save_gate_source=args.save_gate_source)
+        try:
+            if args.profile:
+                cProfile.run('qt.translate()')
+            else:
+                qt.translate()
+        except Qasm_Declaration_Absent_Exception as ex:
+            handle_error(ex, filepath)
+        except Qasm_Unknown_Element as ex:
+            handle_error(ex, filepath)
+        except Qasm_Incomplete_Gate as ex:
+            handle_error(ex, filepath)
+        except Qasm_Gate_Missing_Open_Curly as ex:
+            handle_error(ex, filepath)
+
+        pp.pprint(qt.get_translation())
+        f.close()
+else:
     qasmsourcelines = []
-    for line in f:
+    for line in sys.stdin:
         qasmsourcelines.append(line.strip())
-    qt = QasmTranslator(qasmsourcelines, filepath=filepath,
+
+    qt = QasmTranslator(qasmsourcelines, filepath=str(sys.stdin),
                         no_unknown=args.unknown,
                         datetime=datetime.datetime.now().isoformat(),
                         save_pgm_source=args.save_pgm_source,
