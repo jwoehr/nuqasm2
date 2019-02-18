@@ -19,14 +19,17 @@ import time
 import pprint
 import cProfile
 
-description = """Implement qasm2 translation to python data structures
+description = """Implements qasm2 translation to python data structures.
 Working from _Open Quantum Assembly Language_
-https://arxiv.org/pdf/1707.03429.pdf
-jack j. woehr jwoehr@softwoehr.com po box 51 golden co 80402-0051
+https://arxiv.org/pdf/1707.03429.pdf ......
 Copyright 2019 Jack Woehr jwoehr@softwoehr.com PO Box 51, Golden, CO 80402-0051.
-BSD-3 license -- See LICENSE which you should have received with this code.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES."""
+Apache-2.0 license -- See LICENSE which you should have received with this code.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
 
 now = datetime.datetime.now().isoformat()
 
