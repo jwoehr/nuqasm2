@@ -19,6 +19,37 @@ Translates QASM2 source into a Python dictionary.
   * Issues welcome, including comments and suggestions.
 
 ```
+$ python nuqasm2.py -h
+usage: nuqasm2.py [-h] [-o OUTFILE] [-p] [-u] [-v] [--save_pgm_source]
+                  [--save_element_source] [--save_gate_source]
+                  [filepaths [filepaths ...]]
+
+Implements qasm2 translation to python data structures. Working from _Open
+Quantum Assembly Language_ https://arxiv.org/pdf/1707.03429.pdf ......
+Copyright 2019 Jack Woehr jwoehr@softwoehr.com PO Box 51, Golden, CO
+80402-0051. Apache-2.0 license -- See LICENSE which you should have received
+with this code. Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+the License for the specific language governing permissions and limitations
+under the License.
+
+positional arguments:
+  filepaths             Filepath(s) to one more .qasm file(s), required
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTFILE, --outfile OUTFILE
+                        Write AST to outfile overwriting silently, default is
+                        stdout
+  -p, --profile         Profile translator run
+  -u, --unknown         exit with error on unknown element in source
+  -v, --verbose         Increase verbosity each -v up to 3
+  --save_pgm_source     Save program source in output
+  --save_element_source
+                        Save element source in output
+  --save_gate_source    Save gate source in output
+
 $ cat yiqing.qasm
 // yiqing (one of many possible)
 OPENQASM 2.0;
