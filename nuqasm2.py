@@ -18,6 +18,8 @@ import datetime
 import time
 import pprint
 import cProfile
+import timeit
+import gc
 
 description = """Implements qasm2 translation to python data structures.
 Working from _Open Quantum Assembly Language_
@@ -39,6 +41,8 @@ parser.add_argument("-o", "--outfile", action="store",
                     help="Write AST to outfile overwriting silently, default is stdout")
 parser.add_argument("-p", "--profile", action="store_true",
                     help="Profile translator run")
+parser.add_argument("-t", "--timeit", action="store_true",
+                    help="Time translator run (1 iteration) (gc enabled)")
 parser.add_argument("-u", "--unknown", action="store_true",
                     help="exit with error on unknown element in source")
 parser.add_argument("-v", "--verbose", action="count", default=0,
@@ -87,6 +91,10 @@ if args.filepaths:
         try:
             if args.profile:
                 cProfile.run('qt.translate()')
+            elif args.timeit:
+                print(">>>translation time", end=':')
+                print(timeit.timeit(stmt='qt.translate()',
+                                    setup='gc.enable()', number=1, globals=globals()))
             else:
                 qt.translate()
         except Qasm_Declaration_Absent_Exception as ex:
@@ -111,6 +119,10 @@ else:
     try:
         if args.profile:
             cProfile.run('qt.translate()')
+        elif args.timeit:
+            print(">>>translation time", end=':')
+            print(timeit.timeit(stmt='qt.translate()',
+                                setup='gc.enable()', number=1, globals=globals()))
         else:
             qt.translate()
     except Qasm_Declaration_Absent_Exception as ex:
