@@ -339,6 +339,48 @@ class QasmTranslator():
             'source': self.qasmsourcelines if self.save_pgm_source else None,
             'user_gates': [], 'ast': []}
 
+    @staticmethod
+    def fromFileHandle(fileHandle, filepath=None, datetime=None,
+                       no_unknown=False,
+                       save_pgm_source=False, save_element_source=False,
+                       save_gate_source=False):
+        """
+        Instance QasmTranslator from a file handle reading in all lines.
+        Does not close file handle.
+        """
+        qasmsourcelines = []
+        for line in fileHandle:
+            qasmsourcelines.append(line.strip())
+        qt = QasmTranslator(qasmsourcelines, filepath=filepath,
+                            no_unknown=no_unknown,
+                            datetime=datetime,
+                            save_pgm_source=save_pgm_source,
+                            save_element_source=save_element_source,
+                            save_gate_source=save_gate_source)
+        return qt
+
+    @staticmethod
+    def fromFile(filepath, datetime=None,
+                 no_unknown=False,
+                 save_pgm_source=False, save_element_source=False,
+                 save_gate_source=False):
+        """
+        Instance QasmTranslator from a filepath.
+        Opens file 'r' reading in all lines and closes file.
+        """
+        qasmsourcelines = []
+        fileHandle = open(filepath, 'r')
+        for line in fileHandle:
+            qasmsourcelines.append(line.strip())
+        fileHandle.close()
+        qt = QasmTranslator(qasmsourcelines, filepath=filepath,
+                            no_unknown=no_unknown,
+                            datetime=datetime,
+                            save_pgm_source=save_pgm_source,
+                            save_element_source=save_element_source,
+                            save_gate_source=save_gate_source)
+        return qt
+
     def get_filepath(self):
         return self.translation['filepath']
 
@@ -411,6 +453,10 @@ class QasmTranslator():
         self.append_user_gate(gate)
 
     def translate(self):
+        """
+        Translate the qasm source into the desired representation.
+        Use get_translation() to retrieve the translated source.
+        """
         seen_noncomment = False
         parsing_gate = False
         gate_def = ''
@@ -519,6 +565,7 @@ class QasmTranslator():
             raise Qasm_Incomplete_Gate(i, gate_start_line, gate_start_linenum)
 
     def get_translation(self):
+        """Retrieve translation created by translate()"""
         return self.translation
 
 
