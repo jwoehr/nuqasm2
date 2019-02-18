@@ -16,6 +16,9 @@ import re
 class QTRegEx():
     COMMENT = re.compile(r"^\s*//")
     INCLUDE = re.compile(r"^\s*include\s+\"\S+\"\s*;")
+
+    CTL_2 = re.compile(r"(\w+)\((\w+)(\W+)(\w+)\)\s+(\w+)\s+(\w+\[\w+\]);")
+
     QREG = re.compile(r"^\s*qreg\s+\S*\[\d+\]\s*;")
     CREG = re.compile(r"^\s*creg\s+\S*\[\d+\]\s*;")
     MEASURE = re.compile(r"^\s*measure\s+\S+\s+\-\>\s+\S+\s*;")
@@ -50,6 +53,8 @@ class ASTType(Enum):
     BARRIER = 50
     GATE = 60
     OP = 70
+    CTL = 80
+    CTL_2 = 82
     BLANK = 1000
     DECLARATION_QASM_2_0 = 2000
     INCLUDE = 3000
@@ -66,6 +71,10 @@ class ASTType(Enum):
         x = QTRegEx.INCLUDE.search(source)
         if x:
             return cls.INCLUDE
+        x = QTRegEx.CTL_2.search(source)
+        if x:
+            if x.group(1) == 'if':
+                return cls.CTL_2
         x = QTRegEx.QREG.search(source)
         if x:
             return cls.QREG
@@ -261,6 +270,43 @@ class ASTElementOp(ASTElement):
                 'param_list': self.param_list, 'reg_list': self.reg_list}
 
 
+class ASTElementCtl2(ASTElement):
+    """
+    ASTElementCtl2
+    Control-flow with binary operator
+    Knows linenum, ast_type, source, ctl, expression_op,
+    expression_param_list, op, param_list, reg_list
+    """
+
+    def __init__(self, linenum, source):
+        super(ASTElementCtl2, self).__init__(linenum, ASTType.CTL_2, source)
+        x = QTRegEx.CTL_2.match(self.source)
+        self.ctl = x.group(1)
+        self.expression_op = x.group(3)
+        self.expression_param_list = [x.group(2), x.group(4)]
+
+        op_and_args = x.group(5)
+        x = QTRegEx.OP_PARAM_LIST.match(op_and_args)
+
+        self.param_list = None
+        if x:
+            self.op = x.group(1)
+            self.param_list = x.group(2).split(',')
+        else:
+            self.op = op_and_args
+
+        x = QTRegEx.OP_REG_LIST.findall(self.source)
+        self.reg_list = x[0].split(',')
+
+    def out(self):
+        return {'linenum': self.linenum, 'type': self.ast_type,
+                'source': self.source, 'ctl': self.ctl,
+                'expression_op': self.expression_op,
+                'expression_param_list': self.expression_param_list,
+                'op': self.op,
+                'param_list': self.param_list, 'reg_list': self.reg_list}
+
+
 class QasmTranslator():
 
     def __init__(self, qasmsourcelines, filepath=None, datetime=None,
@@ -405,6 +451,8 @@ class QasmTranslator():
                 astElement = ASTElementDeclarationQasm2_0(i, line)
             if astType == ASTType.INCLUDE:
                 astElement = ASTElementInclude(i, line)
+            elif astType == ASTType.CTL_2:
+                astElement = ASTElementCtl2(i, line)
             elif astType == ASTType.QREG:
                 astElement = ASTElementQReg(i, line)
             elif astType == ASTType.CREG:
