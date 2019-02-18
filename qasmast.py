@@ -25,7 +25,8 @@ class QTRegEx():
     MEASURE = re.compile(r"^\s*measure\s+\S+\s+\-\>\s+\S+\s*;")
     BARRIER = re.compile(r"^\s*barrier\s+.*;")
     GATE = re.compile(r"^\s*gate\s+.*")
-    OP = re.compile(r"^\s*\S+\s+\S+\[\d+\]\s*;")
+    # OP = re.compile(r"^\s*\S+\s+\S+\[\d+\]\s*;")
+    OP = re.compile(r"^\s*\S+\s+\S+\s*;")
 
     INCLUDE_TARGET = re.compile(r".*\"(\S+)\"\s*;")
     REG_DECL = re.compile(r".*(\S+)\[(\d+)\].*")
@@ -33,7 +34,8 @@ class QTRegEx():
     BARRIER_DECL = re.compile(r"\S+\[\d+\]")
     OP_AND_ARGS = re.compile(r"^\s*(\S+)\s+.*")
     OP_PARAM_LIST = re.compile(r"(\S+)\((.*)\)")
-    OP_REG_LIST = re.compile(r"\S+\[\d+\]")
+    # OP_REG_LIST = re.compile(r"\S+\[\d+\]")
+    OP_REG_LIST = re.compile(r"\s+\S+;")
 
     START_CURLY = re.compile(r".*\{.*")
     END_CURLY = re.compile(r".*\}.*")
@@ -116,6 +118,13 @@ class ASTElement():
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None}
+
+    @staticmethod
+    def proc_reg_list(txt):
+        x = QTRegEx.OP_REG_LIST.findall(txt)
+        y = x[0].strip(';')
+        y = y.strip()
+        return y.split(',')
 
 
 class ASTElementUnknown(ASTElement):
@@ -273,8 +282,7 @@ class ASTElementOp(ASTElement):
         else:
             self.op = op_and_args
 
-        x = QTRegEx.OP_REG_LIST.findall(self.source)
-        self.reg_list = x[0].split(',')
+        self.reg_list = self.proc_reg_list(self.source)
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,
@@ -309,8 +317,7 @@ class ASTElementCtl2(ASTElement):
         else:
             self.op = op_and_args
 
-        x = QTRegEx.OP_REG_LIST.findall(self.source)
-        self.reg_list = x[0].split(',')
+        self.reg_list = self.proc_reg_list(self.source)
 
     def out(self):
         return {'linenum': self.linenum, 'type': self.ast_type,

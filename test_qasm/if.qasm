@@ -6,6 +6,7 @@ creg c[3];
 x q[0];
 h q[1];
 h q[2];
+g qr0[0],qr1,qr2[0],qr3;
 cx q[1],q[0];
 cx q[2],q[0];
 if(syn==1) x q[0];
