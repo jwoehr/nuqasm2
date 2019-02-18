@@ -54,7 +54,7 @@ parser.add_argument("--save_element_source", action="store_true",
 parser.add_argument("--save_gate_source", action="store_true",
                     help="Save gate source in output")
 parser.add_argument("filepaths", nargs='*',
-                    help="Filepath(s) to one more .qasm file(s), required")
+                    help="Filepath to 1 or more .qasm file(s) (default stdin)")
 
 args = parser.parse_args()
 
