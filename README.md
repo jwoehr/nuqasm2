@@ -20,7 +20,7 @@ Translates QASM2 source into a Python dictionary.
 
 ```
 $ python nuqasm2.py -h
-usage: nuqasm2.py [-h] [-o OUTFILE] [-p] [-u] [-v] [--save_pgm_source]
+usage: nuqasm2.py [-h] [-o OUTFILE] [-p] [-t] [-u] [-v] [--save_pgm_source]
                   [--save_element_source] [--save_gate_source]
                   [filepaths [filepaths ...]]
 
@@ -43,6 +43,7 @@ optional arguments:
                         Write AST to outfile overwriting silently, default is
                         stdout
   -p, --profile         Profile translator run
+  -t, --timeit          Time translator run (1 iteration) (gc enabled)
   -u, --unknown         exit with error on unknown element in source
   -v, --verbose         Increase verbosity each -v up to 3
   --save_pgm_source     Save program source in output
