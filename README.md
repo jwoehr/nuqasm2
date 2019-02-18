@@ -35,7 +35,7 @@ the License for the specific language governing permissions and limitations
 under the License.
 
 positional arguments:
-  filepaths             Filepath(s) to one more .qasm file(s), required
+  filepaths             Filepath to 1 or more .qasm file(s) (default stdin)
 
 optional arguments:
   -h, --help            show this help message and exit
