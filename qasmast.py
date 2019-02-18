@@ -14,6 +14,7 @@ import re
 
 
 class QTRegEx():
+    """Compiled regular expressions for parsing."""
     COMMENT = re.compile(r"^\s*//")
     INCLUDE = re.compile(r"^\s*include\s+\"\S+\"\s*;")
 
@@ -45,6 +46,7 @@ class QTRegEx():
 
 
 class ASTType(Enum):
+    """Enums designating element types."""
     UNKNOWN = 0
     COMMENT = 100
     QREG = 20
