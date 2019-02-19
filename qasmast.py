@@ -110,17 +110,20 @@ class ASTElement():
     """
 
     def __init__(self, linenum, ast_type, source, save_element_source=False):
+        """Instance from qasm source code and parse into key:value pairs"""
         self.linenum = linenum
         self.ast_type = ast_type
         self.source = source
         self.save_element_source = save_element_source
 
     def out(self):
+        """Returns self as a dict structure"""
         return {'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None}
 
     @staticmethod
     def proc_reg_list(txt):
+        """Internal parsing routine for reg list of ops"""
         x = QTRegEx.OP_REG_LIST.findall(txt)
         y = x[0].strip(';')
         y = y.strip()
@@ -335,6 +338,17 @@ class QasmTranslator():
                  no_unknown=False,
                  save_pgm_source=False, save_element_source=False,
                  save_gate_source=False):
+        """
+        Init from source lines in an array.
+        Does not read in from file, expects code handed to it.
+        qasmsourcelines = the source code
+        no_unknown = True if raises on unknown element
+        filepath = source code filepath (informational only)
+        datetime = datetime informational
+        save_pgm_source = True if program source should be embedded in output
+        save_element_source = True if element source should be embedded in output
+        save_gate_source = True if user gate source should be embedded in output
+        """
         self.qasmsourcelines = qasmsourcelines
         self.no_unknown = no_unknown
         self.filepath = filepath
@@ -356,6 +370,13 @@ class QasmTranslator():
         """
         Instance QasmTranslator from a file handle reading in all lines.
         Does not close file handle.
+        qasmsourcelines = the source code
+        no_unknown = True if raises on unknown element
+        filepath = source code filepath (informational only)
+        datetime = datetime informational
+        save_pgm_source = True if program source should be embedded in output
+        save_element_source = True if element source should be embedded in outpu
+        save_gate_source = True if user gate source should be embedded in output
         """
         qasmsourcelines = []
         for line in fileHandle:
@@ -376,6 +397,13 @@ class QasmTranslator():
         """
         Instance QasmTranslator from a filepath.
         Opens file 'r' reading in all lines and closes file.
+        qasmsourcelines = the source code
+        filepath = source code filepath for loading and informational
+        no_unknown = True if raises on unknown element
+        datetime = datetime informational
+        save_pgm_source = True if program source should be embedded in output
+        save_element_source = True if element source should be embedded in outpu
+        save_gate_source = True if user gate source should be embedded in output
         """
         qasmsourcelines = []
         fileHandle = open(filepath, 'r')
@@ -391,45 +419,68 @@ class QasmTranslator():
         return qt
 
     def get_filepath(self):
+        """Retrieve filepath from translation created by translate()"""
         return self.translation['filepath']
 
     def get_datetime(self):
+        """Retrieve datetime from translation created by translate()"""
         return self.translation['datetime']
 
     def get_ast(self):
+        """Retrieve AST from translation created by translate()"""
         return self.translation['ast']
 
     def get_nth_ast(self, n):
-        return self.get_ast[n]
+        """Retrieve nth element in AST from translation created by translate()"""
+        return self.get_ast()[n]
 
     def get_nth_ast_type(self, n):
-        return self.get_nth_ast['type']
-
-    def get_nth_ast_element(self, n):
-        return self.get_nth_ast['element']
+        """
+        Retrieve AST type of nth AST element
+        from translation created by translate()
+        """
+        return self.get_nth_ast(n)['type']
 
     def get_nth_ast_source(self, n):
-        return self.get_nth_ast['source']
+        """
+        Retrieve source code of nth AST element
+        from translation created by translate()
+        """
+        return self.get_nth_ast(n)['source']
 
-    def get_nth_ast_text(self, n):
-        return self.get_nth_ast['text']
-
-    def get_source():
-        return self.translation['source']
+    def get_source(self):
+        """
+        Retrieve original source code of qasm program
+        that was translated by translate()
+        """
+        return self.translation()['source']
 
     def append_ast(self, ast):
+        """
+        Internal routine to append to the AST
+        """
         self.translation['ast'].append(ast)
 
     def get_user_gates(self):
+        """
+        Get user_gates definition section of output
+        of translation created by translate()
+        """
         return self.translation['user_gates']
 
     def get_nth_user_gate(self, index):
+        """
+        Get nth user_gate definition
+        from translation created by translate()
+        """
         return self.get_user_gates()[index]
 
     def append_user_gate(self, user_gate):
+        """Append a user gate definition to the user_gates output list"""
         self.translation['user_gates'].append(user_gate)
 
     def user_gate_definition(self, linenum, txt):
+        """Internal routine to parse and append a user gate definition"""
         txt = txt.strip()
         gate_decl = QTRegEx.GATE_DECL.match(txt)
         gate_name = gate_decl.group(1)
