@@ -9,9 +9,7 @@ Apache-2.0 license -- See LICENSE which you should have received with this code.
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
 """
-from qasmast import (QasmTranslator, Qasm_Declaration_Absent_Exception,
-                     Qasm_Unknown_Element, Qasm_Gate_Missing_Open_Curly,
-                     Qasm_Incomplete_Gate)
+from qasmast import (QasmTranslator, Qasm_Error)
 import argparse
 import sys
 import datetime
@@ -58,18 +56,24 @@ parser.add_argument("filepaths", nargs='*',
 
 args = parser.parse_args()
 
-# Verbose script
+
+epp = pprint.PrettyPrinter(indent=4, stream=sys.stderr)
 
 
 def verbosity(text, count):
+    """Verbose error messages by level"""
     if args.verbose >= count:
-        print(text)
+        epp.pprint(text)
+
+
+verbosity(args, 2)
 
 
 def handle_error(ex, filepath):
+    """Print out exception packet"""
     print("Error: " + filepath)
     x = ex.errpacket()
-    pp.pprint(x)
+    epp.pprint(x)
     exit(x['errcode'])
 
 
@@ -82,6 +86,7 @@ pp = pprint.PrettyPrinter(indent=4, stream=fout)
 
 if args.filepaths:
     for filepath in args.filepaths:
+        verbosity("Translating " + filepath, 1)
         qt = QasmTranslator.fromFile(filepath,
                                      no_unknown=args.unknown,
                                      datetime=datetime.datetime.now().isoformat(),
@@ -97,13 +102,7 @@ if args.filepaths:
                                     setup='gc.enable()', number=1, globals=globals()))
             else:
                 qt.translate()
-        except Qasm_Declaration_Absent_Exception as ex:
-            handle_error(ex, filepath)
-        except Qasm_Unknown_Element as ex:
-            handle_error(ex, filepath)
-        except Qasm_Incomplete_Gate as ex:
-            handle_error(ex, filepath)
-        except Qasm_Gate_Missing_Open_Curly as ex:
+        except Qasm_Error as ex:
             handle_error(ex, filepath)
 
         pp.pprint(qt.get_translation())
@@ -125,16 +124,11 @@ else:
                                 setup='gc.enable()', number=1, globals=globals()))
         else:
             qt.translate()
-    except Qasm_Declaration_Absent_Exception as ex:
-        handle_error(ex, filepath)
-    except Qasm_Unknown_Element as ex:
-        handle_error(ex, filepath)
-    except Qasm_Incomplete_Gate as ex:
-        handle_error(ex, filepath)
-    except Qasm_Gate_Missing_Open_Curly as ex:
-        handle_error(ex, filepath)
+    except Qasm_Error as ex:
+        handle_error(ex, str(sys.stdin))
 
     pp.pprint(qt.get_translation())
+
 
 if fout is not sys.stdout:
     fout.close()
