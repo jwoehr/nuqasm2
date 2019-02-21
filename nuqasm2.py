@@ -51,6 +51,10 @@ parser.add_argument("--save_element_source", action="store_true",
                     help="Save element source in output")
 parser.add_argument("--save_gate_source", action="store_true",
                     help="Save gate source in output")
+parser.add_argument("--save_source", action="store_true",
+                    help="""Save all source regions of output (equivalent to
+                    --save_pgm_source --save_element_source --save_gate_source)
+                    """)
 parser.add_argument("filepaths", nargs='*',
                     help="Filepath to 1 or more .qasm file(s) (default stdin)")
 
@@ -90,9 +94,9 @@ if args.filepaths:
         qt = QasmTranslator.fromFile(filepath,
                                      no_unknown=args.unknown,
                                      datetime=datetime.datetime.now().isoformat(),
-                                     save_pgm_source=args.save_pgm_source,
-                                     save_element_source=args.save_element_source,
-                                     save_gate_source=args.save_gate_source)
+                                     save_pgm_source=args.save_pgm_source or args.save_source,
+                                     save_element_source=args.save_element_source or args.save_source,
+                                     save_gate_source=args.save_gate_source or args.save_source)
         try:
             if args.profile:
                 cProfile.run('qt.translate()')
@@ -112,9 +116,9 @@ else:
     qt = QasmTranslator.fromFileHandle(sys.stdin, filepath=str(sys.stdin),
                                        no_unknown=args.unknown,
                                        datetime=datetime.datetime.now().isoformat(),
-                                       save_pgm_source=args.save_pgm_source,
-                                       save_element_source=args.save_element_source,
-                                       save_gate_source=args.save_gate_source)
+                                       save_pgm_source=args.save_pgm_source or args.save_source,
+                                       save_element_source=args.save_element_source or args.save_source,
+                                       save_gate_source=args.save_gate_source or args.save_source)
     try:
         if args.profile:
             cProfile.run('qt.translate()')
