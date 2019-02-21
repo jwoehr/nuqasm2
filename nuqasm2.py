@@ -16,8 +16,10 @@ import datetime
 import time
 import pprint
 import cProfile
+import pstats
 import timeit
 import gc
+import io
 
 description = """Implements qasm2 translation to python data structures.
 Working from _Open Quantum Assembly Language_
@@ -38,7 +40,10 @@ parser = argparse.ArgumentParser(description=description)
 parser.add_argument("-o", "--outfile", action="store",
                     help="Write AST to outfile overwriting silently, default is stdout")
 parser.add_argument("-p", "--profile", action="store_true",
-                    help="Profile translator run")
+                    help="""Profile translator run, writing to stderr and also
+                    to file if --perf_filepath switch is also used""")
+parser.add_argument("--perf_filepath", action="store",
+                    help="Save -p --profile data to provided filename")
 parser.add_argument("-t", "--timeit", action="store_true",
                     help="Time translator run (1 iteration) (gc enabled)")
 parser.add_argument("-u", "--unknown", action="store_true",
@@ -55,6 +60,26 @@ parser.add_argument("--save_source", action="store_true",
                     help="""Save all source regions of output (equivalent to
                     --save_pgm_source --save_element_source --save_gate_source)
                     """)
+parser.add_argument("--sortby", action="store", default="cumtime",
+                    help="""Sort sequence for performance data if -p switch
+                    used ... one or more of the following separated by spaces
+                    in a single string on the command line, e.g., --sortby
+                    "calls cumtime file" :
+                    'calls' == call count
+                    'cumtime' == cumulative time
+                    'file' == file name
+                    'module' == file name
+                    'ncalls' == call count
+                    'pcalls' == primitive call count
+                    'line' == line number
+                    'name' == function name
+                    'nfl' == name/file/line
+                    'stdname' == standard name
+                    'time' == internal time
+                    'tottime' == internal time
+                    ... default is cumtime
+                    """)
+
 parser.add_argument("filepaths", nargs='*',
                     help="Filepath to 1 or more .qasm file(s) (default stdin)")
 
@@ -70,7 +95,7 @@ def verbosity(text, count):
         epp.pprint(text)
 
 
-verbosity(args, 2)
+verbosity(args, 3)
 
 
 def handle_error(ex, filepath):
@@ -88,6 +113,27 @@ else:
 
 pp = pprint.PrettyPrinter(indent=4, stream=fout)
 
+
+def profileTranslate(qt, sortby=args.sortby):
+    """
+    Profile a translation run and write it to stderr
+    and optionally to perf_filepath
+    """
+    pr = cProfile.Profile()
+    pr.enable()
+    qt.translate()
+    pr.disable()
+    s = io.StringIO()
+    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    pss = ps.print_stats()
+    sys.stderr.write(s.getvalue())
+    if args.perf_filepath:
+        verbosity("Performance filepath is " + args.perf_filepath, 2)
+        f = open(args.perf_filepath, 'w')
+        f.write(s.getvalue())
+        f.close()
+
+
 if args.filepaths:
     for filepath in args.filepaths:
         verbosity("Translating " + filepath, 1)
@@ -99,7 +145,8 @@ if args.filepaths:
                                      save_gate_source=args.save_gate_source or args.save_source)
         try:
             if args.profile:
-                cProfile.run('qt.translate()')
+                profileTranslate(qt)
+
             elif args.timeit:
                 print(">>>translation time", end=':')
                 print(timeit.timeit(stmt='qt.translate()',
@@ -121,7 +168,7 @@ else:
                                        save_gate_source=args.save_gate_source or args.save_source)
     try:
         if args.profile:
-            cProfile.run('qt.translate()')
+            profileTranslate(qt)
         elif args.timeit:
             print(">>>translation time", end=':')
             print(timeit.timeit(stmt='qt.translate()',
