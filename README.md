@@ -21,7 +21,7 @@ Translates QASM2 source into a Python dictionary.
 ```
 $ python nuqasm2.py -h
 usage: nuqasm2.py [-h] [-o OUTFILE] [-p] [-t] [-u] [-v] [--save_pgm_source]
-                  [--save_element_source] [--save_gate_source]
+                  [--save_element_source] [--save_gate_source] [--save_source]
                   [filepaths [filepaths ...]]
 
 Implements qasm2 translation to python data structures. Working from _Open
@@ -50,7 +50,9 @@ optional arguments:
   --save_element_source
                         Save element source in output
   --save_gate_source    Save gate source in output
-
+  --save_source         Save all source regions of output (equivalent to
+                        --save_pgm_source --save_element_source
+                        --save_gate_source)
 $ cat yiqing.qasm
 // yiqing (one of many possible)
 OPENQASM 2.0;
@@ -64,7 +66,7 @@ barrier q[0],q[1],q[2];
 measure q[0] -> c[0];
 measure q[1] -> c[1];
 measure q[2] -> c[2];
-$ python nuqasm2.py yiqing.qasm
+$ python nuqasm2.py --save_source yiqing.qasm
 {   'ast': [   {   'linenum': 1,
                    'source': '// yiqing (one of many possible)',
                    'type': <ASTType.COMMENT: 100>},
