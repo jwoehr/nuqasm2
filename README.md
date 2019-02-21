@@ -64,7 +64,6 @@ barrier q[0],q[1],q[2];
 measure q[0] -> c[0];
 measure q[1] -> c[1];
 measure q[2] -> c[2];
-
 $ python nuqasm2.py yiqing.qasm
 {   'ast': [   {   'linenum': 1,
                    'source': '// yiqing (one of many possible)',
@@ -88,16 +87,19 @@ $ python nuqasm2.py yiqing.qasm
                    'type': <ASTType.CREG: 30>},
                {   'linenum': 6,
                    'op': 'h',
+                   'param_list': None,
                    'reg_list': ['q[0]'],
                    'source': 'h q[0];',
                    'type': <ASTType.OP: 70>},
                {   'linenum': 7,
                    'op': 'h',
+                   'param_list': None,
                    'reg_list': ['q[1]'],
                    'source': 'h q[1];',
                    'type': <ASTType.OP: 70>},
                {   'linenum': 8,
                    'op': 'h',
+                   'param_list': None,
                    'reg_list': ['q[2]'],
                    'source': 'h q[2];',
                    'type': <ASTType.OP: 70>},
@@ -120,7 +122,7 @@ $ python nuqasm2.py yiqing.qasm
                    'source_reg': 'q[2]',
                    'target_reg': 'c[2]',
                    'type': <ASTType.MEASURE: 40>}],
-    'datetime': '2019-02-16T21:55:18.901432',
+    'datetime': '2019-02-20T21:22:08.696377',
     'filepath': 'yiqing.qasm',
     'source': [   '// yiqing (one of many possible)',
                   'OPENQASM 2.0;',
@@ -133,6 +135,7 @@ $ python nuqasm2.py yiqing.qasm
                   'barrier q[0],q[1],q[2];',
                   'measure q[0] -> c[0];',
                   'measure q[1] -> c[1];',
-                  'measure q[2] -> c[2];',
-                  '']}
+                  'measure q[2] -> c[2];'],
+    'user_gates': []}
+
 ```
