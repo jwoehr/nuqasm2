@@ -528,6 +528,8 @@ class QasmTranslator():
 
             astElement = None
             line = line.strip()
+            line = line.replace(', ', ',')
+            line = line.replace(' ;', ';')
 
             if parsing_gate:
                 if not seen_open_curly:
