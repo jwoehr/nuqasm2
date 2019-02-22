@@ -9,14 +9,19 @@ then
 fi
 
 function diffout () {
-echo -n >outdiff.txt
-
-for i in *.out.txt
-do
-	echo $i >>outdiff.txt
-	echo "..." >>outdiff.txt
-	diff -u $i ${LASTVER}/$i >>outdiff.txt
-done
+	echo "# ####################" >outdiff.txt
+	echo "# diffs from $LASTVER" >>outdiff.txt
+	echo "#" `date '+%Y-%h-%d %H:%M:%S'` >>outdiff.txt
+	echo "# ####################" >>outdiff.txt
+	echo  >>outdiff.txt
+	
+	for i in *.out.txt
+	do
+		echo "# ####################" >>outdiff.txt
+		echo "#" $i >>outdiff.txt
+		echo "# ####################" >>outdiff.txt
+		diff -u $i ${LASTVER}/$i >>outdiff.txt
+	done
 }
 
 # run 'good' files
