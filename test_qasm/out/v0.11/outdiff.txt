@@ -1,0 +1,184 @@
+ggate.out.txt
+...
+*** ggate.out.txt	2019-02-21 22:21:56.817808166 -0700
+--- v0.10/ggate.out.txt	2019-02-20 21:33:02.257372713 -0700
+***************
+*** 124,130 ****
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-21T22:21:56.814362',
+      'filepath': 'test_qasm/ggate.qasm',
+      'source': [   '// GHZ_XYY',
+                    'OPENQASM 2.0;',
+--- 124,130 ----
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-20T21:33:02.255838',
+      'filepath': 'test_qasm/ggate.qasm',
+      'source': [   '// GHZ_XYY',
+                    'OPENQASM 2.0;',
+ggate.perf.out.txt
+...
+ghzstate3q.out.txt
+...
+*** ghzstate3q.out.txt	2019-02-21 22:21:56.885806531 -0700
+--- v0.10/ghzstate3q.out.txt	2019-02-20 21:33:02.317373068 -0700
+***************
+*** 115,121 ****
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-21T22:21:56.884724',
+      'filepath': 'test_qasm/ghzstate3q.qasm',
+      'source': [   '// Name of Experiment: 3Q GHZ State',
+                    '',
+--- 115,121 ----
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-20T21:33:02.319510',
+      'filepath': 'test_qasm/ghzstate3q.qasm',
+      'source': [   '// Name of Experiment: 3Q GHZ State',
+                    '',
+ghzstate3q.perf.out.txt
+...
+ghzxxx.out.txt
+...
+*** ghzxxx.out.txt	2019-02-21 22:21:56.945805087 -0700
+--- v0.10/ghzxxx.out.txt	2019-02-20 21:33:02.373373398 -0700
+***************
+*** 103,109 ****
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-21T22:21:56.945557',
+      'filepath': 'test_qasm/ghzxxx.qasm',
+      'source': [   '// GHZ_XXX',
+                    'OPENQASM 2.0;',
+--- 103,109 ----
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-20T21:33:02.374478',
+      'filepath': 'test_qasm/ghzxxx.qasm',
+      'source': [   '// GHZ_XXX',
+                    'OPENQASM 2.0;',
+ghzxxx.perf.out.txt
+...
+ghzxyx.out.txt
+...
+*** ghzxyx.out.txt	2019-02-21 22:21:57.013803451 -0700
+--- v0.10/ghzxyx.out.txt	2019-02-20 21:33:02.425373706 -0700
+***************
+*** 109,115 ****
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-21T22:21:57.013147',
+      'filepath': 'test_qasm/ghzxyx.qasm',
+      'source': [   '// GHZ_XYX',
+                    'OPENQASM 2.0;',
+--- 109,115 ----
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-20T21:33:02.429014',
+      'filepath': 'test_qasm/ghzxyx.qasm',
+      'source': [   '// GHZ_XYX',
+                    'OPENQASM 2.0;',
+ghzxyx.perf.out.txt
+...
+ghzxyy.out.txt
+...
+*** ghzxyy.out.txt	2019-02-21 22:21:57.081801814 -0700
+--- v0.10/ghzxyy.out.txt	2019-02-20 21:33:02.481374036 -0700
+***************
+*** 115,121 ****
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-21T22:21:57.081921',
+      'filepath': 'test_qasm/ghzxyy.qasm',
+      'source': [   '// GHZ_XYY',
+                    'OPENQASM 2.0;',
+--- 115,121 ----
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-20T21:33:02.483181',
+      'filepath': 'test_qasm/ghzxyy.qasm',
+      'source': [   '// GHZ_XYY',
+                    'OPENQASM 2.0;',
+ghzxyy.perf.out.txt
+...
+ghzyxy.out.txt
+...
+*** ghzyxy.out.txt	2019-02-21 22:21:57.149800178 -0700
+--- v0.10/ghzyxy.out.txt	2019-02-20 21:33:02.541374391 -0700
+***************
+*** 115,121 ****
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-21T22:21:57.148593',
+      'filepath': 'test_qasm/ghzyxy.qasm',
+      'source': [   '// ghzyxy',
+                    'OPENQASM 2.0;',
+--- 115,121 ----
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-20T21:33:02.543984',
+      'filepath': 'test_qasm/ghzyxy.qasm',
+      'source': [   '// ghzyxy',
+                    'OPENQASM 2.0;',
+ghzyxy.perf.out.txt
+...
+ghzyyx.out.txt
+...
+*** ghzyyx.out.txt	2019-02-21 22:21:57.213798637 -0700
+--- v0.10/ghzyyx.out.txt	2019-02-20 21:33:02.601374746 -0700
+***************
+*** 115,121 ****
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-21T22:21:57.215452',
+      'filepath': 'test_qasm/ghzyyx.qasm',
+      'source': [   '// ghzyyx',
+                    'OPENQASM 2.0;',
+--- 115,121 ----
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-20T21:33:02.603186',
+      'filepath': 'test_qasm/ghzyyx.qasm',
+      'source': [   '// ghzyyx',
+                    'OPENQASM 2.0;',
+ghzyyx.perf.out.txt
+...
+if.out.txt
+...
+*** if.out.txt	2019-02-21 22:21:57.281796999 -0700
+--- v0.10/if.out.txt	2019-02-20 21:33:13.097436412 -0700
+***************
+*** 157,163 ****
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-21T22:21:57.277440',
+      'filepath': 'test_qasm/if.qasm',
+      'source': [   '// GHZ_XYY',
+                    'OPENQASM 2.0;',
+--- 157,163 ----
+                     'source_reg': 'q[2]',
+                     'target_reg': 'c[2]',
+                     'type': <ASTType.MEASURE: 40>}],
+!     'datetime': '2019-02-20T21:33:13.083894',
+      'filepath': 'test_qasm/if.qasm',
+      'source': [   '// GHZ_XYY',
+                    'OPENQASM 2.0;',
+if.perf.out.txt
+...

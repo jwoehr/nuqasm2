@@ -1,0 +1,37 @@
+         539 function calls in 0.001 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.001    0.001 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(translate)
+       25    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:66(astType)
+       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:274(__init__)
+      155    0.000    0.000    0.000    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:124(proc_reg_list)
+       25    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:140(__init__)
+       31    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+       47    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:112(__init__)
+       22    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:458(append_ast)
+       14    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
+       50    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:235(__init__)
+       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:290(out)
+       51    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+       14    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+       24    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
+        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:176(__init__)
+        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:195(__init__)
+        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:255(__init__)
+        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:215(__init__)
+       22    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:242(out)
+        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:164(__init__)
+        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:119(out)
+        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:152(__init__)
+        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:222(out)
+        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:261(out)
+        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:182(out)
+        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:202(out)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
