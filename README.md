@@ -4,7 +4,7 @@ New qasm2 translator : qasm2 to Python dict form AST
 Based on [Open Quantum Assembly Language](https://arxiv.org/pdf/1707.03429.pdf)
 
 Translates QASM2 source into a Python dictionary.
-* Filepath, datetime, and full source recorded for entire qasm program.
+* Filepath, datetime, and full source recorded for entire qasm program as appropriate key/value pairs.
 * The `user_gates` key is the list definitions (if any) of user-defined gates.
 * The `ast` key is the program and is a list of element dictionaries, one per element of the program.
   * Within each dict in `ast` there are keys and values for
@@ -20,8 +20,9 @@ Translates QASM2 source into a Python dictionary.
 
 ```
 $ python nuqasm2.py -h
-usage: nuqasm2.py [-h] [-o OUTFILE] [-p] [-t] [-u] [-v] [--save_pgm_source]
-                  [--save_element_source] [--save_gate_source] [--save_source]
+usage: nuqasm2.py [-h] [-o OUTFILE] [-p] [--perf_filepath PERF_FILEPATH] [-t]
+                  [-u] [-v] [--save_pgm_source] [--save_element_source]
+                  [--save_gate_source] [--save_source] [--sortby SORTBY]
                   [filepaths [filepaths ...]]
 
 Implements qasm2 translation to python data structures. Working from _Open
@@ -42,7 +43,10 @@ optional arguments:
   -o OUTFILE, --outfile OUTFILE
                         Write AST to outfile overwriting silently, default is
                         stdout
-  -p, --profile         Profile translator run
+  -p, --profile         Profile translator run, writing to stderr and also to
+                        file if --perf_filepath switch is also used
+  --perf_filepath PERF_FILEPATH
+                        Save -p --profile data to provided filename
   -t, --timeit          Time translator run (1 iteration) (gc enabled)
   -u, --unknown         exit with error on unknown element in source
   -v, --verbose         Increase verbosity each -v up to 3
@@ -53,6 +57,17 @@ optional arguments:
   --save_source         Save all source regions of output (equivalent to
                         --save_pgm_source --save_element_source
                         --save_gate_source)
+  --sortby SORTBY       Sort sequence for performance data if -p switch used
+                        ... one or more of the following separated by spaces
+                        in a single string on the command line, e.g., --sortby
+                        "calls cumtime file" : 'calls' == call count 'cumtime'
+                        == cumulative time 'file' == file name 'module' ==
+                        file name 'ncalls' == call count 'pcalls' == primitive
+                        call count 'line' == line number 'name' == function
+                        name 'nfl' == name/file/line 'stdname' == standard
+                        name 'time' == internal time 'tottime' == internal
+                        time ... default is cumtime
+
 $ cat yiqing.qasm
 // yiqing (one of many possible)
 OPENQASM 2.0;
@@ -124,7 +139,7 @@ $ python nuqasm2.py --save_source yiqing.qasm
                    'source_reg': 'q[2]',
                    'target_reg': 'c[2]',
                    'type': <ASTType.MEASURE: 40>}],
-    'datetime': '2019-02-20T21:22:08.696377',
+    'datetime': '2019-02-21T22:31:37.309093',
     'filepath': 'yiqing.qasm',
     'source': [   '// yiqing (one of many possible)',
                   'OPENQASM 2.0;',
@@ -139,5 +154,4 @@ $ python nuqasm2.py --save_source yiqing.qasm
                   'measure q[1] -> c[1];',
                   'measure q[2] -> c[2];'],
     'user_gates': []}
-
 ```
