@@ -12,6 +12,7 @@ WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
 from enum import Enum
 import re
 import datetime
+import os
 
 
 class QTRegEx():
@@ -345,6 +346,7 @@ class ASTElementGateDefinitionPlaceholder(ASTElement):
         """Returns self as a dict structure"""
         return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type}
 
+
 class Gate_Operation():
     """
     One operation in a gate operation list
@@ -543,7 +545,7 @@ class QasmTranslator():
         self.save_pgm_source = save_pgm_source
         self.save_element_source = save_element_source
         self.save_gate_source = save_gate_source
-        self.show_gate_decls=show_gate_decls
+        self.show_gate_decls = show_gate_decls
 
         # Init sections
         self.t_sect = T_Sect(name)
@@ -611,6 +613,8 @@ class QasmTranslator():
         save_element_source = True if element source should be embedded in outpu
         save_gate_source = True if user gate source should be embedded in output
         """
+        if not os.path.exists(filepath) or not os.access(filepath, os.R_OK):
+            raise Qasm_Cannot_Read_File(None, None, None, filepath)
         qasmsourcelines = []
         fileHandle = open(filepath, 'r')
         for line in fileHandle:
@@ -634,6 +638,8 @@ class QasmTranslator():
 
     def push_include(self, filepath):
         """Open an include file, read it, close it, push source"""
+        if not os.path.exists(filepath) or not os.access(filepath, os.R_OK):
+            raise Qasm_Cannot_Read_File(None, None, None, filepath)
         qasmsourcelines = []
         fileHandle = open(filepath, 'r')
         for line in fileHandle:
@@ -645,65 +651,6 @@ class QasmTranslator():
         """Return the current linenum"""
         return self.source_frame_stack.linenum()
 
-    ###
-    # Access members of the translation
-    # Need to be rewritten
-    ###
-
-    def get_filepath(self):
-        """Retrieve filepath from translation created by translate()"""
-        return self.translation['filepath']
-
-    def get_datetime(self):
-        """Retrieve datetime from translation created by translate()"""
-        return self.translation['datetime']
-
-    def get_ast(self):
-        """Retrieve AST from translation created by translate()"""
-        return self.translation['ast']
-
-    def get_nth_ast(self, n):
-        """Retrieve nth element in AST from translation created by translate()"""
-        return self.get_ast()[n]
-
-    def get_nth_ast_type(self, n):
-        """
-        Retrieve AST type of nth AST element
-        from translation created by translate()
-        """
-        return self.get_nth_ast(n)['type']
-
-    def get_nth_ast_source(self, n):
-        """
-        Retrieve source code of nth AST element
-        from translation created by translate()
-        """
-        return self.get_nth_ast(n)['source']
-
-    def get_source(self):
-        """
-        Retrieve original source code of qasm program
-        that was translated by translate()
-        """
-        return self.translation()['source']
-
-    def get_user_gates(self):
-        """
-        Get user_gates definition section of output
-        of translation created by translate()
-        """
-        return self.translation['user_gates']
-
-    def get_nth_user_gate(self, index):
-        """
-        Get nth user_gate definition
-        from translation created by translate()
-        """
-        return self.get_user_gates()[index]
-
-    ###
-    # End of Need to be Rewritten
-    ###
     def append_ast(self, ast):
         """
         Internal routine to append to the AST
@@ -880,17 +827,82 @@ class QasmTranslator():
         """Retrieve translation created by translate()"""
         return self.translation
 
+    # ###################################
+    # Access Methods for Examining Output
+    # ###################################
+
+    def get_t_sect(self):
+        """Return translation unit section"""
+        return self.translation['t_sect']
+
+    def get_c_sect(self):
+        """Return code section"""
+        return self.translation['c_sect']
+
+    def get_g_sect(self):
+        """Return gate decl section"""
+        return self.translation['g_sect']
+
+    def get_s_sect(self):
+        """Return source section"""
+        return self.translation['s_sect']
+
+    def get_filepaths(self):
+        """Retrieve filepaths"""
+        return self.get_t_sect()['filepaths']
+
+    def get_datetime_start(self):
+        """Retrieve datetime from translation created by translate()"""
+        return self.get_t_sect()['datetime_start']
+
+    def get_datetime_finish(self):
+        """Retrieve datetime from translation created by translate()"""
+        return self.get_t_sect()['datetime_finish']
+
+    def get_nth_ast(self, n):
+        """Retrieve nth element in c_sect from translation created by translate()"""
+        return self.get_c_sect()[n]
+
+    def get_nth_ast_type(self, n):
+        """
+        Retrieve AST type of nth c_sect element
+        from translation created by translate()
+        """
+        return self.get_nth_ast(n)['type']
+
+    def get_nth_ast_source(self, n):
+        """
+        Retrieve source code of nth AST element
+        from translation created by translate()
+        """
+        return self.get_nth_ast(n)['source']
+
+    def get_source(self, filenum):
+        """
+        Retrieve original source code of qasm file
+        number n that was translated by translate()
+        """
+        return self.get_s_sect()[filenum]
+
+    def get_nth_user_gate(self, index):
+        """
+        Get nth user_gate definition
+        from translation created by translate()
+        """
+        return self.get_g_sect()[index]
+
+
+# ##########
+# Exceptions
+# ##########
+
 
 class Qasm_Error(Exception):
     """Base class for Qasm exceptions"""
 
     def __init__(self, filenum, linenum, line):
+        self.filenum = filenum
         self.linenum = linenum
-        self.filenum = filenum
-        self.filenum = filenum
-        self.filenum = filenum
-        self.filenum = filenum
-        self.filenum = filenum
         self.line = line
         self.message = "Qasm_Error"
         self.errcode = 10
@@ -952,7 +964,7 @@ class Qasm_Gate_Missing_Open_Curly(Qasm_Error):
             filenum, linenum, line)
         self.start_linenum = start_linenum
         self.message = "Gate definition missing open curly brace"
-        self.errcode = 40
+        self.errcode = 45
 
     def errpacket(self):
         ex = {'message': self.message,
@@ -960,6 +972,24 @@ class Qasm_Gate_Missing_Open_Curly(Qasm_Error):
               'linenum': self.linenum,
               'line': self.line,
               'start_linenum': self.start_linenum,
+              'errcode': self.errcode
+              }
+        return ex
+
+
+class Qasm_Cannot_Read_File(Qasm_Error):
+    """File read error"""
+
+    def __init__(self, filenum, linenum, line, filepath):
+        super(Qasm_Cannot_Read_File, self).__init__(
+            filenum, linenum, line)
+        self.filepath = filepath
+        self.message = "Cannot access file."
+        self.errcode = 50
+
+    def errpacket(self):
+        ex = {'message': self.message,
+              'filepath': self.filepath,
               'errcode': self.errcode
               }
         return ex
