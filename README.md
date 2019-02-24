@@ -105,7 +105,7 @@ barrier q[0],q[1],q[2];
 measure q[0] -> c[0];
 measure q[1] -> c[1];
 measure q[2] -> c[2];
-$ python nuqasm2.py --save_source yiqing.qasm 
+$ python nuqasm2.py -i "${HOME}/work/QISKit/qiskit-terra/qiskit/qasm/libs" --save_source yiqing.qasm 
 {   'c_sect': [   {   'filenum': 0,
                       'linenum': 0,
                       'source': '// yiqing (one of many possible)',
@@ -890,8 +890,10 @@ $ python nuqasm2.py --save_source yiqing.qasm
                                     'u1(theta) b;',
                                     'cx a,b;',
                                     '}']}],
-    't_sect': {   'datetime_finish': '2019-02-23T22:28:34.459317',
-                  'datetime_start': '2019-02-23T22:28:34.457367',
-                  'filepaths': ['yiqing.qasm', 'qelib1.inc'],
+    't_sect': {   'datetime_finish': '2019-02-24T13:31:34.521665',
+                  'datetime_start': '2019-02-24T13:31:34.519560',
+                  'filepaths': [   'yiqing.qasm',
+                                   '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
                   'name': 'main'}}
+
 ```
