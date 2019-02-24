@@ -3,20 +3,35 @@ New qasm2 translator : qasm2 to Python dict form AST
 
 Based on [Open Quantum Assembly Language](https://arxiv.org/pdf/1707.03429.pdf)
 
-Translates QASM2 source into a Python dictionary.
-* Filepath, datetime, and full source recorded for entire qasm program as appropriate key/value pairs.
-* The `user_gates` key is the list definitions (if any) of user-defined gates.
-* The `ast` key is the program and is a list of element dictionaries, one per element of the program.
-  * Within each dict in `ast` there are keys and values for
-    * Line number
-    * Original source
-    * Element type
-    * Parameter values
-    * Any other appropriate translation elements
+Translates QASM2 source into a Python dictionary with 4 keys:
+* `t_sect`
+  * Filepaths
+  * Datetimes
+  * Name of unit
+* `c_sect`
+  * Ops
+  * Declarations
+  * Comments
+* `g_sect`
+  * User gate definitions (e.g., `qelib1.inc`)
+* `s_sect`
+  * Saved source
+  
+There are many options controlling what gets generated.
 
-* This is a proof of concept.
-  * The AST is intended to illustrate more than to prescribe.
-  * Issues welcome, including comments and suggestions.
+Output can include
+* Source file path
+* Line number
+* Original source
+* Element type
+* Parameter values
+* Other appropriate translation elements
+
+`nuqasm2.py` is a driver.
+* The class file is `qasmast.py`.
+* `qasmast` is the code body providing methods to perform translation from OPENQASM source to data structures useful for backend circuit construction
+
+This is a proof of concept intended to illustrate more than to prescribe. Issues welcome, including comments and suggestions.
 
 ```
 $ python nuqasm2.py -h
