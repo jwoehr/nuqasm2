@@ -37,7 +37,7 @@ This is a proof of concept intended to illustrate more than to prescribe. Issues
 
 ```
 $ python nuqasm2.py -h
-usage: nuqasm2.py [-h] [-n NAME] [-o OUTFILE] [-p]
+usage: nuqasm2.py [-h] [-n NAME] [-o OUTFILE] [-p] [-i INCLUDE_PATH]
                   [--perf_filepath PERF_FILEPATH] [-t] [-u] [-v]
                   [--save_pgm_source] [--save_element_source]
                   [--save_gate_source] [--save_source] [--show_gate_decls]
@@ -65,6 +65,9 @@ optional arguments:
                         stdout
   -p, --profile         Profile translator run, writing to stderr and also to
                         file if --perf_filepath switch is also used
+  -i INCLUDE_PATH, --include_path INCLUDE_PATH
+                        Search path for includes, paths separated by ':',
+                        default include path is '.'
   --perf_filepath PERF_FILEPATH
                         Save -p --profile data to provided filename
   -t, --timeit          Time translator run (1 iteration) (gc enabled)
