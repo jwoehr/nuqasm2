@@ -411,7 +411,7 @@ class T_Sect():
         self.t_sect = {
             'name': name,
             'filepaths': [],
-            'datetime_start': datetime.datetime.now().isoformat(),
+            'datetime_start': None,
             'datetime_finish': None
         }
 
@@ -700,6 +700,8 @@ class QasmTranslator():
         Translate the qasm source into the desired representation.
         Use get_translation() to retrieve the translated source.
         """
+        self.get_t_sect()[
+            'datetime_start'] = datetime.datetime.now().isoformat()
         seen_noncomment = False
         parsing_gate = False
         gate_def = ''
@@ -722,7 +724,7 @@ class QasmTranslator():
                     x = QTRegEx.START_CURLY.search(line)
                     if not x:
                         raise Qasm_Gate_Missing_Open_Curly_Exception(filenum, linenum, gate_start_line,
-                                                           gate_start_linenum)
+                                                                     gate_start_linenum)
                     else:
                         seen_open_curly = True
                         gate_def = gate_def + line + ' '
@@ -757,7 +759,8 @@ class QasmTranslator():
                 if astType == ASTType.DECLARATION_QASM_2_0:
                     seen_noncomment = True
                 else:
-                    raise Qasm_Declaration_Absent_Exception(filenum, linenum, line)
+                    raise Qasm_Declaration_Absent_Exception(
+                        filenum, linenum, line)
 
             # Now step thru types
             if astType == ASTType.COMMENT:
@@ -827,9 +830,9 @@ class QasmTranslator():
         """Retrieve translation created by translate()"""
         return self.translation
 
-    # ###################################
-    # Access Methods for Examining Output
-    # ###################################
+    # #########################
+    # Access Methods for Output
+    # #########################
 
     def get_t_sect(self):
         """Return translation unit section"""
@@ -850,6 +853,10 @@ class QasmTranslator():
     def get_filepaths(self):
         """Retrieve filepaths"""
         return self.get_t_sect()['filepaths']
+
+    def get_nth_filepath(self, n):
+        """Retrieve nth filepath entry"""
+        return self.get_filepaths()[n] if n < len(self.get_filepaths()) else None
 
     def get_datetime_start(self):
         """Retrieve datetime from translation created by translate()"""
@@ -882,7 +889,7 @@ class QasmTranslator():
         Retrieve original source code of qasm file
         number n that was translated by translate()
         """
-        return self.get_s_sect()[filenum]
+        return self.get_s_sect()[filenum] if filenum < len(self.get_s_sect()) else None
 
     def get_nth_user_gate(self, index):
         """
@@ -931,7 +938,8 @@ class Qasm_Unknown_Element_Exception(Qasm_Exception):
     """Unknown element"""
 
     def __init__(self, filenum, linenum, line):
-        super(Qasm_Unknown_Element_Exception, self).__init__(filenum, linenum, line)
+        super(Qasm_Unknown_Element_Exception, self).__init__(
+            filenum, linenum, line)
         self.message = "Unknown element"
         self.errcode = 30
 
@@ -940,7 +948,8 @@ class Qasm_Incomplete_Gate_Exception(Qasm_Exception):
     """Gate definition incomplete"""
 
     def __init__(self, filenum, linenum, line, start_linenum):
-        super(Qasm_Incomplete_Gate_Exception, self).__init__(filenum, linenum, line)
+        super(Qasm_Incomplete_Gate_Exception, self).__init__(
+            filenum, linenum, line)
         self.start_linenum = start_linenum
         self.message = "Gate definition incomplete"
         self.errcode = 40
