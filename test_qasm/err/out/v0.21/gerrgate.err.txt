@@ -1,0 +1,8 @@
+'Error: test_qasm/err/gerrgate.qasm'
+{   'errcode': 45,
+    'filename': 'test_qasm/err/gerrgate.qasm',
+    'filenum': 0,
+    'line': 'gate a b',
+    'linenum': 6,
+    'message': 'Gate definition missing open curly brace',
+    'start_linenum': 5}

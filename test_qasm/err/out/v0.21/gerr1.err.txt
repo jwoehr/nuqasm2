@@ -1,0 +1,7 @@
+'Error: test_qasm/err/gerr1.qasm'
+{   'errcode': 30,
+    'filename': 'test_qasm/err/gerr1.qasm',
+    'filenum': 0,
+    'line': 'cre',
+    'linenum': 4,
+    'message': 'Unknown element'}
