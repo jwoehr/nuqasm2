@@ -1,10 +1,11 @@
 # runtest.sh ... run some regression tests for nuqasm2
 
 LASTVER=$1
+INCPATH=$2
 
 if [ "$LASTVER" == "" ]
 then
-	echo "Usage: $0 LASTVER"
+	echo "Usage: $0 LASTVER INCPATH"
 	exit 1
 fi
 
@@ -28,7 +29,7 @@ function diffout () {
 for i in yiqing.qasm test_qasm/g*.qasm test_qasm/if.qasm
 do
 	FNAME=`basename $i .qasm`
-	python nuqasm2.py -o test_qasm/out/${FNAME}.out.txt -p --save_source -u --perf_filepath test_qasm/out/${FNAME}.perf.out.txt $i
+	python nuqasm2.py -i $INCPATH -o test_qasm/out/${FNAME}.out.txt -p --save_source -u --perf_filepath test_qasm/out/${FNAME}.perf.out.txt $i
 
 done
 
@@ -36,7 +37,7 @@ done
 for i in test_qasm/err/*.qasm
 do
 	FNAME=`basename $i .qasm`
-	python nuqasm2.py -o test_qasm/err/out/${FNAME}.out.txt --save_source -u $i 2>test_qasm/err/out/${FNAME}.err.txt 
+	python nuqasm2.py -i $INCPATH -o test_qasm/err/out/${FNAME}.out.txt --save_source -u $i 2>test_qasm/err/out/${FNAME}.err.txt 
 done
 
 cd test_qasm/out
