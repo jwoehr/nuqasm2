@@ -19,6 +19,7 @@ import pstats
 import timeit
 import gc
 import io
+import os
 
 description = """Implements qasm2 translation to python data structures.
 Working from _Open Quantum Assembly Language_
@@ -41,6 +42,9 @@ parser.add_argument("-o", "--outfile", action="store",
 parser.add_argument("-p", "--profile", action="store_true",
                     help="""Profile translator run, writing to stderr and also
                     to file if --perf_filepath switch is also used""")
+parser.add_argument("-i", "--include_path", action="store", default='.',
+                    help="Search path for includes, paths separated by '" +
+                    os.pathsep + "', default include path is '.'")
 parser.add_argument("--perf_filepath", action="store",
                     help="Save -p --profile data to provided filename")
 parser.add_argument("-t", "--timeit", action="store_true",
@@ -101,7 +105,7 @@ verbosity(args, 3)
 
 def handle_error(ex, filepath):
     """Print out exception packet"""
-    print("Error: " + filepath)
+    epp.pprint("Error: " + filepath)
     x = ex.errpacket()
     epp.pprint(x)
     exit(x['errcode'])
@@ -143,7 +147,8 @@ if args.filepaths:
                                      save_pgm_source=args.save_pgm_source or args.save_source,
                                      save_element_source=args.save_element_source or args.save_source,
                                      save_gate_source=args.save_gate_source or args.save_source,
-                                     show_gate_decls=args.show_gate_decls)
+                                     show_gate_decls=args.show_gate_decls,
+                                     include_path=args.include_path)
         try:
             if args.profile:
                 profileTranslate(qt)
@@ -167,7 +172,8 @@ else:
                                        save_pgm_source=args.save_pgm_source or args.save_source,
                                        save_element_source=args.save_element_source or args.save_source,
                                        save_gate_source=args.save_gate_source or args.save_source,
-                                       show_gate_decls=args.show_gate_decls)
+                                       show_gate_decls=args.show_gate_decls,
+                                       include_path=args.include_path)
     try:
         if args.profile:
             profileTranslate(qt)

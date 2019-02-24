@@ -388,6 +388,11 @@ class Gate_Definition():
             'ops_list': ops_list}
 
 
+# #########################
+# Translation unit sections
+# #########################
+
+
 class Source_Body():
     """Source code body with filenum of source file"""
 
@@ -455,6 +460,11 @@ class S_Sect():
         self.s_sect.append(sourcebody)
 
 
+# ##################################
+# Pushable frames for source nesting
+# ##################################
+
+
 class Source_Frame():
     """
     A pushable frame defining the source we are processing
@@ -477,6 +487,10 @@ class Source_Frame():
             source = self.qasmsourcelines[self.linenum]
             self.linenum += 1
         return source
+
+    def nth_qasmline(self, n):
+        """Return nth qasm source line"""
+        return self.qasmsourcelines[n] if n < len(self.qasmsourcelines) else None
 
 
 class Source_Frame_Stack():
@@ -518,6 +532,14 @@ class Source_Frame_Stack():
         """Return linenum of current tos"""
         return self.tos().filenum
 
+    def nth_qasmline(self, n):
+        return self.tos().nth_qasmline(n)
+
+
+# ##############
+# The Translator
+# ##############
+
 
 class QasmTranslator():
     """Translation of a Qasm unit"""
@@ -528,16 +550,20 @@ class QasmTranslator():
                  no_unknown=False,
                  save_pgm_source=False, save_element_source=False,
                  save_gate_source=False,
-                 show_gate_decls=False):
+                 show_gate_decls=False,
+                 include_path='.'):
         """
         Init from source lines in an array.
         Does not read in from file, expects code handed to it.
         qasmsourcelines = the source code
+        name = user-defined name for translation unit
         no_unknown = True if raises on unknown element
         filepath = source code filepath (informational only)
         save_pgm_source = True if program source should be embedded in output
         save_element_source = True if element source should be embedded in output
         save_gate_source = True if user gate source should be embedded in output
+        show_gate_decls = True if gate declaration should be noted in c_sect
+        include_path is path for include file search
         """
 
         # Control factors
@@ -546,6 +572,7 @@ class QasmTranslator():
         self.save_element_source = save_element_source
         self.save_gate_source = save_gate_source
         self.show_gate_decls = show_gate_decls
+        self.include_path = include_path
 
         # Init sections
         self.t_sect = T_Sect(name)
@@ -569,31 +596,36 @@ class QasmTranslator():
         self.push_source(filepath, qasmsourcelines)
 
     @staticmethod
-    def fromFileHandle(fileHandle, name='main', filepath=None, datetime=None,
+    def fromFileHandle(file_handle, name='main', filepath=None, datetime=None,
                        no_unknown=False,
                        save_pgm_source=False, save_element_source=False,
                        save_gate_source=False,
-                       show_gate_decls=False):
+                       show_gate_decls=False,
+                       include_path='.'):
         """
         Instance QasmTranslator from a file handle reading in all lines.
         Does not close file handle.
-        qasmsourcelines = the source code
+        file_handle = open read file containing qasm source
+        name = user-defined name for translation unit
         no_unknown = True if raises on unknown element
         filepath = source code filepath (informational only)
         datetime = datetime informational
         save_pgm_source = True if program source should be embedded in output
         save_element_source = True if element source should be embedded in outpu
         save_gate_source = True if user gate source should be embedded in output
+        show_gate_decls = True if gate declaration should be noted in c_sect
+        include_path is path for include file search
         """
         qasmsourcelines = []
-        for line in fileHandle:
+        for line in file_handle:
             qasmsourcelines.append(line.strip())
         qt = QasmTranslator(qasmsourcelines, name=name, filepath=filepath,
                             no_unknown=no_unknown,
                             save_pgm_source=save_pgm_source,
                             save_element_source=save_element_source,
                             save_gate_source=save_gate_source,
-                            show_gate_decls=show_gate_decls)
+                            show_gate_decls=show_gate_decls,
+                            include_path=include_path)
         return qt
 
     @staticmethod
@@ -601,31 +633,33 @@ class QasmTranslator():
                  no_unknown=False,
                  save_pgm_source=False, save_element_source=False,
                  save_gate_source=False,
-                 show_gate_decls=False):
+                 show_gate_decls=False,
+                 include_path='.'):
         """
         Instance QasmTranslator from a filepath.
         Opens file 'r' reading in all lines and closes file.
-        qasmsourcelines = the source code
         filepath = source code filepath for loading and informational
         no_unknown = True if raises on unknown element
-        datetime = datetime informational
         save_pgm_source = True if program source should be embedded in output
         save_element_source = True if element source should be embedded in outpu
         save_gate_source = True if user gate source should be embedded in output
+        show_gate_decls = True if gate declaration should be noted in c_sect
+        include_path is path for include file search
         """
         if not os.path.exists(filepath) or not os.access(filepath, os.R_OK):
             raise Qasm_Cannot_Read_File_Exception(None, None, None, filepath)
         qasmsourcelines = []
-        fileHandle = open(filepath, 'r')
-        for line in fileHandle:
+        file_handle = open(filepath, 'r')
+        for line in file_handle:
             qasmsourcelines.append(line.strip())
-        fileHandle.close()
+        file_handle.close()
         qt = QasmTranslator(qasmsourcelines, name=name, filepath=filepath,
                             no_unknown=no_unknown,
                             save_pgm_source=save_pgm_source,
                             save_element_source=save_element_source,
                             save_gate_source=save_gate_source,
-                            show_gate_decls=show_gate_decls)
+                            show_gate_decls=show_gate_decls,
+                            include_path=include_path)
         return qt
 
     def push_source(self, filepath, qasmsourcelines):
@@ -636,20 +670,58 @@ class QasmTranslator():
             self.s_sect.append(Source_Body(
                 filenum, qasmsourcelines).source_body)
 
-    def push_include(self, filepath):
-        """Open an include file, read it, close it, push source"""
-        if not os.path.exists(filepath) or not os.access(filepath, os.R_OK):
-            raise Qasm_Cannot_Read_File_Exception(None, None, None, filepath)
-        qasmsourcelines = []
-        fileHandle = open(filepath, 'r')
-        for line in fileHandle:
-            qasmsourcelines.append(line.strip())
-        fileHandle.close()
-        self.push_source(filepath, qasmsourcelines)
+    def filenum(self):
+        """Return the current filenum"""
+        return self.source_frame_stack.filenum()
 
     def linenum(self):
         """Return the current linenum"""
         return self.source_frame_stack.linenum()
+
+    def nth_qasmline(self, n):
+        """Return nth line in current source or None"""
+        return self.source_frame_stack.nth_qasmline(n)
+
+    def find_include(self, filepath):
+        """
+        Search include path for filepath
+        Return completed filepath if found else None
+        """
+        found = None
+        include_dirs = self.include_path.split(os.pathsep)
+        for idir in include_dirs:
+            ipath = idir + os.path.sep + filepath
+            if os.path.exists(ipath):
+                found = ipath
+                break
+        return found
+
+    def push_include(self, filepath):
+        """Open an include file, read it, close it, push source"""
+        found = self.find_include(filepath)
+        if not found:
+            raise Qasm_Cannot_Find_File_Exception(self.filenum(),
+                                                  self.get_nth_filepath(
+                                                      self.filenum()),
+                                                  self.linenum() - 1,
+                                                  self.nth_qasmline(
+                                                      self.linenum() - 1),
+                                                  filepath)
+        filepath = found
+        if not os.access(filepath, os.R_OK):
+            raise Qasm_Cannot_Read_File_Exception(self.filenum(),
+                                                  self.get_nth_filepath(
+                                                      self.filenum()),
+                                                  self.linenum() - 1,
+                                                  self.nth_qasmline(
+                                                      self.linenum() - 1),
+                                                  filepath)
+        qasmsourcelines = []
+        file_handle = open(filepath, 'r')
+        for line in file_handle:
+            qasmsourcelines.append(line.strip())
+        file_handle.close()
+        self.push_source(filepath, qasmsourcelines)
 
     def append_ast(self, ast):
         """
@@ -723,7 +795,11 @@ class QasmTranslator():
                 if not seen_open_curly:
                     x = QTRegEx.START_CURLY.search(line)
                     if not x:
-                        raise Qasm_Gate_Missing_Open_Curly_Exception(filenum, linenum, gate_start_line,
+                        raise Qasm_Gate_Missing_Open_Curly_Exception(filenum,
+                                                                     self.get_nth_filepath(
+                                                                         filenum),
+                                                                     linenum,
+                                                                     gate_start_line,
                                                                      gate_start_linenum)
                     else:
                         seen_open_curly = True
@@ -760,7 +836,7 @@ class QasmTranslator():
                     seen_noncomment = True
                 else:
                     raise Qasm_Declaration_Absent_Exception(
-                        filenum, linenum, line)
+                        filenum, self.get_nth_filepath(filenum), linenum, line)
 
             # Now step thru types
             if astType == ASTType.COMMENT:
@@ -816,12 +892,20 @@ class QasmTranslator():
                 astElement = ASTElementOp(
                     filenum, linenum, line, self.save_element_source)
             if type(astElement) is ASTElementUnknown and self.no_unknown:
-                raise Qasm_Unknown_Element_Exception(filenum, linenum, line)
+                raise Qasm_Unknown_Element_Exception(filenum,
+                                                     self.get_nth_filepath(
+                                                         filenum),
+                                                     linenum,
+                                                     line)
             self.append_ast(astElement.out())
 
         if parsing_gate:
             raise Qasm_Incomplete_Gate_Exception(
-                filenum, linenum, gate_start_line, gate_start_linenum)
+                filenum,
+                self.get_nth_filepath(filenum),
+                linenum,
+                gate_start_line,
+                gate_start_linenum)
 
         self.t_sect.t_sect['datetime_finish'] = datetime.datetime.now(
         ).isoformat()
@@ -907,8 +991,9 @@ class QasmTranslator():
 class Qasm_Exception(Exception):
     """Base class for Qasm exceptions"""
 
-    def __init__(self, filenum, linenum, line):
+    def __init__(self, filenum, filename, linenum, line):
         self.filenum = filenum
+        self.filename = filename
         self.linenum = linenum
         self.line = line
         self.message = "Qasm_Exception"
@@ -917,6 +1002,7 @@ class Qasm_Exception(Exception):
     def errpacket(self):
         ex = {'message': self.message,
               'filenum': self.filenum,
+              'filename': self.filename,
               'linenum': self.linenum,
               'line': self.line,
               'errcode': self.errcode
@@ -927,9 +1013,9 @@ class Qasm_Exception(Exception):
 class Qasm_Declaration_Absent_Exception(Qasm_Exception):
     """QASM2.0 Declaration not first non-blank non-comment line"""
 
-    def __init__(self, filenum, linenum, line):
+    def __init__(self, filenum, filename, linenum, line):
         super(Qasm_Declaration_Absent_Exception,
-              self).__init__(filenum, linenum, line)
+              self).__init__(filenum, filename, linenum, line)
         self.message = "QASM2.0 Declaration not first non-blank non-comment line"
         self.errcode = 20
 
@@ -937,9 +1023,9 @@ class Qasm_Declaration_Absent_Exception(Qasm_Exception):
 class Qasm_Unknown_Element_Exception(Qasm_Exception):
     """Unknown element"""
 
-    def __init__(self, filenum, linenum, line):
+    def __init__(self, filenum, filename, linenum, line):
         super(Qasm_Unknown_Element_Exception, self).__init__(
-            filenum, linenum, line)
+            filenum, filename, linenum, line)
         self.message = "Unknown element"
         self.errcode = 30
 
@@ -947,16 +1033,17 @@ class Qasm_Unknown_Element_Exception(Qasm_Exception):
 class Qasm_Incomplete_Gate_Exception(Qasm_Exception):
     """Gate definition incomplete"""
 
-    def __init__(self, filenum, linenum, line, start_linenum):
+    def __init__(self, filenum, filename, linenum, line, start_linenum):
         super(Qasm_Incomplete_Gate_Exception, self).__init__(
-            filenum, linenum, line)
-        self.start_linenum = start_linenum
+            filenum, filename, linenum, line)
         self.message = "Gate definition incomplete"
         self.errcode = 40
+        self.start_linenum = start_linenum
 
     def errpacket(self):
         ex = {'message': self.message,
               'filenum': self.filenum,
+              'filename': self.filename,
               'linenum': self.linenum,
               'line': self.line,
               'start_linenum': self.start_linenum,
@@ -968,16 +1055,17 @@ class Qasm_Incomplete_Gate_Exception(Qasm_Exception):
 class Qasm_Gate_Missing_Open_Curly_Exception(Qasm_Exception):
     """Gate definition incomplete"""
 
-    def __init__(self, filenum, linenum, line, start_linenum):
+    def __init__(self, filenum, filename, linenum, line, start_linenum):
         super(Qasm_Gate_Missing_Open_Curly_Exception, self).__init__(
-            filenum, linenum, line)
-        self.start_linenum = start_linenum
+            filenum, filename, linenum, line)
         self.message = "Gate definition missing open curly brace"
         self.errcode = 45
+        self.start_linenum = start_linenum
 
     def errpacket(self):
         ex = {'message': self.message,
               'filenum': self.filenum,
+              'filename': self.filename,
               'linenum': self.linenum,
               'line': self.line,
               'start_linenum': self.start_linenum,
@@ -986,19 +1074,47 @@ class Qasm_Gate_Missing_Open_Curly_Exception(Qasm_Exception):
         return ex
 
 
-class Qasm_Cannot_Read_File_Exception(Qasm_Exception):
+class Qasm_Cannot_Find_File_Exception(Qasm_Exception):
     """File read error"""
 
-    def __init__(self, filenum, linenum, line, filepath):
-        super(Qasm_Cannot_Read_File_Exception, self).__init__(
-            filenum, linenum, line)
-        self.filepath = filepath
-        self.message = "Cannot access file."
+    def __init__(self, filenum, filename, linenum, line, filepath):
+        super(Qasm_Cannot_Find_File_Exception, self).__init__(
+            filenum, filename, linenum, line)
+        self.message = "Cannot find file."
         self.errcode = 50
+        self.filepath = filepath
 
     def errpacket(self):
         ex = {'message': self.message,
+              'filenum': self.filenum,
+              'filename': self.filename,
+              'linenum': self.linenum,
+              'line': self.line,
               'filepath': self.filepath,
               'errcode': self.errcode
               }
         return ex
+
+
+class Qasm_Cannot_Read_File_Exception(Qasm_Exception):
+    """File read error"""
+
+    def __init__(self, filenum, filename, linenum, line, filepath):
+        super(Qasm_Cannot_Read_File_Exception, self).__init__(
+            filenum, filename, linenum, line)
+        self.message = "Cannot read file."
+        self.errcode = 55
+        self.filepath = filepath
+
+    def errpacket(self):
+        ex = {'message': self.message,
+              'filenum': self.filenum,
+              'filename': self.filename,
+              'linenum': self.linenum,
+              'line': self.line,
+              'filepath': self.filepath,
+              'errcode': self.errcode
+              }
+        return ex
+
+# fin
