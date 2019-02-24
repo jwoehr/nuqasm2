@@ -11,6 +11,7 @@ WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
 """
 from enum import Enum
 import re
+import datetime
 
 
 class QTRegEx():
@@ -109,8 +110,9 @@ class ASTElement():
     source is source code
     """
 
-    def __init__(self, linenum, ast_type, source, save_element_source=False):
+    def __init__(self, filenum, linenum, ast_type, source, save_element_source=False):
         """Instance from qasm source code and parse into key:value pairs"""
+        self.filenum = filenum
         self.linenum = linenum
         self.ast_type = ast_type
         self.source = source
@@ -118,7 +120,7 @@ class ASTElement():
 
     def out(self):
         """Returns self as a dict structure"""
-        return {'linenum': self.linenum, 'type': self.ast_type,
+        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None}
 
     @staticmethod
@@ -137,9 +139,9 @@ class ASTElementUnknown(ASTElement):
     Knows linenum, ast_type, source
     """
 
-    def __init__(self, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False):
         super(ASTElementUnknown, self).__init__(
-            linenum, ASTType.UNKNOWN, source, save_element_source)
+            filenum, linenum, ASTType.UNKNOWN, source, save_element_source)
 
 
 class ASTElementComment(ASTElement):
@@ -149,9 +151,9 @@ class ASTElementComment(ASTElement):
     Knows linenum, ast_type, source
     """
 
-    def __init__(self, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False):
         super(ASTElementComment, self).__init__(
-            linenum, ASTType.COMMENT, source, save_element_source)
+            filenum, linenum, ASTType.COMMENT, source, save_element_source)
 
 
 class ASTElementDeclarationQasm2_0(ASTElement):
@@ -161,9 +163,9 @@ class ASTElementDeclarationQasm2_0(ASTElement):
     Knows linenum, ast_type, source
     """
 
-    def __init__(self, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False):
         super(ASTElementDeclarationQasm2_0, self).__init__(
-            linenum, ASTType.DECLARATION_QASM_2_0, source, save_element_source)
+            filenum, linenum, ASTType.DECLARATION_QASM_2_0, source, save_element_source)
 
 
 class ASTElementInclude(ASTElement):
@@ -173,14 +175,14 @@ class ASTElementInclude(ASTElement):
     Knows linenum, ast_type, source, include
     """
 
-    def __init__(self, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False):
         super(ASTElementInclude, self).__init__(
-            linenum, ASTType.INCLUDE, source, save_element_source)
+            filenum, linenum, ASTType.INCLUDE, source, save_element_source)
         x = QTRegEx.INCLUDE_TARGET.search(source)
         self.include = x.group(1)
 
     def out(self):
-        return {'linenum': self.linenum, 'type': self.ast_type,
+        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'include': self.include}
 
@@ -192,15 +194,15 @@ class ASTElementQReg(ASTElement):
     Knows linenum, ast_type, source, qreg_name, qreg_num
     """
 
-    def __init__(self, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False):
         super(ASTElementQReg, self).__init__(
-            linenum, ASTType.QREG, source, save_element_source)
+            filenum, linenum, ASTType.QREG, source, save_element_source)
         x = QTRegEx.REG_DECL.match(self.source)
         self.qreg_name = x.group(1)
         self.qreg_num = x.group(2)
 
     def out(self):
-        return {'linenum': self.linenum, 'type': self.ast_type,
+        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'qreg_name': self.qreg_name, 'qreg_num': self.qreg_num}
 
@@ -212,15 +214,15 @@ class ASTElementCReg(ASTElement):
     Knows linenum, ast_type, source, creg_name, creg_num
     """
 
-    def __init__(self, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False):
         super(ASTElementCReg, self).__init__(
-            linenum, ASTType.CREG, source, save_element_source)
+            filenum, linenum, ASTType.CREG, source, save_element_source)
         x = QTRegEx.REG_DECL.match(self.source)
         self.creg_name = x.group(1)
         self.creg_num = x.group(2)
 
     def out(self):
-        return {'linenum': self.linenum, 'type': self.ast_type,
+        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'creg_name': self.creg_name, 'creg_num': self.creg_num}
 
@@ -232,15 +234,15 @@ class ASTElementMeasure(ASTElement):
     Knows linenum, ast_type, source, source_reg, target_reg
     """
 
-    def __init__(self, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False):
         super(ASTElementMeasure, self).__init__(
-            linenum, ASTType.MEASURE, source, save_element_source)
+            filenum, linenum, ASTType.MEASURE, source, save_element_source)
         x = QTRegEx.MEASURE_DECL.match(self.source)
         self.source_reg = x.group(1)
         self.target_reg = x.group(2)
 
     def out(self):
-        return {'linenum': self.linenum, 'type': self.ast_type,
+        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'source_reg': self.source_reg, 'target_reg': self.target_reg}
 
@@ -252,14 +254,14 @@ class ASTElementBarrier(ASTElement):
     Knows linenum, ast_type, source, reg_list
     """
 
-    def __init__(self, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False):
         super(ASTElementBarrier, self).__init__(
-            linenum, ASTType.BARRIER, source, save_element_source)
+            filenum, linenum, ASTType.BARRIER, source, save_element_source)
         x = QTRegEx.BARRIER_DECL.findall(self.source)
         self.reg_list = x[0].split(',')
 
     def out(self):
-        return {'linenum': self.linenum, 'type': self.ast_type,
+        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'reg_list': self.reg_list}
 
@@ -271,9 +273,9 @@ class ASTElementOp(ASTElement):
     Knows linenum, ast_type, source, op, param_list, reg_list
     """
 
-    def __init__(self, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False):
         super(ASTElementOp, self).__init__(
-            linenum, ASTType.OP, source, save_element_source)
+            filenum, linenum, ASTType.OP, source, save_element_source)
         x = QTRegEx.OP_AND_ARGS.match(self.source)
         op_and_args = x.group(1)
         x = QTRegEx.OP_PARAM_LIST.match(op_and_args)
@@ -288,7 +290,7 @@ class ASTElementOp(ASTElement):
         self.reg_list = self.proc_reg_list(self.source)
 
     def out(self):
-        return {'linenum': self.linenum, 'type': self.ast_type,
+        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'op': self.op,
                 'param_list': self.param_list, 'reg_list': self.reg_list}
@@ -302,9 +304,9 @@ class ASTElementCtl2(ASTElement):
     expression_param_list, op, param_list, reg_list
     """
 
-    def __init__(self, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False):
         super(ASTElementCtl2, self).__init__(
-            linenum, ASTType.CTL_2, source, save_element_source)
+            filenum, linenum, ASTType.CTL_2, source, save_element_source)
         x = QTRegEx.CTL_2.match(self.source)
         self.ctl = x.group(1)
         self.expression_op = x.group(3)
@@ -323,7 +325,7 @@ class ASTElementCtl2(ASTElement):
         self.reg_list = self.proc_reg_list(self.source)
 
     def out(self):
-        return {'linenum': self.linenum, 'type': self.ast_type,
+        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'ctl': self.ctl,
                 'expression_op': self.expression_op,
@@ -332,41 +334,244 @@ class ASTElementCtl2(ASTElement):
                 'param_list': self.param_list, 'reg_list': self.reg_list}
 
 
-class QasmTranslator():
+class ASTElementGateDefinitionPlaceholder(ASTElement):
+    """So something will show up in the c_sect when a gate definition starts"""
 
-    def __init__(self, qasmsourcelines, filepath=None, datetime=None,
+    def __init__(self, filenum, linenum, source, save_element_source=False):
+        super(ASTElementGateDefinitionPlaceholder, self).__init__(
+            filenum, linenum, ASTType.GATE, None, None)
+
+    def out(self):
+        """Returns self as a dict structure"""
+        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type}
+
+class Gate_Operation():
+    """
+    One operation in a gate operation list
+    """
+
+    def __init__(self, op, op_param_list, op_reg_list):
+        """
+        Init operation step
+        op ... operator
+        op_param_list ... parameter list for operator
+        op_param_list ... register list for operator
+        """
+        self. operation = {
+            'op': op,
+            'op_param_list': op_param_list,
+            'op_reg_list': op_reg_list
+        }
+
+
+class Gate_Definition():
+    """User gate definition"""
+
+    def __init__(self, source, filenum, linenum, param_list, ops_raw_list, ops_list):
+        """
+        Instance structures filled in by QasmTranslator
+        source ... source code for definition
+        filenum ... index of filepath in t_sect filepaths vector
+        linenum ... line number in source file
+        param_list ... vector of gate param names
+        ops_raw_list ... vector of operations as expressed in source code
+        ops_list ... vector of Gate_Operation (translated ops)
+        """
+        self.gate_definition = {
+            'source': source,
+            'filenum': filenum,
+            'linenum': linenum,
+            'param_list': param_list,
+            'ops_raw_list': ops_raw_list,
+            'ops_list': ops_list}
+
+
+class Source_Body():
+    """Source code body with filenum of source file"""
+
+    def __init__(self, filenum, source):
+        """
+        Instance structures filled in by QasmTranslator
+        filenum ... index of filepath in t_sect filepaths vector
+        source ... source lines vector
+        """
+        self.source_body = {
+            'filenum': filenum,
+            'source': source
+        }
+
+
+class T_Sect():
+    """Translation overhead section of translation unit"""
+
+    def __init__(self, name):
+        """Instance structures filled in by QasmTranslator"""
+        self.t_sect = {
+            'name': name,
+            'filepaths': [],
+            'datetime_start': datetime.datetime.now().isoformat(),
+            'datetime_finish': None
+        }
+
+    def append_filepath(self, filepath):
+        """Append to filepaths returning index of latest append"""
+        l = len(self.t_sect['filepaths'])
+        self.t_sect['filepaths'].append(filepath)
+        return l
+
+
+class C_Sect():
+    """Code section of translation unit"""
+
+    def __init__(self):
+        """
+        Instance structures filled in by QasmTranslator
+        Vector of ASTElement
+        """
+        self.c_sect = []
+
+
+class G_Sect():
+    """User gate definition section of translation unit"""
+
+    def __init__(self):
+        """Instance structures filled in by QasmTranslator"""
+        self.g_sect = []
+
+
+class S_Sect():
+    """
+    Source code section
+    Vector of Source_Body
+    """
+
+    def __init__(self):
+        """Instance structures filled in by QasmTranslator"""
+        self.s_sect = []
+
+    def append(self, sourcebody):
+        self.s_sect.append(sourcebody)
+
+
+class Source_Frame():
+    """
+    A pushable frame defining the source we are processing
+    """
+
+    def __init__(self, filenum, qasmsourcelines):
+        """
+        filenum ... index of filepath in t_sect filepaths vector
+        qasmsourcelines ... source lines vector
+        Init counter to 0
+        """
+        self.filenum = filenum
+        self.qasmsourcelines = qasmsourcelines
+        self.linenum = 0
+
+    def next(self):
+        """ Return next source line and increment counter"""
+        source = None
+        if self.linenum < len(self.qasmsourcelines):
+            source = self.qasmsourcelines[self.linenum]
+            self.linenum += 1
+        return source
+
+
+class Source_Frame_Stack():
+    """Stack of source frames so we can nest into include files"""
+
+    def __init__(self):
+        """Create the stack"""
+        self.frames = []
+
+    def push(self, filenum, qasmsourcelines):
+        """
+        Create and push a frame
+        filenum ... index of filepath in t_sect filepaths vector
+        qasmsourcelines ... source lines vector
+        """
+        self.frames.append(Source_Frame(filenum, qasmsourcelines))
+
+    def pop(self):
+        """Lose top frame"""
+        self.frames.pop()
+
+    def tos(self):
+        """Return top frame"""
+        return self.frames[-1]
+
+    def next(self):
+        """Return next line in source from top frame or None"""
+        return self.filenum(), self.linenum(), self.tos().next()
+
+    def depth(self):
+        """Depth of stack"""
+        return len(self.frames)
+
+    def linenum(self):
+        """Return linenum of current tos"""
+        return self.tos().linenum
+
+    def filenum(self):
+        """Return linenum of current tos"""
+        return self.tos().filenum
+
+
+class QasmTranslator():
+    """Translation of a Qasm unit"""
+
+    def __init__(self, qasmsourcelines,
+                 name='main',
+                 filepath=None,
                  no_unknown=False,
                  save_pgm_source=False, save_element_source=False,
-                 save_gate_source=False):
+                 save_gate_source=False,
+                 show_gate_decls=False):
         """
         Init from source lines in an array.
         Does not read in from file, expects code handed to it.
         qasmsourcelines = the source code
         no_unknown = True if raises on unknown element
         filepath = source code filepath (informational only)
-        datetime = datetime informational
         save_pgm_source = True if program source should be embedded in output
         save_element_source = True if element source should be embedded in output
         save_gate_source = True if user gate source should be embedded in output
         """
-        self.qasmsourcelines = qasmsourcelines
+
+        # Control factors
         self.no_unknown = no_unknown
-        self.filepath = filepath
-        self.datetime = datetime
         self.save_pgm_source = save_pgm_source
         self.save_element_source = save_element_source
         self.save_gate_source = save_gate_source
+        self.show_gate_decls=show_gate_decls
+
+        # Init sections
+        self.t_sect = T_Sect(name)
+        self.c_sect = C_Sect()
+        self.g_sect = G_Sect()
+
+        if save_pgm_source is None:
+            self.s_sect = None
+        else:
+            self.s_sect = S_Sect()
 
         self.translation = {
-            'filepath': self.filepath, 'datetime': self.datetime,
-            'source': self.qasmsourcelines if self.save_pgm_source else None,
-            'user_gates': [], 'ast': []}
+            't_sect': self.t_sect.t_sect,
+            'c_sect': self.c_sect.c_sect,
+            'g_sect': self.g_sect.g_sect,
+            's_sect': self.s_sect.s_sect
+        }
+
+        # Prepare to process initial source
+        self.source_frame_stack = Source_Frame_Stack()
+        self.push_source(filepath, qasmsourcelines)
 
     @staticmethod
-    def fromFileHandle(fileHandle, filepath=None, datetime=None,
+    def fromFileHandle(fileHandle, name='main', filepath=None, datetime=None,
                        no_unknown=False,
                        save_pgm_source=False, save_element_source=False,
-                       save_gate_source=False):
+                       save_gate_source=False,
+                       show_gate_decls=False):
         """
         Instance QasmTranslator from a file handle reading in all lines.
         Does not close file handle.
@@ -381,19 +586,20 @@ class QasmTranslator():
         qasmsourcelines = []
         for line in fileHandle:
             qasmsourcelines.append(line.strip())
-        qt = QasmTranslator(qasmsourcelines, filepath=filepath,
+        qt = QasmTranslator(qasmsourcelines, name=name, filepath=filepath,
                             no_unknown=no_unknown,
-                            datetime=datetime,
                             save_pgm_source=save_pgm_source,
                             save_element_source=save_element_source,
-                            save_gate_source=save_gate_source)
+                            save_gate_source=save_gate_source,
+                            show_gate_decls=show_gate_decls)
         return qt
 
     @staticmethod
-    def fromFile(filepath, datetime=None,
+    def fromFile(filepath, name='main',
                  no_unknown=False,
                  save_pgm_source=False, save_element_source=False,
-                 save_gate_source=False):
+                 save_gate_source=False,
+                 show_gate_decls=False):
         """
         Instance QasmTranslator from a filepath.
         Opens file 'r' reading in all lines and closes file.
@@ -410,13 +616,39 @@ class QasmTranslator():
         for line in fileHandle:
             qasmsourcelines.append(line.strip())
         fileHandle.close()
-        qt = QasmTranslator(qasmsourcelines, filepath=filepath,
+        qt = QasmTranslator(qasmsourcelines, name=name, filepath=filepath,
                             no_unknown=no_unknown,
-                            datetime=datetime,
                             save_pgm_source=save_pgm_source,
                             save_element_source=save_element_source,
-                            save_gate_source=save_gate_source)
+                            save_gate_source=save_gate_source,
+                            show_gate_decls=show_gate_decls)
         return qt
+
+    def push_source(self, filepath, qasmsourcelines):
+        """Add filepath, push source frame stack, and save source if wanted"""
+        filenum = self.t_sect.append_filepath(filepath)
+        self.source_frame_stack.push(filenum, qasmsourcelines)
+        if self.save_pgm_source:
+            self.s_sect.append(Source_Body(
+                filenum, qasmsourcelines).source_body)
+
+    def push_include(self, filepath):
+        """Open an include file, read it, close it, push source"""
+        qasmsourcelines = []
+        fileHandle = open(filepath, 'r')
+        for line in fileHandle:
+            qasmsourcelines.append(line.strip())
+        fileHandle.close()
+        self.push_source(filepath, qasmsourcelines)
+
+    def linenum(self):
+        """Return the current linenum"""
+        return self.source_frame_stack.linenum()
+
+    ###
+    # Access members of the translation
+    # Need to be rewritten
+    ###
 
     def get_filepath(self):
         """Retrieve filepath from translation created by translate()"""
@@ -455,12 +687,6 @@ class QasmTranslator():
         """
         return self.translation()['source']
 
-    def append_ast(self, ast):
-        """
-        Internal routine to append to the AST
-        """
-        self.translation['ast'].append(ast)
-
     def get_user_gates(self):
         """
         Get user_gates definition section of output
@@ -475,11 +701,20 @@ class QasmTranslator():
         """
         return self.get_user_gates()[index]
 
+    ###
+    # End of Need to be Rewritten
+    ###
+    def append_ast(self, ast):
+        """
+        Internal routine to append to the AST
+        """
+        self.translation['c_sect'].append(ast)
+
     def append_user_gate(self, user_gate):
         """Append a user gate definition to the user_gates output list"""
-        self.translation['user_gates'].append(user_gate)
+        self.translation['g_sect'].append(user_gate)
 
-    def user_gate_definition(self, linenum, txt):
+    def user_gate_definition(self, filenum, linenum, txt):
         """Internal routine to parse and append a user gate definition"""
         txt = txt.strip()
         gate_decl = QTRegEx.GATE_DECL.match(txt)
@@ -506,6 +741,7 @@ class QasmTranslator():
                                   'op_param_list': op_param_list,
                                   'op_reg_list': op_reg_list})
         gate = {'source': txt if self.save_gate_source else None,
+                'filenum': filenum,
                 'linenum': linenum, 'gate_name': gate_name,
                 'gate_param_list': gate_param_list,
                 'gate_ops_raw_list': gate_ops_raw_list,
@@ -523,9 +759,12 @@ class QasmTranslator():
         gate_start_line = None
         gate_start_linenum = None
         seen_open_curly = False
-        i = 1
-        for line in self.qasmsourcelines:
 
+        while self.source_frame_stack.depth():
+            filenum, linenum, line = self.source_frame_stack.next()
+            if line is None:
+                self.source_frame_stack.pop()
+                continue
             astElement = None
             line = line.strip()
             line = line.replace(', ', ',')
@@ -535,7 +774,7 @@ class QasmTranslator():
                 if not seen_open_curly:
                     x = QTRegEx.START_CURLY.search(line)
                     if not x:
-                        raise Qasm_Gate_Missing_Open_Curly(i, gate_start_line,
+                        raise Qasm_Gate_Missing_Open_Curly(linenum, gate_start_line,
                                                            gate_start_linenum)
                     else:
                         seen_open_curly = True
@@ -553,78 +792,89 @@ class QasmTranslator():
                     gate_def = gate_def + line + ' '
                     x = QTRegEx.END_CURLY.search(line)
                     if x:
-                        self.user_gate_definition(gate_start_linenum, gate_def)
+                        self.user_gate_definition(
+                            filenum, gate_start_linenum, gate_def)
                         parsing_gate = False
                         gate_def = ''
                         gate_start_line = None
                         gate_start_linenum = None
                         seen_open_curly = False
 
-                i = i + 1
                 continue
 
-            astElement = ASTElementUnknown(i, line)
+            astElement = ASTElementUnknown(filenum, linenum, line)
             astType = ASTType.astType(line)
             if astType == ASTType.BLANK:
-                i = i + 1
                 continue
             if not seen_noncomment and astType != ASTType.COMMENT:
                 if astType == ASTType.DECLARATION_QASM_2_0:
                     seen_noncomment = True
                 else:
-                    raise Qasm_Declaration_Absent_Exception(i, line)
+                    raise Qasm_Declaration_Absent_Exception(linenum, line)
 
             # Now step thru types
             if astType == ASTType.COMMENT:
                 astElement = ASTElementComment(
-                    i, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source)
             elif astType == ASTType.DECLARATION_QASM_2_0:
                 astElement = ASTElementDeclarationQasm2_0(
-                    i, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source)
             if astType == ASTType.INCLUDE:
                 astElement = ASTElementInclude(
-                    i, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source)
+                self.push_include(astElement.out()['include'])
             elif astType == ASTType.CTL_2:
-                astElement = ASTElementCtl2(i, line, self.save_element_source)
+                astElement = ASTElementCtl2(
+                    filenum, linenum, line, self.save_element_source)
             elif astType == ASTType.QREG:
-                astElement = ASTElementQReg(i, line, self.save_element_source)
+                astElement = ASTElementQReg(
+                    filenum, linenum, line, self.save_element_source)
             elif astType == ASTType.CREG:
-                astElement = ASTElementCReg(i, line, self.save_element_source)
+                astElement = ASTElementCReg(
+                    filenum, linenum, line, self.save_element_source)
             elif astType == ASTType.MEASURE:
                 astElement = ASTElementMeasure(
-                    i, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source)
             elif astType == ASTType.BARRIER:
                 astElement = ASTElementBarrier(
-                    i, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source)
 
             elif astType == ASTType.GATE:
+                if self.show_gate_decls:
+                    astElement = ASTElementGateDefinitionPlaceholder(
+                        filenum, linenum, line, self.save_element_source)
+                    self.append_ast(astElement.out())
                 parsing_gate = True
                 gate_start_line = line
-                gate_start_linenum = i
+                gate_start_linenum = linenum
                 gate_def = line + ' '
                 x = QTRegEx.START_CURLY.search(line)
                 if x:
                     seen_open_curly = True
                     x = QTRegEx.END_CURLY.search(line)
                     if x:
-                        self.user_gate_definition(gate_start_linenum, gate_def)
+                        self.user_gate_definition(
+                            filenum, gate_start_linenum, gate_def)
                         parsing_gate = False
                         gate_def = ''
                         gate_start_line = None
                         gate_start_linenum = None
                         seen_open_curly = False
-                i = i + 1
                 continue
 
             elif astType == ASTType.OP:
-                astElement = ASTElementOp(i, line, self.save_element_source)
+                astElement = ASTElementOp(
+                    filenum, linenum, line, self.save_element_source)
             if type(astElement) is ASTElementUnknown and self.no_unknown:
-                raise Qasm_Unknown_Element(i, line)
+                raise Qasm_Unknown_Element(filenum, linenum, line)
             self.append_ast(astElement.out())
-            i = i + 1
 
         if parsing_gate:
-            raise Qasm_Incomplete_Gate(i, gate_start_line, gate_start_linenum)
+            raise Qasm_Incomplete_Gate(
+                filenum, linenum, gate_start_line, gate_start_linenum)
+
+        self.t_sect.t_sect['datetime_finish'] = datetime.datetime.now(
+        ).isoformat()
 
     def get_translation(self):
         """Retrieve translation created by translate()"""
@@ -634,14 +884,20 @@ class QasmTranslator():
 class Qasm_Error(Exception):
     """Base class for Qasm exceptions"""
 
-    def __init__(self, linenum, line):
+    def __init__(self, filenum, linenum, line):
         self.linenum = linenum
+        self.filenum = filenum
+        self.filenum = filenum
+        self.filenum = filenum
+        self.filenum = filenum
+        self.filenum = filenum
         self.line = line
         self.message = "Qasm_Error"
         self.errcode = 10
 
     def errpacket(self):
         ex = {'message': self.message,
+              'filenum': self.filenum,
               'linenum': self.linenum,
               'line': self.line,
               'errcode': self.errcode
@@ -652,8 +908,9 @@ class Qasm_Error(Exception):
 class Qasm_Declaration_Absent_Exception(Qasm_Error):
     """QASM2.0 Declaration not first non-blank non-comment line"""
 
-    def __init__(self, linenum, line):
-        super(Qasm_Declaration_Absent_Exception, self).__init__(linenum, line)
+    def __init__(self, filenum, linenum, line):
+        super(Qasm_Declaration_Absent_Exception,
+              self).__init__(filenum, linenum, line)
         self.message = "QASM2.0 Declaration not first non-blank non-comment line"
         self.errcode = 20
 
@@ -661,8 +918,8 @@ class Qasm_Declaration_Absent_Exception(Qasm_Error):
 class Qasm_Unknown_Element(Qasm_Error):
     """Unknown element"""
 
-    def __init__(self, linenum, line):
-        super(Qasm_Unknown_Element, self).__init__(linenum, line)
+    def __init__(self, filenum, linenum, line):
+        super(Qasm_Unknown_Element, self).__init__(filenum, linenum, line)
         self.message = "Unknown element"
         self.errcode = 30
 
@@ -670,14 +927,15 @@ class Qasm_Unknown_Element(Qasm_Error):
 class Qasm_Incomplete_Gate(Qasm_Error):
     """Gate definition incomplete"""
 
-    def __init__(self, linenum, line, start_linenum):
-        super(Qasm_Incomplete_Gate, self).__init__(linenum, line)
+    def __init__(self, filenum, linenum, line, start_linenum):
+        super(Qasm_Incomplete_Gate, self).__init__(filenum, linenum, line)
         self.start_linenum = start_linenum
         self.message = "Gate definition incomplete"
         self.errcode = 40
 
     def errpacket(self):
         ex = {'message': self.message,
+              'filenum': self.filenum,
               'linenum': self.linenum,
               'line': self.line,
               'start_linenum': self.start_linenum,
@@ -689,14 +947,16 @@ class Qasm_Incomplete_Gate(Qasm_Error):
 class Qasm_Gate_Missing_Open_Curly(Qasm_Error):
     """Gate definition incomplete"""
 
-    def __init__(self, linenum, line, start_linenum):
-        super(Qasm_Gate_Missing_Open_Curly, self).__init__(linenum, line)
+    def __init__(self, filenum, linenum, line, start_linenum):
+        super(Qasm_Gate_Missing_Open_Curly, self).__init__(
+            filenum, linenum, line)
         self.start_linenum = start_linenum
         self.message = "Gate definition missing open curly brace"
         self.errcode = 40
 
     def errpacket(self):
         ex = {'message': self.message,
+              'filenum': self.filenum,
               'linenum': self.linenum,
               'line': self.line,
               'start_linenum': self.start_linenum,

@@ -12,7 +12,6 @@ WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
 from qasmast import (QasmTranslator, Qasm_Error)
 import argparse
 import sys
-import datetime
 import time
 import pprint
 import cProfile
@@ -33,10 +32,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-now = datetime.datetime.now().isoformat()
-
 parser = argparse.ArgumentParser(description=description)
 
+parser.add_argument("-n", "--name", action="store", default='main',
+                    help="Give a name to the translation unit (default 'main'")
 parser.add_argument("-o", "--outfile", action="store",
                     help="Write AST to outfile overwriting silently, default is stdout")
 parser.add_argument("-p", "--profile", action="store_true",
@@ -60,6 +59,8 @@ parser.add_argument("--save_source", action="store_true",
                     help="""Save all source regions of output (equivalent to
                     --save_pgm_source --save_element_source --save_gate_source)
                     """)
+parser.add_argument("--show_gate_decls", action="store_true",
+                    help="Show gate declarations in code section output")
 parser.add_argument("--sortby", action="store", default="cumtime",
                     help="""Sort sequence for performance data if -p switch
                     used ... one or more of the following separated by spaces
@@ -137,12 +138,12 @@ def profileTranslate(qt, sortby=args.sortby):
 if args.filepaths:
     for filepath in args.filepaths:
         verbosity("Translating " + filepath, 1)
-        qt = QasmTranslator.fromFile(filepath,
+        qt = QasmTranslator.fromFile(filepath, name=args.name,
                                      no_unknown=args.unknown,
-                                     datetime=datetime.datetime.now().isoformat(),
                                      save_pgm_source=args.save_pgm_source or args.save_source,
                                      save_element_source=args.save_element_source or args.save_source,
-                                     save_gate_source=args.save_gate_source or args.save_source)
+                                     save_gate_source=args.save_gate_source or args.save_source,
+                                     show_gate_decls=args.show_gate_decls)
         try:
             if args.profile:
                 profileTranslate(qt)
@@ -160,12 +161,13 @@ if args.filepaths:
 
 else:
 
-    qt = QasmTranslator.fromFileHandle(sys.stdin, filepath=str(sys.stdin),
+    qt = QasmTranslator.fromFileHandle(sys.stdin, name=args.name, filepath=str(sys.stdin),
                                        no_unknown=args.unknown,
                                        datetime=datetime.datetime.now().isoformat(),
                                        save_pgm_source=args.save_pgm_source or args.save_source,
                                        save_element_source=args.save_element_source or args.save_source,
-                                       save_gate_source=args.save_gate_source or args.save_source)
+                                       save_gate_source=args.save_gate_source or args.save_source,
+                                       show_gate_decls=args.show_gate_decls)
     try:
         if args.profile:
             profileTranslate(qt)
