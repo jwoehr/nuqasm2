@@ -31,6 +31,8 @@ Output can include
 * The class file is `qasmast.py`.
 * `qasmast` is the code body providing methods to perform translation from OPENQASM source to data structures useful for backend circuit construction
 
+*Note* that as of v0.20 any qasm source file which does `include "qelib1.inc";` will need `qelib.inc` to be in the current directory, as the `include` directive is now supported and followed. We will be adding an include path regimen next.
+
 This is a proof of concept intended to illustrate more than to prescribe. Issues welcome, including comments and suggestions.
 
 ```
