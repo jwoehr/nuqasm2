@@ -614,7 +614,7 @@ class QasmTranslator():
         save_gate_source = True if user gate source should be embedded in output
         """
         if not os.path.exists(filepath) or not os.access(filepath, os.R_OK):
-            raise Qasm_Cannot_Read_File(None, None, None, filepath)
+            raise Qasm_Cannot_Read_File_Exception(None, None, None, filepath)
         qasmsourcelines = []
         fileHandle = open(filepath, 'r')
         for line in fileHandle:
@@ -639,7 +639,7 @@ class QasmTranslator():
     def push_include(self, filepath):
         """Open an include file, read it, close it, push source"""
         if not os.path.exists(filepath) or not os.access(filepath, os.R_OK):
-            raise Qasm_Cannot_Read_File(None, None, None, filepath)
+            raise Qasm_Cannot_Read_File_Exception(None, None, None, filepath)
         qasmsourcelines = []
         fileHandle = open(filepath, 'r')
         for line in fileHandle:
@@ -721,7 +721,7 @@ class QasmTranslator():
                 if not seen_open_curly:
                     x = QTRegEx.START_CURLY.search(line)
                     if not x:
-                        raise Qasm_Gate_Missing_Open_Curly(linenum, gate_start_line,
+                        raise Qasm_Gate_Missing_Open_Curly_Exception(filenum, linenum, gate_start_line,
                                                            gate_start_linenum)
                     else:
                         seen_open_curly = True
@@ -757,7 +757,7 @@ class QasmTranslator():
                 if astType == ASTType.DECLARATION_QASM_2_0:
                     seen_noncomment = True
                 else:
-                    raise Qasm_Declaration_Absent_Exception(linenum, line)
+                    raise Qasm_Declaration_Absent_Exception(filenum, linenum, line)
 
             # Now step thru types
             if astType == ASTType.COMMENT:
@@ -813,11 +813,11 @@ class QasmTranslator():
                 astElement = ASTElementOp(
                     filenum, linenum, line, self.save_element_source)
             if type(astElement) is ASTElementUnknown and self.no_unknown:
-                raise Qasm_Unknown_Element(filenum, linenum, line)
+                raise Qasm_Unknown_Element_Exception(filenum, linenum, line)
             self.append_ast(astElement.out())
 
         if parsing_gate:
-            raise Qasm_Incomplete_Gate(
+            raise Qasm_Incomplete_Gate_Exception(
                 filenum, linenum, gate_start_line, gate_start_linenum)
 
         self.t_sect.t_sect['datetime_finish'] = datetime.datetime.now(
@@ -897,14 +897,14 @@ class QasmTranslator():
 # ##########
 
 
-class Qasm_Error(Exception):
+class Qasm_Exception(Exception):
     """Base class for Qasm exceptions"""
 
     def __init__(self, filenum, linenum, line):
         self.filenum = filenum
         self.linenum = linenum
         self.line = line
-        self.message = "Qasm_Error"
+        self.message = "Qasm_Exception"
         self.errcode = 10
 
     def errpacket(self):
@@ -917,7 +917,7 @@ class Qasm_Error(Exception):
         return ex
 
 
-class Qasm_Declaration_Absent_Exception(Qasm_Error):
+class Qasm_Declaration_Absent_Exception(Qasm_Exception):
     """QASM2.0 Declaration not first non-blank non-comment line"""
 
     def __init__(self, filenum, linenum, line):
@@ -927,20 +927,20 @@ class Qasm_Declaration_Absent_Exception(Qasm_Error):
         self.errcode = 20
 
 
-class Qasm_Unknown_Element(Qasm_Error):
+class Qasm_Unknown_Element_Exception(Qasm_Exception):
     """Unknown element"""
 
     def __init__(self, filenum, linenum, line):
-        super(Qasm_Unknown_Element, self).__init__(filenum, linenum, line)
+        super(Qasm_Unknown_Element_Exception, self).__init__(filenum, linenum, line)
         self.message = "Unknown element"
         self.errcode = 30
 
 
-class Qasm_Incomplete_Gate(Qasm_Error):
+class Qasm_Incomplete_Gate_Exception(Qasm_Exception):
     """Gate definition incomplete"""
 
     def __init__(self, filenum, linenum, line, start_linenum):
-        super(Qasm_Incomplete_Gate, self).__init__(filenum, linenum, line)
+        super(Qasm_Incomplete_Gate_Exception, self).__init__(filenum, linenum, line)
         self.start_linenum = start_linenum
         self.message = "Gate definition incomplete"
         self.errcode = 40
@@ -956,11 +956,11 @@ class Qasm_Incomplete_Gate(Qasm_Error):
         return ex
 
 
-class Qasm_Gate_Missing_Open_Curly(Qasm_Error):
+class Qasm_Gate_Missing_Open_Curly_Exception(Qasm_Exception):
     """Gate definition incomplete"""
 
     def __init__(self, filenum, linenum, line, start_linenum):
-        super(Qasm_Gate_Missing_Open_Curly, self).__init__(
+        super(Qasm_Gate_Missing_Open_Curly_Exception, self).__init__(
             filenum, linenum, line)
         self.start_linenum = start_linenum
         self.message = "Gate definition missing open curly brace"
@@ -977,11 +977,11 @@ class Qasm_Gate_Missing_Open_Curly(Qasm_Error):
         return ex
 
 
-class Qasm_Cannot_Read_File(Qasm_Error):
+class Qasm_Cannot_Read_File_Exception(Qasm_Exception):
     """File read error"""
 
     def __init__(self, filenum, linenum, line, filepath):
-        super(Qasm_Cannot_Read_File, self).__init__(
+        super(Qasm_Cannot_Read_File_Exception, self).__init__(
             filenum, linenum, line)
         self.filepath = filepath
         self.message = "Cannot access file."

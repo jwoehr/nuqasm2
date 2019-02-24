@@ -9,7 +9,7 @@ Apache-2.0 license -- See LICENSE which you should have received with this code.
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
 """
-from qasmast import (QasmTranslator, Qasm_Error)
+from qasmast import (QasmTranslator, Qasm_Exception)
 import argparse
 import sys
 import time
@@ -154,7 +154,7 @@ if args.filepaths:
                                     setup='gc.enable()', number=1, globals=globals()))
             else:
                 qt.translate()
-        except Qasm_Error as ex:
+        except Qasm_Exception as ex:
             handle_error(ex, filepath)
 
         pp.pprint(qt.get_translation())
@@ -177,7 +177,7 @@ else:
                                 setup='gc.enable()', number=1, globals=globals()))
         else:
             qt.translate()
-    except Qasm_Error as ex:
+    except Qasm_Exception as ex:
         handle_error(ex, str(sys.stdin))
 
     pp.pprint(qt.get_translation())
