@@ -26,7 +26,9 @@ function diffout () {
 }
 
 # run 'good' files
-for i in yiqing.qasm test_qasm/g*.qasm test_qasm/if.qasm
+for i in yiqing.qasm test_qasm/g*.qasm \
+	test_qasm/if.qasm \
+	test_qasm/entangled_registers.qasm test_qasm/plaquette_check.qasm
 do
 	FNAME=`basename $i .qasm`
 	python nuqasm2.py -i $INCPATH -o test_qasm/out/${FNAME}.out.txt -p --save_source -u --perf_filepath test_qasm/out/${FNAME}.perf.out.txt $i

@@ -34,6 +34,7 @@ class QTRegEx():
     REG_DECL = re.compile(r".*(\S+)\[(\d+)\].*")
     MEASURE_DECL = re.compile(r"^\s*measure\s+(\S+)\s+\-\>\s+(\S+)\s*;")
     BARRIER_DECL = re.compile(r"\S+\[\d+\]")
+    BARRIER_DECL_1 = re.compile(r"\S+\s*[\,;]")
     OP_AND_ARGS = re.compile(r"^\s*(\S+)\s+.*")
     OP_PARAM_LIST = re.compile(r"(\S+)\((.*)\)")
     # OP_REG_LIST = re.compile(r"\S+\[\d+\]")
@@ -259,6 +260,9 @@ class ASTElementBarrier(ASTElement):
         super(ASTElementBarrier, self).__init__(
             filenum, linenum, ASTType.BARRIER, source, save_element_source)
         x = QTRegEx.BARRIER_DECL.findall(self.source)
+        if not x:  # e.g., qiskit-terra/examples/qasm/entangled_registers.qasm
+            x = QTRegEx.BARRIER_DECL_1.findall(self.source)
+            x[0] = x[0].rstrip(';')
         self.reg_list = x[0].split(',')
 
     def out(self):
