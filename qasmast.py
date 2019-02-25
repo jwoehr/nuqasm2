@@ -24,7 +24,7 @@ class QTRegEx():
 
     QREG = re.compile(r"^\s*qreg\s+\S*\[\d+\]\s*;")
     CREG = re.compile(r"^\s*creg\s+\S*\[\d+\]\s*;")
-    MEASURE = re.compile(r"^\s*measure\s+\S+\s+\-\>\s+\S+\s*;")
+    MEASURE = re.compile(r"^\s*measure\s+\S+\s*\-\>\s*\S+\s*;")
     BARRIER = re.compile(r"^\s*barrier\s+.*;")
     GATE = re.compile(r"^\s*gate\s+.*")
     # OP = re.compile(r"^\s*\S+\s+\S+\[\d+\]\s*;")
@@ -32,7 +32,7 @@ class QTRegEx():
 
     INCLUDE_TARGET = re.compile(r".*\"(\S+)\"\s*;")
     REG_DECL = re.compile(r".*(\S+)\[(\d+)\].*")
-    MEASURE_DECL = re.compile(r"^\s*measure\s+(\S+)\s+\-\>\s+(\S+)\s*;")
+    MEASURE_DECL = re.compile(r"^\s*measure\s+(\S+)\s*\-\>\s*(\S+)\s*;")
     BARRIER_DECL = re.compile(r"\S+\[\d+\]")
     BARRIER_DECL_1 = re.compile(r"\S+\s*[\,;]")
     OP_AND_ARGS = re.compile(r"^\s*(\S+)\s+.*")
