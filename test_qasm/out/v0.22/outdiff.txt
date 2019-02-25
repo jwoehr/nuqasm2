@@ -1,0 +1,1242 @@
+# ####################
+# diffs from v0.21
+# 2019-Feb-24 22:57:02
+# ####################
+
+# ####################
+# entangled_registers.out.txt
+# ####################
+# ####################
+# entangled_registers.perf.out.txt
+# ####################
+# ####################
+# ggate.out.txt
+# ####################
+--- ggate.out.txt	2019-02-24 22:57:01.044612618 -0700
++++ v0.21/ggate.out.txt	2019-02-24 13:27:03.510698066 -0700
+@@ -941,8 +941,8 @@
+                                     'u1(theta) b;',
+                                     'cx a,b;',
+                                     '}']}],
+-    't_sect': {   'datetime_finish': '2019-02-24T22:57:01.018805',
+-                  'datetime_start': '2019-02-24T22:57:01.015123',
++    't_sect': {   'datetime_finish': '2019-02-24T13:27:03.488118',
++                  'datetime_start': '2019-02-24T13:27:03.484645',
+                   'filepaths': [   'test_qasm/ggate.qasm',
+                                    '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
+                   'name': 'main'}}
+# ####################
+# ggate.perf.out.txt
+# ####################
+--- ggate.perf.out.txt	2019-02-24 22:57:01.016612519 -0700
++++ v0.21/ggate.perf.out.txt	2019-02-24 13:27:03.486697633 -0700
+@@ -1,70 +1,70 @@
+-         4459 function calls in 0.004 seconds
++         4459 function calls in 0.003 seconds
+ 
+    Ordered by: cumulative time
+ 
+    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+-        1    0.001    0.001    0.004    0.004 /home/jax/work/QISKit/nuqasm2/qasmast.py:774(translate)
+-       29    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:740(user_gate_definition)
+-      148    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(next)
+-       94    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:69(astType)
++        1    0.001    0.001    0.003    0.003 /home/jax/work/QISKit/nuqasm2/qasmast.py:770(translate)
++       29    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(user_gate_definition)
++       94    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:68(astType)
++      148    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(next)
+       540    0.000    0.000    0.000    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+       340    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:703(push_include)
+-       94    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:144(__init__)
+-       14    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:281(__init__)
+-      148    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:487(next)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:699(push_include)
++       94    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:143(__init__)
++       14    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:277(__init__)
++      148    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:483(next)
+        44    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
+-      151    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:115(__init__)
+-      148    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:535(filenum)
+       292    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+-      148    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(linenum)
++      149    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(depth)
++      151    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:114(__init__)
++      148    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(filenum)
++      148    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(linenum)
++      444    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(tos)
+       155    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+-      149    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(depth)
+       399    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+-       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:156(__init__)
+-      444    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(tos)
+       306    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
++       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:155(__init__)
++       57    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:726(append_ast)
++       14    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:127(proc_reg_list)
+       285    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+-       14    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:128(proc_reg_list)
+-       57    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:730(append_ast)
+       298    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+-       36    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:123(out)
+         1    0.000    0.000    0.000    0.000 {built-in method io.open}
+-       29    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(append_user_gate)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:689(find_include)
+-       14    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:297(out)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:239(__init__)
++       36    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:122(out)
++       29    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:732(append_user_gate)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:685(find_include)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:238(__init__)
++       14    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:293(out)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/genericpath.py:16(exists)
+         2    0.000    0.000    0.000    0.000 {built-in method now}
+-        1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
+         2    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:669(push_source)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:199(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:180(__init__)
++        1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:665(push_source)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:179(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:198(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:258(__init__)
+         2    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:318(decode)
+         1    0.000    0.000    0.000    0.000 {method 'close' of '_io.TextIOWrapper' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:259(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:219(__init__)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(pop)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:218(__init__)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:511(pop)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:245(out)
+         1    0.000    0.000    0.000    0.000 {built-in method posix.access}
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:246(out)
+         2    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:507(push)
+-        2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:503(push)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:167(__init__)
+         1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:226(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:268(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:427(append_filepath)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:168(__init__)
+-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:206(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:403(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:463(append)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:186(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:423(append_filepath)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:185(out)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:477(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:925(get_t_sect)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:205(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:225(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:264(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:399(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:921(get_t_sect)
++        2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
++        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:459(append)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:473(__init__)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
+ 
+ 
+# ####################
+# ghzstate3q.out.txt
+# ####################
+--- ghzstate3q.out.txt	2019-02-24 22:57:01.128612916 -0700
++++ v0.21/ghzstate3q.out.txt	2019-02-24 13:27:03.590699508 -0700
+@@ -865,8 +865,8 @@
+                                     'u1(theta) b;',
+                                     'cx a,b;',
+                                     '}']}],
+-    't_sect': {   'datetime_finish': '2019-02-24T22:57:01.106997',
+-                  'datetime_start': '2019-02-24T22:57:01.103274',
++    't_sect': {   'datetime_finish': '2019-02-24T13:27:03.569170',
++                  'datetime_start': '2019-02-24T13:27:03.565787',
+                   'filepaths': [   'test_qasm/ghzstate3q.qasm',
+                                    '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
+                   'name': 'main'}}
+# ####################
+# ghzstate3q.perf.out.txt
+# ####################
+--- ghzstate3q.perf.out.txt	2019-02-24 22:57:01.104612831 -0700
++++ v0.21/ghzstate3q.perf.out.txt	2019-02-24 13:27:03.566699076 -0700
+@@ -1,70 +1,70 @@
+-         4180 function calls in 0.004 seconds
++         4180 function calls in 0.003 seconds
+ 
+    Ordered by: cumulative time
+ 
+    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+-        1    0.001    0.001    0.004    0.004 /home/jax/work/QISKit/nuqasm2/qasmast.py:774(translate)
+-       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:740(user_gate_definition)
+-      140    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(next)
+-       92    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:69(astType)
++        1    0.001    0.001    0.003    0.003 /home/jax/work/QISKit/nuqasm2/qasmast.py:770(translate)
++       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(user_gate_definition)
++       92    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:68(astType)
++      140    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(next)
+       504    0.000    0.000    0.000    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+       301    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:703(push_include)
+-       92    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:144(__init__)
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:281(__init__)
+-      140    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:487(next)
+-       41    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
+-      147    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:115(__init__)
+-      140    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:535(filenum)
+-      141    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(depth)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:699(push_include)
++       92    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:143(__init__)
++      140    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:483(next)
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:277(__init__)
+       276    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+-      139    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+-      420    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(tos)
++      140    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(filenum)
++       41    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
++      147    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:114(__init__)
+       376    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+-      140    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(linenum)
++      140    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(linenum)
++      139    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
++      420    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(tos)
++      141    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(depth)
+       274    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
+-       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:156(__init__)
+-       55    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:730(append_ast)
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:128(proc_reg_list)
+-       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(append_user_gate)
++       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:155(__init__)
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:127(proc_reg_list)
+       270    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+-      282    0.000    0.000    0.000    0.000 {built-in method builtins.len}
++       55    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:726(append_ast)
+         1    0.000    0.000    0.000    0.000 {built-in method io.open}
+-       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:123(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:689(find_include)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:239(__init__)
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:297(out)
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/genericpath.py:16(exists)
+-        1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
++      282    0.000    0.000    0.000    0.000 {built-in method builtins.len}
++       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:122(out)
++       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:732(append_user_gate)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:685(find_include)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:238(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:665(push_source)
+         2    0.000    0.000    0.000    0.000 {built-in method now}
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/genericpath.py:16(exists)
+         2    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:293(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:179(__init__)
++        1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:198(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:258(__init__)
+         2    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:318(decode)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:669(push_source)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:180(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:199(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:259(__init__)
+         1    0.000    0.000    0.000    0.000 {method 'close' of '_io.TextIOWrapper' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:219(__init__)
+-        1    0.000    0.000    0.000    0.000 {built-in method posix.access}
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(pop)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:218(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:423(append_filepath)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:511(pop)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
+-        2    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:507(push)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:168(__init__)
++        1    0.000    0.000    0.000    0.000 {built-in method posix.access}
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:245(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:503(push)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:167(__init__)
+         1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:206(out)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:246(out)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:186(out)
++        2    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:185(out)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
++        2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:205(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:225(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:264(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:399(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:459(append)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:921(get_t_sect)
+         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:226(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:268(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:427(append_filepath)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:463(append)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:477(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:925(get_t_sect)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:473(__init__)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
+-        2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:403(__init__)
+ 
+ 
+# ####################
+# ghzxxx.out.txt
+# ####################
+--- ghzxxx.out.txt	2019-02-24 22:57:01.212613212 -0700
++++ v0.21/ghzxxx.out.txt	2019-02-24 13:27:03.670700949 -0700
+@@ -846,8 +846,8 @@
+                                     'u1(theta) b;',
+                                     'cx a,b;',
+                                     '}']}],
+-    't_sect': {   'datetime_finish': '2019-02-24T22:57:01.189100',
+-                  'datetime_start': '2019-02-24T22:57:01.185668',
++    't_sect': {   'datetime_finish': '2019-02-24T13:27:03.650471',
++                  'datetime_start': '2019-02-24T13:27:03.647051',
+                   'filepaths': [   'test_qasm/ghzxxx.qasm',
+                                    '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
+                   'name': 'main'}}
+# ####################
+# ghzxxx.perf.out.txt
+# ####################
+--- ghzxxx.perf.out.txt	2019-02-24 22:57:01.188613127 -0700
++++ v0.21/ghzxxx.perf.out.txt	2019-02-24 13:27:03.646700517 -0700
+@@ -3,68 +3,68 @@
+    Ordered by: cumulative time
+ 
+    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+-        1    0.001    0.001    0.003    0.003 /home/jax/work/QISKit/nuqasm2/qasmast.py:774(translate)
+-       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:740(user_gate_definition)
+-      135    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(next)
+-       87    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:69(astType)
++        1    0.001    0.001    0.003    0.003 /home/jax/work/QISKit/nuqasm2/qasmast.py:770(translate)
++       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(user_gate_definition)
++      135    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(next)
++       87    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:68(astType)
+       486    0.000    0.000    0.000    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+       297    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:703(push_include)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:699(push_include)
++       87    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:143(__init__)
++      135    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:483(next)
++       11    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:277(__init__)
+        39    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
+-       87    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:144(__init__)
+-      135    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:487(next)
+-       11    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:281(__init__)
++      135    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(filenum)
++      140    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:114(__init__)
+       266    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+-      140    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:115(__init__)
+-      135    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:535(filenum)
+-      405    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(tos)
+-      136    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(depth)
+-      135    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(linenum)
+-       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:156(__init__)
+-      367    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
++      136    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(depth)
++      135    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(linenum)
++      405    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(tos)
+       272    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
+-       53    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:730(append_ast)
+       137    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+-       11    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:128(proc_reg_list)
+-      268    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
++      367    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
++       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:155(__init__)
++       11    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:127(proc_reg_list)
++       53    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:726(append_ast)
+       272    0.000    0.000    0.000    0.000 {built-in method builtins.len}
++      268    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
++       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:122(out)
+         1    0.000    0.000    0.000    0.000 {built-in method io.open}
+-       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(append_user_gate)
+-       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:123(out)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:239(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:689(find_include)
+-       11    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:297(out)
++       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:732(append_user_gate)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:238(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:685(find_include)
+         2    0.000    0.000    0.000    0.000 {built-in method now}
++       11    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:293(out)
+         2    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:669(push_source)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:665(push_source)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/genericpath.py:16(exists)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:180(__init__)
+         1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:199(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:219(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:259(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:198(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:258(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:179(__init__)
+         1    0.000    0.000    0.000    0.000 {method 'close' of '_io.TextIOWrapper' objects}
+         2    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:318(decode)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(pop)
+-        1    0.000    0.000    0.000    0.000 {built-in method posix.access}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:218(__init__)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:246(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:507(push)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:511(pop)
++        1    0.000    0.000    0.000    0.000 {built-in method posix.access}
++        2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+         1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
+         2    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:427(append_filepath)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:168(__init__)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:186(out)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:245(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:503(push)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:167(__init__)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
+-        2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:206(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:226(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:268(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:403(__init__)
+-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:463(append)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:477(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:925(get_t_sect)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:205(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:225(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:264(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:423(append_filepath)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:459(append)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:473(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:921(get_t_sect)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:185(out)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
++        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:399(__init__)
+ 
+ 
+# ####################
+# ghzxyx.out.txt
+# ####################
+--- ghzxyx.out.txt	2019-02-24 22:57:01.292613495 -0700
++++ v0.21/ghzxyx.out.txt	2019-02-24 13:27:03.750702391 -0700
+@@ -854,8 +854,8 @@
+                                     'u1(theta) b;',
+                                     'cx a,b;',
+                                     '}']}],
+-    't_sect': {   'datetime_finish': '2019-02-24T22:57:01.269669',
+-                  'datetime_start': '2019-02-24T22:57:01.266267',
++    't_sect': {   'datetime_finish': '2019-02-24T13:27:03.729369',
++                  'datetime_start': '2019-02-24T13:27:03.725874',
+                   'filepaths': [   'test_qasm/ghzxyx.qasm',
+                                    '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
+                   'name': 'main'}}
+# ####################
+# ghzxyx.perf.out.txt
+# ####################
+--- ghzxyx.perf.out.txt	2019-02-24 22:57:01.268613410 -0700
++++ v0.21/ghzxyx.perf.out.txt	2019-02-24 13:27:03.726701959 -0700
+@@ -1,70 +1,70 @@
+-         4094 function calls in 0.003 seconds
++         4094 function calls in 0.004 seconds
+ 
+    Ordered by: cumulative time
+ 
+    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+-        1    0.001    0.001    0.003    0.003 /home/jax/work/QISKit/nuqasm2/qasmast.py:774(translate)
+-       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:740(user_gate_definition)
+-      136    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(next)
+-       88    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:69(astType)
++        1    0.001    0.001    0.004    0.004 /home/jax/work/QISKit/nuqasm2/qasmast.py:770(translate)
++       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(user_gate_definition)
++      136    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(next)
++       88    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:68(astType)
+       495    0.000    0.000    0.000    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+       299    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:703(push_include)
+-       88    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:144(__init__)
+-       12    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:281(__init__)
+-      136    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:487(next)
+-      268    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
++       88    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:143(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:699(push_include)
++      136    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:483(next)
++       12    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:277(__init__)
+        40    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
+-      142    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:115(__init__)
+-      136    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:535(filenum)
+-      136    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(linenum)
+-      408    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(tos)
+-      137    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(depth)
++      137    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(depth)
++      136    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(filenum)
++      142    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:114(__init__)
++      408    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(tos)
++      136    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(linenum)
++      268    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+       370    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+-       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:156(__init__)
+       138    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+-       12    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:128(proc_reg_list)
+-       54    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:730(append_ast)
++       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:155(__init__)
+       273    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
+-      269    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
++       12    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:127(proc_reg_list)
++       54    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:726(append_ast)
+       274    0.000    0.000    0.000    0.000 {built-in method builtins.len}
++      269    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+         1    0.000    0.000    0.000    0.000 {built-in method io.open}
+-       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:123(out)
+-       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(append_user_gate)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:239(__init__)
+-       12    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:297(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:689(find_include)
++       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:122(out)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:238(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:665(push_source)
++       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:732(append_user_gate)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:685(find_include)
++       12    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:293(out)
+         2    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
+         2    0.000    0.000    0.000    0.000 {built-in method now}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:198(__init__)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/genericpath.py:16(exists)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:199(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:669(push_source)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:259(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:180(__init__)
+-        2    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:318(decode)
+-        1    0.000    0.000    0.000    0.000 {method 'close' of '_io.TextIOWrapper' objects}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:179(__init__)
+         1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:219(__init__)
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(pop)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:258(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:218(__init__)
++        1    0.000    0.000    0.000    0.000 {method 'close' of '_io.TextIOWrapper' objects}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:423(append_filepath)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:511(pop)
++        2    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:318(decode)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:503(push)
+         1    0.000    0.000    0.000    0.000 {built-in method posix.access}
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:246(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:507(push)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:168(__init__)
+-        2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:245(out)
++        1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
+         2    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:427(append_filepath)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:186(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:167(__init__)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:185(out)
++        2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:205(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:225(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:399(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:459(append)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:473(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:921(get_t_sect)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
+-        1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:206(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:226(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:268(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:463(append)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:477(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:925(get_t_sect)
+         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:403(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:264(out)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
+ 
+ 
+# ####################
+# ghzxyy.out.txt
+# ####################
+--- ghzxyy.out.txt	2019-02-24 22:57:01.372613777 -0700
++++ v0.21/ghzxyy.out.txt	2019-02-24 13:27:03.830703833 -0700
+@@ -862,8 +862,8 @@
+                                     'u1(theta) b;',
+                                     'cx a,b;',
+                                     '}']}],
+-    't_sect': {   'datetime_finish': '2019-02-24T22:57:01.353072',
+-                  'datetime_start': '2019-02-24T22:57:01.349535',
++    't_sect': {   'datetime_finish': '2019-02-24T13:27:03.808452',
++                  'datetime_start': '2019-02-24T13:27:03.804945',
+                   'filepaths': [   'test_qasm/ghzxyy.qasm',
+                                    '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
+                   'name': 'main'}}
+# ####################
+# ghzxyy.perf.out.txt
+# ####################
+--- ghzxyy.perf.out.txt	2019-02-24 22:57:01.352613706 -0700
++++ v0.21/ghzxyy.perf.out.txt	2019-02-24 13:27:03.806703400 -0700
+@@ -3,68 +3,68 @@
+    Ordered by: cumulative time
+ 
+    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+-        1    0.001    0.001    0.004    0.004 /home/jax/work/QISKit/nuqasm2/qasmast.py:774(translate)
+-       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:740(user_gate_definition)
+-      137    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(next)
+-       89    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:69(astType)
++        1    0.001    0.001    0.004    0.004 /home/jax/work/QISKit/nuqasm2/qasmast.py:770(translate)
++       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(user_gate_definition)
++       89    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:68(astType)
++      137    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(next)
+       504    0.000    0.000    0.000    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+       301    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+-       89    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:144(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:703(push_include)
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:281(__init__)
+-      137    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:487(next)
+-      137    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:535(filenum)
++       89    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:143(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:699(push_include)
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:277(__init__)
++      137    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:483(next)
+        41    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
+-      144    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:115(__init__)
+-      411    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(tos)
++      144    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:114(__init__)
++      137    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(filenum)
++      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(depth)
+       270    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+-      137    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(linenum)
+-      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(depth)
+-      274    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
++      137    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(linenum)
++      411    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(tos)
+       139    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
++       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:155(__init__)
+       373    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+-       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:156(__init__)
+-       55    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:730(append_ast)
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:128(proc_reg_list)
++      274    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
++       55    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:726(append_ast)
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:127(proc_reg_list)
+       270    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+-      276    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+         1    0.000    0.000    0.000    0.000 {built-in method io.open}
+-       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:123(out)
+-       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(append_user_gate)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:239(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:689(find_include)
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:297(out)
++       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:122(out)
++      276    0.000    0.000    0.000    0.000 {built-in method builtins.len}
++       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:732(append_user_gate)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:685(find_include)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:238(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:665(push_source)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:258(__init__)
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:293(out)
+         2    0.000    0.000    0.000    0.000 {built-in method now}
+         2    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/genericpath.py:16(exists)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:199(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:669(push_source)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:259(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:180(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:198(__init__)
+         1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:219(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:179(__init__)
+         2    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:318(decode)
+         1    0.000    0.000    0.000    0.000 {method 'close' of '_io.TextIOWrapper' objects}
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(pop)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:218(__init__)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:511(pop)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:423(append_filepath)
+         1    0.000    0.000    0.000    0.000 {built-in method posix.access}
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:246(out)
+-        1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
+         2    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:507(push)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:168(__init__)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:186(out)
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:503(push)
+         2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:206(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:226(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:403(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:427(append_filepath)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:477(__init__)
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
++        1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:245(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:264(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:167(__init__)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:185(out)
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:205(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:225(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:399(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:473(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:921(get_t_sect)
+         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:268(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:463(append)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:925(get_t_sect)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:459(append)
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
+ 
+ 
+# ####################
+# ghzyxy.out.txt
+# ####################
+--- ghzyxy.out.txt	2019-02-24 22:57:01.460614087 -0700
++++ v0.21/ghzyxy.out.txt	2019-02-24 13:27:03.906705203 -0700
+@@ -863,8 +863,8 @@
+                                     'u1(theta) b;',
+                                     'cx a,b;',
+                                     '}']}],
+-    't_sect': {   'datetime_finish': '2019-02-24T22:57:01.436980',
+-                  'datetime_start': '2019-02-24T22:57:01.433670',
++    't_sect': {   'datetime_finish': '2019-02-24T13:27:03.886873',
++                  'datetime_start': '2019-02-24T13:27:03.883466',
+                   'filepaths': [   'test_qasm/ghzyxy.qasm',
+                                    '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
+                   'name': 'main'}}
+# ####################
+# ghzyxy.perf.out.txt
+# ####################
+--- ghzyxy.perf.out.txt	2019-02-24 22:57:01.436614002 -0700
++++ v0.21/ghzyxy.perf.out.txt	2019-02-24 13:27:03.886704842 -0700
+@@ -3,68 +3,68 @@
+    Ordered by: cumulative time
+ 
+    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+-        1    0.001    0.001    0.003    0.003 /home/jax/work/QISKit/nuqasm2/qasmast.py:774(translate)
+-       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:740(user_gate_definition)
+-       90    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:69(astType)
+-      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(next)
++        1    0.001    0.001    0.003    0.003 /home/jax/work/QISKit/nuqasm2/qasmast.py:770(translate)
++       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(user_gate_definition)
++       90    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:68(astType)
++      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(next)
+       504    0.000    0.000    0.000    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+       301    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+-       90    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:144(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:703(push_include)
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:281(__init__)
+-      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:487(next)
+-      145    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:115(__init__)
++       90    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:143(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:699(push_include)
++      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:483(next)
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:277(__init__)
+        41    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
+-      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:535(filenum)
+-      139    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(depth)
++      145    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:114(__init__)
++      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(filenum)
+       272    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+-      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(linenum)
+-      374    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+-      414    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(tos)
+-      139    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+-       55    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:730(append_ast)
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:128(proc_reg_list)
++      414    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(tos)
++      139    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(depth)
+       274    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
+-       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:156(__init__)
++      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(linenum)
++      139    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
++       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:155(__init__)
++      374    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:127(proc_reg_list)
++       55    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:726(append_ast)
+       270    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+-        1    0.000    0.000    0.000    0.000 {built-in method io.open}
+       278    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:297(out)
+-       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:123(out)
++       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:122(out)
++        1    0.000    0.000    0.000    0.000 {built-in method io.open}
++       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:732(append_user_gate)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:238(__init__)
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:293(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:685(find_include)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:198(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:665(push_source)
+         2    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
+-       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(append_user_gate)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:239(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:689(find_include)
+         2    0.000    0.000    0.000    0.000 {built-in method now}
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/genericpath.py:16(exists)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:669(push_source)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:179(__init__)
+         1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:199(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:259(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:180(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:218(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:258(__init__)
+         2    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:318(decode)
+         1    0.000    0.000    0.000    0.000 {method 'close' of '_io.TextIOWrapper' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:219(__init__)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(pop)
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:246(out)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:511(pop)
+         1    0.000    0.000    0.000    0.000 {built-in method posix.access}
+-        2    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:507(push)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:168(__init__)
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:245(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:503(push)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:167(__init__)
+         1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:206(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:427(append_filepath)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:186(out)
+-        2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:226(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:268(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:463(append)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:477(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:925(get_t_sect)
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
++        2    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:205(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:423(append_filepath)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:185(out)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
++        2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:225(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:264(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:399(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:921(get_t_sect)
+         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:403(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:459(append)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:473(__init__)
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
+ 
+ 
+# ####################
+# ghzyyx.out.txt
+# ####################
+--- ghzyyx.out.txt	2019-02-24 22:57:01.544614384 -0700
++++ v0.21/ghzyyx.out.txt	2019-02-24 13:27:03.994706789 -0700
+@@ -863,8 +863,8 @@
+                                     'u1(theta) b;',
+                                     'cx a,b;',
+                                     '}']}],
+-    't_sect': {   'datetime_finish': '2019-02-24T22:57:01.521660',
+-                  'datetime_start': '2019-02-24T22:57:01.518118',
++    't_sect': {   'datetime_finish': '2019-02-24T13:27:03.970571',
++                  'datetime_start': '2019-02-24T13:27:03.967139',
+                   'filepaths': [   'test_qasm/ghzyyx.qasm',
+                                    '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
+                   'name': 'main'}}
+# ####################
+# ghzyyx.perf.out.txt
+# ####################
+--- ghzyyx.perf.out.txt	2019-02-24 22:57:01.520614300 -0700
++++ v0.21/ghzyyx.perf.out.txt	2019-02-24 13:27:03.970706357 -0700
+@@ -1,70 +1,70 @@
+-         4148 function calls in 0.004 seconds
++         4148 function calls in 0.003 seconds
+ 
+    Ordered by: cumulative time
+ 
+    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+-        1    0.001    0.001    0.004    0.004 /home/jax/work/QISKit/nuqasm2/qasmast.py:774(translate)
+-       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:740(user_gate_definition)
+-       90    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:69(astType)
+-      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(next)
++        1    0.001    0.001    0.003    0.003 /home/jax/work/QISKit/nuqasm2/qasmast.py:770(translate)
++       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(user_gate_definition)
++       90    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:68(astType)
++      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(next)
+       504    0.000    0.000    0.000    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+       301    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:703(push_include)
+-       90    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:144(__init__)
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:281(__init__)
+-      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:487(next)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:699(push_include)
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:277(__init__)
++       90    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:143(__init__)
++      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:483(next)
+        41    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
+-      145    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:115(__init__)
+-      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:535(filenum)
+-      272    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+-      139    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(depth)
+-      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(linenum)
+-      274    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
++      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(filenum)
++      145    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:114(__init__)
++      414    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(tos)
++      139    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(depth)
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:127(proc_reg_list)
+       139    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+-       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:156(__init__)
++      272    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+       374    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+-      414    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(tos)
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:128(proc_reg_list)
+-       55    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:730(append_ast)
++      274    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
++      138    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(linenum)
++       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:155(__init__)
++       55    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:726(append_ast)
+       270    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+       278    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+         1    0.000    0.000    0.000    0.000 {built-in method io.open}
+-       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:123(out)
+-       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(append_user_gate)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:239(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:689(find_include)
+-       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:297(out)
++       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:122(out)
++       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:732(append_user_gate)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:238(__init__)
++       13    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:293(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:218(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:685(find_include)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:665(push_source)
+         2    0.000    0.000    0.000    0.000 {built-in method now}
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/genericpath.py:16(exists)
+         2    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:669(push_source)
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/genericpath.py:16(exists)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:198(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:258(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:179(__init__)
+         1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:199(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:180(__init__)
+         2    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:318(decode)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:259(__init__)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:511(pop)
+         1    0.000    0.000    0.000    0.000 {method 'close' of '_io.TextIOWrapper' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:219(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:423(append_filepath)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:245(out)
+         1    0.000    0.000    0.000    0.000 {built-in method posix.access}
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(pop)
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
+         2    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:246(out)
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:167(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:205(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:225(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:503(push)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:185(out)
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
+         2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:427(append_filepath)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:507(push)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:168(__init__)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:186(out)
+         1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:206(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:226(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:268(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:403(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:463(append)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:477(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:925(get_t_sect)
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:264(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:399(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:921(get_t_sect)
+         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:459(append)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:473(__init__)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
+ 
+ 
+# ####################
+# if.out.txt
+# ####################
+--- if.out.txt	2019-02-24 22:57:01.632614695 -0700
++++ v0.21/if.out.txt	2019-02-24 13:27:04.082708375 -0700
+@@ -982,8 +982,8 @@
+                                     'u1(theta) b;',
+                                     'cx a,b;',
+                                     '}']}],
+-    't_sect': {   'datetime_finish': '2019-02-24T22:57:01.606629',
+-                  'datetime_start': '2019-02-24T22:57:01.602899',
++    't_sect': {   'datetime_finish': '2019-02-24T13:27:04.058890',
++                  'datetime_start': '2019-02-24T13:27:04.054922',
+                   'filepaths': [   'test_qasm/if.qasm',
+                                    '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
+                   'name': 'main'}}
+# ####################
+# if.perf.out.txt
+# ####################
+--- if.perf.out.txt	2019-02-24 22:57:01.604614596 -0700
++++ v0.21/if.perf.out.txt	2019-02-24 13:27:04.058707942 -0700
+@@ -3,70 +3,70 @@
+    Ordered by: cumulative time
+ 
+    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+-        1    0.001    0.001    0.004    0.004 /home/jax/work/QISKit/nuqasm2/qasmast.py:774(translate)
+-       29    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:740(user_gate_definition)
+-       98    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:69(astType)
+-      152    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(next)
++        1    0.001    0.001    0.004    0.004 /home/jax/work/QISKit/nuqasm2/qasmast.py:770(translate)
++       29    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(user_gate_definition)
++       98    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:68(astType)
++      152    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(next)
+       558    0.000    0.000    0.000    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+       348    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+-       98    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:144(__init__)
+-       15    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:281(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:703(push_include)
+-      152    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:487(next)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:699(push_include)
++       98    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:143(__init__)
++       15    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:277(__init__)
++      152    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:483(next)
+        48    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
++      159    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:114(__init__)
++      152    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(filenum)
+       300    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+-      159    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:115(__init__)
+-      152    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:535(filenum)
+-      153    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(depth)
++      153    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(depth)
+       159    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+-      456    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(tos)
+-       18    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:128(proc_reg_list)
+       411    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+-      152    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(linenum)
+-       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:156(__init__)
++      152    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(linenum)
+       325    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
+-       61    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:730(append_ast)
++      456    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(tos)
++       18    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:127(proc_reg_list)
++       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:155(__init__)
++       61    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:726(append_ast)
+       289    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:312(__init__)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:308(__init__)
+       306    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+         1    0.000    0.000    0.000    0.000 {built-in method io.open}
+-       15    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:297(out)
+-       29    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(append_user_gate)
+-       36    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:123(out)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:239(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:689(find_include)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:180(__init__)
+-        2    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
++       36    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:122(out)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:238(__init__)
++       15    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:293(out)
++       29    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:732(append_user_gate)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:685(find_include)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/genericpath.py:16(exists)
++        1    0.000    0.000    0.000    0.000 {built-in method posix.access}
++        2    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
+         2    0.000    0.000    0.000    0.000 {built-in method now}
+         1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:669(push_source)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:199(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:259(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:665(push_source)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:198(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:179(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:258(__init__)
+         2    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:318(decode)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:219(__init__)
+         1    0.000    0.000    0.000    0.000 {method 'close' of '_io.TextIOWrapper' objects}
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(pop)
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:246(out)
+-        1    0.000    0.000    0.000    0.000 {built-in method posix.access}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:218(__init__)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:511(pop)
+         2    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:332(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:507(push)
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:328(out)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:245(out)
+         1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:206(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:427(append_filepath)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:168(__init__)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:186(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:226(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:268(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:403(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:463(append)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:925(get_t_sect)
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:264(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:423(append_filepath)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:503(push)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:167(__init__)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:185(out)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
+         2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:205(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:225(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:399(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:459(append)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:473(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:921(get_t_sect)
+         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:477(__init__)
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
+ 
+ 
+# ####################
+# plaquette_check.out.txt
+# ####################
+# ####################
+# plaquette_check.perf.out.txt
+# ####################
+# ####################
+# yiqing.out.txt
+# ####################
+--- yiqing.out.txt	2019-02-24 22:57:00.956612308 -0700
++++ v0.21/yiqing.out.txt	2019-02-24 13:27:03.426696551 -0700
+@@ -782,8 +782,8 @@
+                                     'u1(theta) b;',
+                                     'cx a,b;',
+                                     '}']}],
+-    't_sect': {   'datetime_finish': '2019-02-24T22:57:00.934701',
+-                  'datetime_start': '2019-02-24T22:57:00.931357',
++    't_sect': {   'datetime_finish': '2019-02-24T13:27:03.408612',
++                  'datetime_start': '2019-02-24T13:27:03.405457',
+                   'filepaths': [   'yiqing.qasm',
+                                    '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
+                   'name': 'main'}}
+# ####################
+# yiqing.perf.out.txt
+# ####################
+--- yiqing.perf.out.txt	2019-02-24 22:57:00.932612223 -0700
++++ v0.21/yiqing.perf.out.txt	2019-02-24 13:27:03.406696191 -0700
+@@ -3,68 +3,68 @@
+    Ordered by: cumulative time
+ 
+    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+-        1    0.001    0.001    0.003    0.003 /home/jax/work/QISKit/nuqasm2/qasmast.py:774(translate)
+-        1    0.001    0.001    0.001    0.001 /home/jax/work/QISKit/nuqasm2/qasmast.py:703(push_include)
+-       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:740(user_gate_definition)
+-      127    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(next)
+-       79    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:69(astType)
++        1    0.001    0.001    0.003    0.003 /home/jax/work/QISKit/nuqasm2/qasmast.py:770(translate)
++       27    0.000    0.000    0.001    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(user_gate_definition)
++      127    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(next)
++       79    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:68(astType)
+       414    0.000    0.000    0.000    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+       281    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+-       79    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:144(__init__)
+-      127    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:487(next)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:699(push_include)
++       79    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:143(__init__)
++      127    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:483(next)
++      127    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(filenum)
+        31    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
++      124    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:114(__init__)
++      127    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(linenum)
++      381    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(tos)
++      128    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:523(depth)
+       250    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+-      128    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:527(depth)
+-      127    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:535(filenum)
+-      124    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:115(__init__)
+-      127    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:531(linenum)
+-       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:156(__init__)
+-      381    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:519(tos)
++       34    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:155(__init__)
+       129    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+       343    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+       264    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
+       260    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+-       45    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:730(append_ast)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:281(__init__)
++       45    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:726(append_ast)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:277(__init__)
++       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:122(out)
+         1    0.000    0.000    0.000    0.000 {built-in method io.open}
+       256    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+-       35    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:123(out)
+-       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:736(append_user_gate)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:689(find_include)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:239(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:685(find_include)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:238(__init__)
++       27    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:732(append_user_gate)
+         2    0.000    0.000    0.000    0.000 {built-in method now}
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:128(proc_reg_list)
+-        2    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:665(push_source)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/genericpath.py:16(exists)
++        2    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:127(proc_reg_list)
+         1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:669(push_source)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:180(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:199(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:259(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:198(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:179(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:258(__init__)
+         2    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:318(decode)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:218(__init__)
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:245(out)
+         1    0.000    0.000    0.000    0.000 {method 'close' of '_io.TextIOWrapper' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:219(__init__)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:515(pop)
+-        1    0.000    0.000    0.000    0.000 {built-in method posix.access}
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:503(push)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/_bootlocale.py:23(getpreferredencoding)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:297(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:168(__init__)
+-        1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:511(pop)
++        1    0.000    0.000    0.000    0.000 {built-in method posix.access}
+         2    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:507(push)
+-        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:186(out)
+-        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:246(out)
+-        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
+         2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:925(get_t_sect)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:403(__init__)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:427(append_filepath)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:463(append)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:206(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:226(out)
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:268(out)
++        1    0.000    0.000    0.000    0.000 {built-in method _locale.nl_langinfo}
++        3    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:293(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:423(append_filepath)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:167(__init__)
++        2    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:185(out)
++        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:308(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:205(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:225(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:264(out)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:399(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:459(append)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:921(get_t_sect)
+         1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/codecs.py:259(__init__)
+         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+-        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:477(__init__)
++        1    0.000    0.000    0.000    0.000 /home/jax/work/QISKit/nuqasm2/qasmast.py:473(__init__)
+ 
+ 

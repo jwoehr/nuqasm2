@@ -1,0 +1,5 @@
+{   'errcode': 40,
+    'line': 'gate a b',
+    'linenum': 7,
+    'message': 'Gate definition missing open curly brace',
+    'start_linenum': 6}

@@ -1,0 +1,4 @@
+{   'errcode': 20,
+    'line': 'include "qelib1.inc";',
+    'linenum': 2,
+    'message': 'QASM2.0 Declaration not first non-blank non-comment line'}

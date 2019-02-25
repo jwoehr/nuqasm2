@@ -1,0 +1,30 @@
+# ####################
+# diffs from v0.21
+# 2019-Feb-24 22:57:02
+# ####################
+
+# ####################
+# gerr1.out.txt
+# ####################
+# ####################
+# gerrgate.out.txt
+# ####################
+# ####################
+# gerr.out.txt
+# ####################
+# ####################
+# gspace.out.txt
+# ####################
+--- gspace.out.txt	2019-02-24 22:57:02.040616136 -0700
++++ v0.21/gspace.out.txt	2019-02-24 13:27:04.314712558 -0700
+@@ -941,8 +941,8 @@
+                                     'u1(theta) b;',
+                                     'cx a,b;',
+                                     '}']}],
+-    't_sect': {   'datetime_finish': '2019-02-24T22:57:02.021031',
+-                  'datetime_start': '2019-02-24T22:57:02.018541',
++    't_sect': {   'datetime_finish': '2019-02-24T13:27:04.295618',
++                  'datetime_start': '2019-02-24T13:27:04.293080',
+                   'filepaths': [   'test_qasm/err/gspace.qasm',
+                                    '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
+                   'name': 'main'}}
