@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+<!-- Edit mode for OPENQASM 2.0 (see https://qiskit.org/) -->
+<!-- Add to ~/.jedit/modes/catalog as follows:  -->
+<!-- <MODE NAME="qasm2" FILE="qasm2.xml" FILE_NAME_GLOB="*.qasm" /> -->
+<!-- Jack J. Woehr jwoehr@softwoehr.com updated 20190227 -->
+<MODE>
+
+	<PROPS>
+		<PROPERTY NAME="lineComment" VALUE="#" />
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
+		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
+		<PROPERTY NAME="indentSize" VALUE="2" />
+		<PROPERTY NAME="tabSize" VALUE="4" />
+		<PROPERTY NAME="noTabs" VALUE="true" />
+	</PROPS>
+
+	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0[lL]?|[1-9]\d{0,9}(\d{0,9}[lL])?|0[xX]\p{XDigit}{1,8}(\p{XDigit}{0,8}[lL])?|0[0-7]{1,11}([0-7]{0,11}[lL])?|([0-9]+\.[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?[fFdD]?|[0-9]+([eE][+-]?[0-9]+[fFdD]?|([eE][+-]?[0-9]+)?[fFdD]))">
+
+		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<!-- SEQ_REGEXP TYPE="OPERATOR">\S+;</SEQ_REGEXP -->
+
+		<MARK_PREVIOUS TYPE="KEYWORD3" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+		<MARK_PREVIOUS TYPE="KEYWORD3" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+
+		<SEQ TYPE="OPERATOR">)</SEQ>
+		<SEQ TYPE="OPERATOR">[</SEQ>
+		<SEQ TYPE="OPERATOR">]</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="OPERATOR">-&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">==</SEQ>
+		<SEQ TYPE="OPERATOR">!=</SEQ>
+
+		<SEQ_REGEXP TYPE="KEYWORD1" AT_LINE_START="TRUE" HASH_CHAR="OPENQASM">OPENQASM</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="KEYWORD1" AT_LINE_START="TRUE" HASH_CHAR="include">include</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="KEYWORD2" AT_LINE_START="TRUE" HASH_CHAR="if">if</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="KEYWORD2" AT_LINE_START="TRUE" HASH_CHAR="gate">gate</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="KEYWORD2" AT_LINE_START="TRUE" HASH_CHAR="barrier">barrier</SEQ_REGEXP>
+				<SEQ_REGEXP TYPE="KEYWORD2" AT_LINE_START="TRUE" HASH_CHAR="measure">measure</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="KEYWORD3" AT_LINE_START="TRUE" HASH_CHAR="">\w+</SEQ_REGEXP>
+
+		<KEYWORDS>
+			<KEYWORD1>OPENQASM</KEYWORD1>
+			<KEYWORD1>include</KEYWORD1>
+			<KEYWORD2>if</KEYWORD2>
+			<KEYWORD2>gate</KEYWORD2>
+			<KEYWORD2>barrier</KEYWORD2>
+			<KEYWORD2>measure</KEYWORD2>
+		</KEYWORDS>
+
+	</RULES>
+</MODE>
