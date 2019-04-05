@@ -1,7 +1,0 @@
-'Error: test_qasm/err/gerr.qasm'
-{   'errcode': 20,
-    'filename': 'test_qasm/err/gerr.qasm',
-    'filenum': 0,
-    'line': 'include "qelib1.inc";',
-    'linenum': 1,
-    'message': 'QASM2.0 Declaration not first non-blank non-comment line'}

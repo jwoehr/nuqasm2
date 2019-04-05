@@ -19,6 +19,7 @@ class QTRegEx():
     """Compiled regular expressions for parsing."""
     COMMENT = re.compile(r"^\s*//")
     INCLUDE = re.compile(r"^\s*include\s+\"\S+\"\s*;")
+    EOL_COMMENT = re.compile(r";.*(//.*)")
 
     CTL_2 = re.compile(r"(\w+)\((\w+)(\W+)(\w+)\)\s+(\w+)\s+(\w+\[\w+\]);")
 
@@ -68,6 +69,10 @@ class ASTType(Enum):
 
     @classmethod
     def astType(cls, source):
+        """
+        Return enum indicating line type
+        source is source code
+        """
         if source == '':
             return cls.BLANK
         if source == "OPENQASM 2.0;":
@@ -102,6 +107,16 @@ class ASTType(Enum):
             return cls.OP
         return cls.UNKNOWN
 
+    @classmethod
+    def ast_eol_comment(cls, source):
+        """
+        Return an end-of-line comment if present or None if absent
+        source is source code
+        """
+        x = QTRegEx.EOL_COMMENT.search(source)
+        if x:
+            x = x.group(1).strip()
+        return x
 
 class ASTElement():
     """
@@ -110,20 +125,25 @@ class ASTElement():
     Knows linenum, ast_type, source, text
     linenum is source array line number
     source is source code
+    eol_comment is any end-of-line comment, if present
     """
 
-    def __init__(self, filenum, linenum, ast_type, source, save_element_source=False):
+    def __init__(self, filenum, linenum, ast_type, source, save_element_source=False, eol_comment=None):
         """Instance from qasm source code and parse into key:value pairs"""
         self.filenum = filenum
         self.linenum = linenum
         self.ast_type = ast_type
         self.source = source
         self.save_element_source = save_element_source
+        self.eol_comment = eol_comment
 
     def out(self):
         """Returns self as a dict structure"""
-        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
+        x = {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None}
+        if self.eol_comment:
+            x['eol_comment'] = self.eol_comment
+        return x
 
     @staticmethod
     def proc_reg_list(txt):
@@ -141,9 +161,9 @@ class ASTElementUnknown(ASTElement):
     Knows linenum, ast_type, source
     """
 
-    def __init__(self, filenum, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False, eol_comment=None):
         super(ASTElementUnknown, self).__init__(
-            filenum, linenum, ASTType.UNKNOWN, source, save_element_source)
+            filenum, linenum, ASTType.UNKNOWN, source, save_element_source, eol_comment)
 
 
 class ASTElementComment(ASTElement):
@@ -153,9 +173,9 @@ class ASTElementComment(ASTElement):
     Knows linenum, ast_type, source
     """
 
-    def __init__(self, filenum, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False, eol_comment=None):
         super(ASTElementComment, self).__init__(
-            filenum, linenum, ASTType.COMMENT, source, save_element_source)
+            filenum, linenum, ASTType.COMMENT, source, save_element_source, eol_comment)
 
 
 class ASTElementDeclarationQasm2_0(ASTElement):
@@ -165,9 +185,9 @@ class ASTElementDeclarationQasm2_0(ASTElement):
     Knows linenum, ast_type, source
     """
 
-    def __init__(self, filenum, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False, eol_comment=None):
         super(ASTElementDeclarationQasm2_0, self).__init__(
-            filenum, linenum, ASTType.DECLARATION_QASM_2_0, source, save_element_source)
+            filenum, linenum, ASTType.DECLARATION_QASM_2_0, source, save_element_source, eol_comment)
 
 
 class ASTElementInclude(ASTElement):
@@ -177,16 +197,19 @@ class ASTElementInclude(ASTElement):
     Knows linenum, ast_type, source, include
     """
 
-    def __init__(self, filenum, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False, eol_comment=None):
         super(ASTElementInclude, self).__init__(
-            filenum, linenum, ASTType.INCLUDE, source, save_element_source)
+            filenum, linenum, ASTType.INCLUDE, source, save_element_source, eol_comment)
         x = QTRegEx.INCLUDE_TARGET.search(source)
         self.include = x.group(1)
 
     def out(self):
-        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
+        x = {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'include': self.include}
+        if self.eol_comment:
+            x['eol_comment'] = self.eol_comment
+        return x
 
 
 class ASTElementQReg(ASTElement):
@@ -196,18 +219,20 @@ class ASTElementQReg(ASTElement):
     Knows linenum, ast_type, source, qreg_name, qreg_num
     """
 
-    def __init__(self, filenum, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False, eol_comment=None):
         super(ASTElementQReg, self).__init__(
-            filenum, linenum, ASTType.QREG, source, save_element_source)
+            filenum, linenum, ASTType.QREG, source, save_element_source, eol_comment)
         x = QTRegEx.REG_DECL.match(self.source)
         self.qreg_name = x.group(1)
         self.qreg_num = x.group(2)
 
     def out(self):
-        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
+        x =  {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'qreg_name': self.qreg_name, 'qreg_num': self.qreg_num}
-
+        if self.eol_comment:
+            x['eol_comment'] = self.eol_comment
+        return x
 
 class ASTElementCReg(ASTElement):
     """
@@ -216,18 +241,20 @@ class ASTElementCReg(ASTElement):
     Knows linenum, ast_type, source, creg_name, creg_num
     """
 
-    def __init__(self, filenum, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False, eol_comment=None):
         super(ASTElementCReg, self).__init__(
-            filenum, linenum, ASTType.CREG, source, save_element_source)
+            filenum, linenum, ASTType.CREG, source, save_element_source, eol_comment)
         x = QTRegEx.REG_DECL.match(self.source)
         self.creg_name = x.group(1)
         self.creg_num = x.group(2)
 
     def out(self):
-        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
+        x = {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'creg_name': self.creg_name, 'creg_num': self.creg_num}
-
+        if self.eol_comment:
+            x['eol_comment'] = self.eol_comment
+        return x
 
 class ASTElementMeasure(ASTElement):
     """
@@ -236,18 +263,20 @@ class ASTElementMeasure(ASTElement):
     Knows linenum, ast_type, source, source_reg, target_reg
     """
 
-    def __init__(self, filenum, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False, eol_comment=None):
         super(ASTElementMeasure, self).__init__(
-            filenum, linenum, ASTType.MEASURE, source, save_element_source)
+            filenum, linenum, ASTType.MEASURE, source, save_element_source, eol_comment)
         x = QTRegEx.MEASURE_DECL.match(self.source)
         self.source_reg = x.group(1)
         self.target_reg = x.group(2)
 
     def out(self):
-        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
+        x = {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'source_reg': self.source_reg, 'target_reg': self.target_reg}
-
+        if self.eol_comment:
+            x['eol_comment'] = self.eol_comment
+        return x
 
 class ASTElementBarrier(ASTElement):
     """
@@ -256,9 +285,9 @@ class ASTElementBarrier(ASTElement):
     Knows linenum, ast_type, source, reg_list
     """
 
-    def __init__(self, filenum, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False, eol_comment=None):
         super(ASTElementBarrier, self).__init__(
-            filenum, linenum, ASTType.BARRIER, source, save_element_source)
+            filenum, linenum, ASTType.BARRIER, source, save_element_source, eol_comment)
         x = QTRegEx.BARRIER_DECL.findall(self.source)
         if not x:  # e.g., qiskit-terra/examples/qasm/entangled_registers.qasm
             x = QTRegEx.BARRIER_DECL_1.findall(self.source)
@@ -266,9 +295,12 @@ class ASTElementBarrier(ASTElement):
         self.reg_list = x[0].split(',')
 
     def out(self):
-        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
+        x = {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'reg_list': self.reg_list}
+        if self.eol_comment:
+            x['eol_comment'] = self.eol_comment
+        return x
 
 
 class ASTElementOp(ASTElement):
@@ -278,9 +310,9 @@ class ASTElementOp(ASTElement):
     Knows linenum, ast_type, source, op, param_list, reg_list
     """
 
-    def __init__(self, filenum, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False, eol_comment=None):
         super(ASTElementOp, self).__init__(
-            filenum, linenum, ASTType.OP, source, save_element_source)
+            filenum, linenum, ASTType.OP, source, save_element_source, eol_comment)
         x = QTRegEx.OP_AND_ARGS.match(self.source)
         op_and_args = x.group(1)
         x = QTRegEx.OP_PARAM_LIST.match(op_and_args)
@@ -295,11 +327,13 @@ class ASTElementOp(ASTElement):
         self.reg_list = self.proc_reg_list(self.source)
 
     def out(self):
-        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
+        x = {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'op': self.op,
                 'param_list': self.param_list, 'reg_list': self.reg_list}
-
+        if self.eol_comment:
+            x['eol_comment'] = self.eol_comment
+        return x
 
 class ASTElementCtl2(ASTElement):
     """
@@ -309,9 +343,9 @@ class ASTElementCtl2(ASTElement):
     expression_param_list, op, param_list, reg_list
     """
 
-    def __init__(self, filenum, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False, eol_comment=None):
         super(ASTElementCtl2, self).__init__(
-            filenum, linenum, ASTType.CTL_2, source, save_element_source)
+            filenum, linenum, ASTType.CTL_2, source, save_element_source, eol_comment)
         x = QTRegEx.CTL_2.match(self.source)
         self.ctl = x.group(1)
         self.expression_op = x.group(3)
@@ -330,25 +364,30 @@ class ASTElementCtl2(ASTElement):
         self.reg_list = self.proc_reg_list(self.source)
 
     def out(self):
-        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
+        x = {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type,
                 'source': self.source if self.save_element_source else None,
                 'ctl': self.ctl,
                 'expression_op': self.expression_op,
                 'expression_param_list': self.expression_param_list,
                 'op': self.op,
                 'param_list': self.param_list, 'reg_list': self.reg_list}
-
+        if self.eol_comment:
+            x['eol_comment'] = self.eol_comment
+        return x
 
 class ASTElementGateDefinitionPlaceholder(ASTElement):
     """So something will show up in the c_sect when a gate definition starts"""
 
-    def __init__(self, filenum, linenum, source, save_element_source=False):
+    def __init__(self, filenum, linenum, source, save_element_source=False, eol_comment=None):
         super(ASTElementGateDefinitionPlaceholder, self).__init__(
             filenum, linenum, ASTType.GATE, None, None)
 
     def out(self):
         """Returns self as a dict structure"""
-        return {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type}
+        x = {'filenum': self.filenum, 'linenum': self.linenum, 'type': self.ast_type}
+        if self.eol_comment:
+            x['eol_comment'] = self.eol_comment
+        return x
 
 
 class Gate_Operation():
@@ -794,6 +833,7 @@ class QasmTranslator():
             line = line.strip()
             line = line.replace(', ', ',')
             line = line.replace(' ;', ';')
+            eolComment = ASTType.ast_eol_comment(line)
 
             if parsing_gate:
                 if not seen_open_curly:
@@ -845,34 +885,34 @@ class QasmTranslator():
             # Now step thru types
             if astType == ASTType.COMMENT:
                 astElement = ASTElementComment(
-                    filenum, linenum, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source, eol_comment=eolComment)
             elif astType == ASTType.DECLARATION_QASM_2_0:
                 astElement = ASTElementDeclarationQasm2_0(
-                    filenum, linenum, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source, eol_comment=eolComment)
             if astType == ASTType.INCLUDE:
                 astElement = ASTElementInclude(
-                    filenum, linenum, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source, eol_comment=eolComment)
                 self.push_include(astElement.out()['include'])
             elif astType == ASTType.CTL_2:
                 astElement = ASTElementCtl2(
-                    filenum, linenum, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source, eol_comment=eolComment)
             elif astType == ASTType.QREG:
                 astElement = ASTElementQReg(
-                    filenum, linenum, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source, eol_comment=eolComment)
             elif astType == ASTType.CREG:
                 astElement = ASTElementCReg(
-                    filenum, linenum, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source, eol_comment=eolComment)
             elif astType == ASTType.MEASURE:
                 astElement = ASTElementMeasure(
-                    filenum, linenum, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source, eol_comment=eolComment)
             elif astType == ASTType.BARRIER:
                 astElement = ASTElementBarrier(
-                    filenum, linenum, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source, eol_comment=eolComment)
 
             elif astType == ASTType.GATE:
                 if self.show_gate_decls:
                     astElement = ASTElementGateDefinitionPlaceholder(
-                        filenum, linenum, line, self.save_element_source)
+                        filenum, linenum, line, self.save_element_source, eol_comment=eolComment)
                     self.append_ast(astElement.out())
                 parsing_gate = True
                 gate_start_line = line
@@ -894,7 +934,7 @@ class QasmTranslator():
 
             elif astType == ASTType.OP:
                 astElement = ASTElementOp(
-                    filenum, linenum, line, self.save_element_source)
+                    filenum, linenum, line, self.save_element_source, eol_comment=eolComment)
             if type(astElement) is ASTElementUnknown and self.no_unknown:
                 raise Qasm_Unknown_Element_Exception(filenum,
                                                      self.get_nth_filepath(
