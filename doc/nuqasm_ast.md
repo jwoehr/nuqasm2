@@ -1,7 +1,10 @@
 __nuqasm2_ast.md 2019-04-07__
 
+nuqasm2 Abstract Syntax Tree Implementation
+-------------------------------------------
+
 Intro
------
+=====
 
 nuqasm2 is a proof of concept of an OPENQASM (and potentially OPENPULSE) parser
 generating an abstract syntax tree (AST) to be consumed by other code generators.
@@ -17,7 +20,7 @@ The current as-is implementation is described unless otherwise noted.
 AST Structure
 =============
 
-nuqasm2 reads OPENQASM 2.0 files, recursively descending into included files, and outputs Python unordered dictionary which may be consumed by another module or
+nuqasm2 reads OPENQASM 2.0 files, recursively descending into included files, and outputs a Python unordered dictionary which may be consumed by another module or
 pretty-printed.
 
 The dictionary has 4 string keys:
