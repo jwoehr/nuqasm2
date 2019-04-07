@@ -85,8 +85,8 @@ The most important key is `'type'` which defines what sort of entity has been pa
 </pre>
 
 <h3><pre>s_sect</pre></h3>
-If source was optionally preserved by translation,
-`s_sect` is an ordered list of unordered dictionaries, each representing a file visited in translation. Each dictionary has 2 keys:
+If source was optionally preserved by translation, `s_sect` is an ordered list of unordered dictionaries, each representing a file visited in translation. Each dictionary has 2 keys:
+
 * `filenum` is the zero-based index into `t_sect`'s list of files visited.
 * `source` is an ordered list of source code lines for the visited file.
 
