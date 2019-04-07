@@ -63,9 +63,9 @@ The keys to these entity dictionaries are as follows:
 * `target_reg` is the target of measurement.
 * `eol_comment` is the end-of-line comment, if any.
 
-Not all keys are present for every type. Also, certain keys normal to a type may be present or absent depending on circumstance, for instance, `'eol_comment'` indicating an end-of-line comment is absent if the qasm line which was parsed contained no end-of-line comment.
+Not all keys are present for every type. Also, certain keys normal to a type may be present or absent depending on circumstance, for instance, `eol_comment` indicating an end-of-line comment is absent if the qasm line which was parsed contained no end-of-line comment.
 
-The most important key is `'type'` which defines what sort of entity has been parsed. The keys for `type` are defined in the code as follows:
+The most important key is `type` which defines what sort of entity has been parsed. The keys for `type` are defined in the code as follows:
 
 <pre><font color="#000000"><font color="#006699"><strong>class</strong></font> <font color="#9966ff">ASTType</font><font color="#000000"><strong>(</strong></font>Enum<font color="#000000"><strong>)</strong></font><font color="#006699"><strong>:</strong></font>
     <font color="#cc00cc">&quot;&quot;&quot;</font><font color="#cc00cc">Enums</font><font color="#cc00cc"> </font><font color="#cc00cc">designating</font><font color="#cc00cc"> </font><font color="#cc00cc">element</font><font color="#cc00cc"> </font><font color="#cc00cc">types</font><font color="#cc00cc">.</font><font color="#cc00cc">&quot;&quot;&quot;</font>
@@ -85,7 +85,8 @@ The most important key is `'type'` which defines what sort of entity has been pa
 </pre>
 
 <h3><pre>s_sect</pre></h3>
-If source was optionally preserved by translation, `s_sect` is an ordered list of unordered dictionaries, each representing a file visited in translation. Each dictionary has 2 keys:
+
+If source was optionally preserved by translation `s_sect` is an ordered list of unordered dictionaries, each representing a file visited in translation. Each dictionary has 2 keys:
 
 * `filenum` is the zero-based index into `t_sect`'s list of files visited.
 * `source` is an ordered list of source code lines for the visited file.
@@ -137,7 +138,7 @@ An example qasm2 file is given below, followed by its nuqasm2 translation.
 <font color="#009966"><strong>measure</strong></font> q<font color="#000000"><strong>[</strong></font><font color="#ff0000">0</font><font color="#000000"><strong>]</strong></font> <font color="#000000"><strong>-&gt;</strong></font> c<font color="#000000"><strong>[</strong></font><font color="#ff0000">0</font><font color="#000000"><strong>]</strong></font>;
 <font color="#009966"><strong>measure</strong></font> q<font color="#000000"><strong>[</strong></font><font color="#ff0000">1</font><font color="#000000"><strong>]</strong></font> <font color="#000000"><strong>-&gt;</strong></font> c<font color="#000000"><strong>[</strong></font><font color="#ff0000">1</font><font color="#000000"><strong>]</strong></font>;
 <font color="#009966"><strong>measure</strong></font> q<font color="#000000"><strong>[</strong></font><font color="#ff0000">2</font><font color="#000000"><strong>]</strong></font> <font color="#000000"><strong>-&gt;</strong></font> c<font color="#000000"><strong>[</strong></font><font color="#ff0000">2</font><font color="#000000"><strong>]</strong></font>;
-</font></pre>
+</pre>
 
 ```
 {   'c_sect': [   {   'filenum': 0,
