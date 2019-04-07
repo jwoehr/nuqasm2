@@ -40,6 +40,7 @@ The `t_sect` is an unordered dictionary of information about the entire translat
   * It comprises the top-level source file and all included files.
   * The zero-based index of each filepath in the list is used in other sections as `filenum`.
   * The filepaths may be relative or absolute, depending on how they were expressed to the translator.
+* `name` for the translation unit can be provided to the translator and defaults to `main`.
 
 <h3><pre>c_sect</pre></h3>
 
