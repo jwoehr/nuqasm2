@@ -61,6 +61,7 @@ The keys to these entity dictionaries are as follows:
 * `reg_list` is an ordered list of the register arguments to an operator.
 * `source_reg` is the source of measurement.
 * `target_reg` is the target of measurement.
+* `eol_comment` is the end-of-line comment, if any.
 
 Not all keys are present for every type. Also, certain keys normal to a type may be present or absent depending on circumstance, for instance, `'eol_comment'` indicating an end-of-line comment is absent if the qasm line which was parsed contained no end-of-line comment.
 
