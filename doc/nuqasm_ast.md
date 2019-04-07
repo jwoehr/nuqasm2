@@ -82,7 +82,7 @@ The most important key is `'type'` which defines what sort of entity has been pa
     BLANK <font color="#000000"><strong>=</strong></font> <font color="#ff0000">1000</font>
     DECLARATION_QASM_2_0 <font color="#000000"><strong>=</strong></font> <font color="#ff0000">2000</font>
     INCLUDE <font color="#000000"><strong>=</strong></font> <font color="#ff0000">3000</font>
-</font></pre>
+</pre>
 
 <h3><pre>s_sect</pre></h3>
 If source was optionally preserved by translation,
