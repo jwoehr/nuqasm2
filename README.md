@@ -31,9 +31,9 @@ Output can include
 * The class file is `qasmast.py`.
 * `qasmast` is the code body providing methods to perform translation from OPENQASM source to data structures useful for backend circuit construction
 
-*Note* that as of v0.20 any qasm source file which does `include "qelib1.inc";` will need `qelib.inc` to be in the current directory, as the `include` directive is now supported and followed. We will be adding an include path regimen next.
+*Note* that as of v0.20 any qasm source file which does `include "qelib1.inc";` will need `qelib.inc` to be in the current directory, as the `include` directive is now supported and followed. There is also an include path regimen.
 
-This is a proof of concept intended to illustrate more than to prescribe. Issues welcome, including comments and suggestions.
+This is a proof of concept intended to illustrate more than to prescribe. Issues welcome, including comments and suggestions. There is a [detailed explanation of the Abstract Syntax Tree (AST) output](https://github.com/jwoehr/nuqasm2/blob/master/doc/nuqasm_ast.md) in the `doc/` directory
 
 ```
 $ python nuqasm2.py -h
