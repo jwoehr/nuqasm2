@@ -12,12 +12,10 @@ WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
 if __name__ == '__main__':
     import os
     import io
-    import gc
     import timeit
     import pstats
     import cProfile
     import pprint
-    import time
     import datetime
     import sys
     import argparse
@@ -47,16 +45,16 @@ if __name__ == '__main__':
                         os.pathsep + "', default include path is '.'")
     perfgroup = parser.add_mutually_exclusive_group()
     perfgroup.add_argument("-p", "--profile", action="store_true",
-                        help="""Profile translator run, writing to stderr and also
-                        to file if --perf_filepath switch is also used
-                        (-p, --profile is mutually exclusive with -t, --timeit)
-                        """)
+                           help="""Profile translator run, writing to stderr and also
+                           to file if --perf_filepath switch is also used
+                           (-p, --profile is mutually exclusive with -t, --timeit)
+                           """)
     parser.add_argument("--perf_filepath", action="store",
                         help="Save -p --profile data to provided filename")
     perfgroup.add_argument("-t", "--timeit", action="store_true",
-                        help="""Time translator run (1 iteration) (gc enabled)
-                        (-t, --timeit is mutually exclusive with -p, --profile)
-                        """)
+                           help="""Time translator run (1 iteration) (gc enabled)
+                           (-t, --timeit is mutually exclusive with -p, --profile)
+                           """)
     parser.add_argument("-u", "--unknown", action="store_true",
                         help="exit with error on unknown element in source")
     parser.add_argument("-v", "--verbose", action="count", default=0,
@@ -132,7 +130,7 @@ if __name__ == '__main__':
         pr.disable()
         s = io.StringIO()
         ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-        pss = ps.print_stats()
+        _ = ps.print_stats()
         sys.stderr.write(s.getvalue())
         if args.perf_filepath:
             verbosity("Performance filepath is " + args.perf_filepath, 2)

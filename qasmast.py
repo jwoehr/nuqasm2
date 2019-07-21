@@ -464,9 +464,9 @@ class T_Sect():
 
     def append_filepath(self, filepath):
         """Append to filepaths returning index of latest append"""
-        l = len(self.t_sect['filepaths'])
+        idx = len(self.t_sect['filepaths'])
         self.t_sect['filepaths'].append(filepath)
-        return l
+        return idx
 
 
 class C_Sect():
