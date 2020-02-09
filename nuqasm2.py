@@ -110,7 +110,7 @@ if __name__ == '__main__':
         epp.pprint("Error: " + filepath)
         x = ex.errpacket()
         epp.pprint(x)
-        exit(x['errcode'])
+        sys.exit(x['errcode'])
 
     if args.outfile:
         fout = open(args.outfile, 'w')
@@ -190,6 +190,6 @@ if __name__ == '__main__':
     if fout is not sys.stdout:
         fout.close()
 
-    exit()
+    sys.exit()
 
 # end
