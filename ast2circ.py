@@ -203,7 +203,6 @@ class Ast2Circ():
             else:
                 reg_list.append(ClassicalRegister(entry.get('creg_num'), entry.get('creg_name')))
 
-        self.pp.pprint(reg_list)
         self.circuit = QuantumCircuit(*reg_list)
         return self.circuit
 

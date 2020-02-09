@@ -186,6 +186,7 @@ if __name__ == '__main__':
                     print("Circuit:")
                     ast2circ = Ast2Circ(nuq2_ast=translated_ast)
                     print(ast2circ.translate().circuit)
+                    PP.pprint(ast2circ.regdefs)
 
         else:
 
@@ -218,7 +219,7 @@ if __name__ == '__main__':
                 print("Circuit:", FOUT)
                 ast2circ = Ast2Circ(nuq2_ast=translated_ast)
                 print(ast2circ.translate().circuit)
-
+                PP.pprint(ast2circ.regdefs)
 
 do_it()
 
