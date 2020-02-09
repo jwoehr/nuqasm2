@@ -1035,6 +1035,7 @@ class Qasm_Exception(Exception):
     """Base class for Qasm exceptions"""
 
     def __init__(self, filenum, filename, linenum, line):
+        super(Qasm_Exception, self).__init__()
         self.filenum = filenum
         self.filename = filename
         self.linenum = linenum

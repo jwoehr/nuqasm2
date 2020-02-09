@@ -12,6 +12,7 @@ import os
 import pprint
 import re
 import sys
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 from qasmast import(ASTType)
 
 class ASTRegEx():  # pylint: disable-msg=too-few-public-methods
@@ -22,21 +23,27 @@ class ASTRegEx():  # pylint: disable-msg=too-few-public-methods
 class Ast2Circ():
     """Turns nuqasm2 ast into Qiskit QuantumCircuit"""
 
-    def __init__(self, ast=None, circuit=None, stream=sys.stdout):
+    def __init__(self, nuq2_ast=None, circuit=None, stream=sys.stdout):
         """Initialize instance"""
-        self.reinit(ast, circuit, stream)
-
-    def reinit(self, ast=None, circuit=None, stream=sys.stdout):
-        "Reinitialize instance cold for re-use"
         self.circuit = circuit
-        self.ast = ast
+        self.nuq2_ast = nuq2_ast
         self.spool = None
         self.gatedefs = {}
+        self.regdefs = []
+        self.pp = pprint.PrettyPrinter(indent=4, stream=stream)
+
+    def reinit(self, nuq2_ast=None, circuit=None, stream=sys.stdout):
+        "Reinitialize instance cold for re-use"
+        self.circuit = circuit
+        self.nuq2_ast = nuq2_ast
+        self.spool = None
+        self.gatedefs = {}
+        self.regdefs = []
         self.pp = pprint.PrettyPrinter(indent=4, stream=stream)
 
     def marshall_gatedefs(self):
         """Make dictionary of gate definitions from AST"""
-        for gatedef in self.ast['g_sect']:
+        for gatedef in self.nuq2_ast['g_sect']:
             gate_name = gatedef['gate_name']
             op = ASTRegEx.OP.match(gate_name).group(1)
             arglist_match = ASTRegEx.ARGLIST.match(gate_name)
@@ -44,16 +51,25 @@ class Ast2Circ():
             arity = 0 if len(arglist) == 0 else len(arglist.split(','))
             self.gatedefs[op + '/' + str(arity)] = gatedef
 
+    def marshall_regdefs(self):
+        """Marshall the list of register declarations"""
+        for entry in self.nuq2_ast['c_sect']:
+            entry_type = entry['type']
+            if isinstance(entry_type, (ASTType.QREG, ASTType.CREG)):
+                self.regdefs.append(entry)
+
     def unrollable(self, op_sig):
         """Does a op signature exist in the gate section?"""
-        return self.gatedefs.hasattr(op_sig)
+        return self.gatedefs.get(op_sig)
 
     def unroll(self, gate_invocation, gate_definition):
         """Expand a gate definition"""
 
     def translate(self):
         """Instance self.circuit from self.ast"""
-        for code in self.ast['c_sect']:
+        if not self.circuit:
+            self.circuit = QuantumCircuit(0)
+        for code in self.nuq2_ast['c_sect']:
             op_type = code['type']
             if op_type is ASTType.QREG:
                 pass
@@ -85,7 +101,7 @@ class Ast2Circ():
         Returns
         -------
         TYPE
-            Ast2Circ instance with loaded AST.
+            Ast2Circ instance with loaded nuqasm2 AST.
 
         """
         if not os.path.exists(filepath) or not os.access(filepath, os.R_OK):
@@ -93,13 +109,14 @@ class Ast2Circ():
         file_handle = open(filepath, 'r')
         text = file_handle.read()
         file_handle.close()
-        text = re.sub('(\<ASTType\.\w*\: \d*\>)', "'$1'", text)
-        return Ast2Circ(ast=ast.literal_eval(text))
+        text = re.sub(r'(\<ASTType\.\w*\: \d*\>)', "'$1'", text)
+        return Ast2Circ(nuq2_ast=ast.literal_eval(text))
 
 class Ast2CircException(Exception):
     """Base class for Qasm exceptions"""
 
     def __init__(self, filepath=None, linenum=None, line=None):
+        super(Ast2CircException, self).__init__()
         self.filepath = filepath
         self.linenum = linenum
         self.line = line

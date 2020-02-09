@@ -19,6 +19,7 @@ if __name__ == '__main__':
     import datetime
     import sys
     import argparse
+    from ast2circ import Ast2Circ
     from qasmast import (QasmTranslator, Qasm_Exception)
 
     description = """Implements qasm2 translation to python data structures.
@@ -39,22 +40,23 @@ if __name__ == '__main__':
                         help="Give a name to the translation unit (default 'main'")
     parser.add_argument("-o", "--outfile", action="store",
                         help="Write AST to outfile overwriting silently, default is stdout")
-
     parser.add_argument("-i", "--include_path", action="store", default='.',
                         help="Search path for includes, paths separated by '" +
                         os.pathsep + "', default include path is '.'")
+    parser.add_argument("-c", "--circuit", action="store_true",
+                        help="Generate circuit and draw-print result")
     perfgroup = parser.add_mutually_exclusive_group()
     perfgroup.add_argument("-p", "--profile", action="store_true",
                            help="""Profile translator run, writing to stderr and also
                            to file if --perf_filepath switch is also used
                            (-p, --profile is mutually exclusive with -t, --timeit)
                            """)
-    parser.add_argument("--perf_filepath", action="store",
-                        help="Save -p --profile data to provided filename")
     perfgroup.add_argument("-t", "--timeit", action="store_true",
                            help="""Time translator run (1 iteration) (gc enabled)
                            (-t, --timeit is mutually exclusive with -p, --profile)
                            """)
+    parser.add_argument("--perf_filepath", action="store",
+                        help="Save -p --profile data to provided filename")
     parser.add_argument("-u", "--unknown", action="store_true",
                         help="exit with error on unknown element in source")
     parser.add_argument("-v", "--verbose", action="count", default=0,
@@ -105,10 +107,10 @@ if __name__ == '__main__':
 
     verbosity(args, 3)
 
-    def handle_error(ex, filepath):
+    def handle_error(err, erring_filepath):
         """Print out exception packet"""
-        epp.pprint("Error: " + filepath)
-        x = ex.errpacket()
+        epp.pprint("Error: " + erring_filepath)
+        x = err.errpacket()
         epp.pprint(x)
         sys.exit(x['errcode'])
 
@@ -119,14 +121,14 @@ if __name__ == '__main__':
 
     pp = pprint.PrettyPrinter(indent=4, stream=fout)
 
-    def profileTranslate(qt, sortby=args.sortby):
+    def profile_translate(qt_instance, sortby=args.sortby):
         """
         Profile a translation run and write it to stderr
         and optionally to perf_filepath
         """
         pr = cProfile.Profile()
         pr.enable()
-        qt.translate()
+        qt_instance.translate()
         pr.disable()
         s = io.StringIO()
         ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
@@ -150,7 +152,7 @@ if __name__ == '__main__':
                                          include_path=args.include_path)
             try:
                 if args.profile:
-                    profileTranslate(qt)
+                    profile_translate(qt)
 
                 elif args.timeit:
                     print(">>>translation time", end=':')
@@ -158,8 +160,8 @@ if __name__ == '__main__':
                                         setup='gc.enable()', number=1, globals=globals()))
                 else:
                     qt.translate()
-            except Qasm_Exception as ex:
-                handle_error(ex, filepath)
+            except Qasm_Exception as exc:
+                handle_error(exc, filepath)
 
             pp.pprint(qt.get_translation())
 
@@ -185,7 +187,13 @@ if __name__ == '__main__':
         except Qasm_Exception as ex:
             handle_error(ex, str(sys.stdin))
 
-        pp.pprint(qt.get_translation())
+        translated_ast = qt.get_translation()
+
+        pp.pprint(translated_ast)
+
+        if args.circuit:
+            ast2circ = Ast2Circ(nuq2_ast=translated_ast)
+            print(ast2circ.translate().draw())
 
     if fout is not sys.stdout:
         fout.close()
