@@ -13,29 +13,74 @@ import pprint
 import re
 import sys
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
-from qasmast import(ASTType)
+from qasmast import ASTType
+
 
 class ASTRegEx():  # pylint: disable-msg=too-few-public-methods
     """Regexes to use in processing AST"""
     OP = re.compile(r"(\w*)")
     ARGLIST = re.compile(r"\w*(.*)")
 
+
 class Ast2Circ():
     """Turns nuqasm2 ast into Qiskit QuantumCircuit"""
 
-    def __init__(self, nuq2_ast=None, circuit=None, stream=sys.stdout):
-        """Initialize instance"""
+    def __init__(self,
+                 nuq2_ast=None,
+                 circuit=None,
+                 stream=sys.stdout,
+                 loading_from_file=False):
+        """
+        Initialize instance
+
+        Parameters
+        ----------
+        nuq2_ast : TYPE, optional
+            DESCRIPTION. The default is None.
+        circuit : TYPE, optional
+            DESCRIPTION. The default is None.
+        stream : TYPE, optional
+            DESCRIPTION. The default is sys.stdout.
+        loading_from_file : TYPE, optional
+            DESCRIPTION. The default is False.
+
+        Returns
+        -------
+        None.
+
+        """
+
         self.circuit = circuit
         self.nuq2_ast = nuq2_ast
+        self.loading_from_file = loading_from_file
         self.spool = None
         self.gatedefs = {}
         self.regdefs = []
-        self.pp = pprint.PrettyPrinter(indent=4, stream=stream)
+        self.pp = pprint.PrettyPrinter(indent=4, stream=stream)   # pylint: disable-msg=invalid-name
 
-    def reinit(self, nuq2_ast=None, circuit=None, stream=sys.stdout):
-        "Reinitialize instance cold for re-use"
+    def reinit(self, nuq2_ast=None,
+               circuit=None,
+               stream=sys.stdout,
+               loading_from_file=False):
+        """
+
+        Parameters
+        ----------
+        nuq2_ast : TYPE, optional
+            DESCRIPTION. The default is None.
+        circuit : TYPE, optional
+            DESCRIPTION. The default is None.
+        stream : TYPE, optional
+            DESCRIPTION. The default is sys.stdout               loading_from_file=False.
+
+        Returns
+        -------
+        None.
+
+        """
         self.circuit = circuit
         self.nuq2_ast = nuq2_ast
+        self.loading_from_file = loading_from_file
         self.spool = None
         self.gatedefs = {}
         self.regdefs = []
@@ -45,17 +90,75 @@ class Ast2Circ():
         """Make dictionary of gate definitions from AST"""
         for gatedef in self.nuq2_ast['g_sect']:
             gate_name = gatedef['gate_name']
-            op = ASTRegEx.OP.match(gate_name).group(1)
+            op = ASTRegEx.OP.match(gate_name).group(1)   # pylint: disable-msg=invalid-name
             arglist_match = ASTRegEx.ARGLIST.match(gate_name)
             arglist = arglist_match.group(1)
             arity = 0 if len(arglist) == 0 else len(arglist.split(','))
             self.gatedefs[op + '/' + str(arity)] = gatedef
 
+    @staticmethod
+    def match_entry_type(code_entry, type_tuple):
+        """
+
+
+        Parameters
+        ----------
+        code_entry : TYPE
+            DESCRIPTION.
+        type_tuple : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        TYPE
+            DESCRIPTION.
+
+        """
+        entry_type = code_entry['type']
+        return isinstance(entry_type, type_tuple)
+
+    @staticmethod
+    def match_entry_type_string(code_entry, string_list):
+        """
+
+
+        Parameters
+        ----------
+        code_entry : TYPE
+            DESCRIPTION.
+        string_list : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        bool
+            DESCRIPTION.
+
+        """
+        entry_type = code_entry.get('type')
+        # print('Debug: code entry type: ' +  entry_type)
+        # print('Debug: string list: ' + str(string_list))
+        return bool(entry_type in string_list)
+
     def marshall_regdefs(self):
         """Marshall the list of register declarations"""
         for entry in self.nuq2_ast['c_sect']:
-            entry_type = entry['type']
-            if isinstance(entry_type, (ASTType.QREG, ASTType.CREG)):
+            is_regdef = False
+            if self.loading_from_file:
+                is_regdef = self.match_entry_type_string(entry,
+                                                         ['<ASTType.QREG: 20>',
+                                                          '<ASTType.CREG: 30>'
+                                                         ]
+                                                         )
+            else:
+                is_regdef = self.match_entry_type(entry,
+                                                  (ASTType.QREG,
+                                                   ASTType.CREG
+                                                   )
+                                                  )
+
+            print("is_regdef: " + str(is_regdef))
+            if is_regdef:
                 self.regdefs.append(entry)
 
     def unrollable(self, op_sig):
@@ -66,9 +169,17 @@ class Ast2Circ():
         """Expand a gate definition"""
 
     def translate(self):
-        """Instance self.circuit from self.ast"""
+        """
+        Instance self.circuit from self.ast
+
+        Returns
+        -------
+        TYPE, Ast2Circ
+            DESCRIPTION. Ast2Circ self, to access attributes after translation.
+
+        """
         if not self.circuit:
-            self.circuit = QuantumCircuit(0)
+            self.circuit = QuantumCircuit(1)
         for code in self.nuq2_ast['c_sect']:
             op_type = code['type']
             if op_type is ASTType.QREG:
@@ -83,6 +194,7 @@ class Ast2Circ():
                 pass
             else:  # It's nothing we care about in this stage
                 pass
+        return self
 
     @staticmethod
     def from_file(filepath):
@@ -95,13 +207,13 @@ class Ast2Circ():
 
         Raises
         ------
-        Ast2CircException
-            Raised if can't open file.
+        TYPE. Ast2CircException
+            DESCRIPTION. Raised if can't open file.
 
         Returns
         -------
-        TYPE
-            Ast2Circ instance with loaded nuqasm2 AST.
+        TYPE Ast2Circ
+            DESCRIPTION. instance with loaded stringified nuqasm2 AST.
 
         """
         if not os.path.exists(filepath) or not os.access(filepath, os.R_OK):
@@ -109,8 +221,9 @@ class Ast2Circ():
         file_handle = open(filepath, 'r')
         text = file_handle.read()
         file_handle.close()
-        text = re.sub(r'(\<ASTType\.\w*\: \d*\>)', "'$1'", text)
-        return Ast2Circ(nuq2_ast=ast.literal_eval(text))
+        text = re.sub(r'(<ASTType\.\w*\: \d*>)', r"'\g<1>'", text)
+        return Ast2Circ(nuq2_ast=ast.literal_eval(text), loading_from_file=True)
+
 
 class Ast2CircException(Exception):
     """Base class for Qasm exceptions"""
@@ -133,6 +246,7 @@ class Ast2CircException(Exception):
               }
         return ex
 
+
 if __name__ == '__main__':
 
     DESCRIPTION = """Implements qasm2 translation to python data structures.
@@ -154,8 +268,12 @@ if __name__ == '__main__':
     ARGS = PARSER.parse_args()
 
     if ARGS.filepath:
-        ast2circ = Ast2Circ.from_file(ARGS.filepath)
-        ast2circ.marshall_gatedefs()
-        ast2circ.pp.pprint(ast2circ.gatedefs)
+        AST2CIRC = Ast2Circ.from_file(ARGS.filepath)
+        AST2CIRC.pp.pprint(AST2CIRC.nuq2_ast)
+        AST2CIRC.marshall_gatedefs()
+        AST2CIRC.pp.pprint(AST2CIRC.gatedefs)
+        AST2CIRC.marshall_regdefs()
+        print("Regdefs:")
+        AST2CIRC.pp.pprint(AST2CIRC.regdefs)
 
     sys.exit(0)

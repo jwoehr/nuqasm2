@@ -22,7 +22,7 @@ if __name__ == '__main__':
     from ast2circ import Ast2Circ
     from qasmast import (QasmTranslator, Qasm_Exception)
 
-    description = """Implements qasm2 translation to python data structures.
+    DESCRIPTION = """Implements qasm2 translation to python data structures.
     Working from _Open Quantum Assembly Language_
     https://arxiv.org/pdf/1707.03429.pdf ......
     Copyright 2019 Jack Woehr jwoehr@softwoehr.com PO Box 51, Golden, CO 80402-0051.
@@ -34,46 +34,46 @@ if __name__ == '__main__':
     limitations under the License.
     """
 
-    parser = argparse.ArgumentParser(description=description)
+    PARSER = argparse.ArgumentParser(description=DESCRIPTION)
 
-    parser.add_argument("-n", "--name", action="store", default='main',
+    PARSER.add_argument("-n", "--name", action="store", default='main',
                         help="Give a name to the translation unit (default 'main'")
-    parser.add_argument("-o", "--outfile", action="store",
+    PARSER.add_argument("-o", "--outfile", action="store",
                         help="Write AST to outfile overwriting silently, default is stdout")
-    parser.add_argument("-i", "--include_path", action="store", default='.',
+    PARSER.add_argument("-i", "--include_path", action="store", default='.',
                         help="Search path for includes, paths separated by '" +
                         os.pathsep + "', default include path is '.'")
-    parser.add_argument("-c", "--circuit", action="store_true",
+    PARSER.add_argument("-c", "--circuit", action="store_true",
                         help="Generate circuit and draw-print result")
-    perfgroup = parser.add_mutually_exclusive_group()
-    perfgroup.add_argument("-p", "--profile", action="store_true",
+    PERFGROUP = PARSER.add_mutually_exclusive_group()
+    PERFGROUP.add_argument("-p", "--profile", action="store_true",
                            help="""Profile translator run, writing to stderr and also
                            to file if --perf_filepath switch is also used
                            (-p, --profile is mutually exclusive with -t, --timeit)
                            """)
-    perfgroup.add_argument("-t", "--timeit", action="store_true",
+    PERFGROUP.add_argument("-t", "--timeit", action="store_true",
                            help="""Time translator run (1 iteration) (gc enabled)
                            (-t, --timeit is mutually exclusive with -p, --profile)
                            """)
-    parser.add_argument("--perf_filepath", action="store",
+    PARSER.add_argument("--perf_filepath", action="store",
                         help="Save -p --profile data to provided filename")
-    parser.add_argument("-u", "--unknown", action="store_true",
+    PARSER.add_argument("-u", "--unknown", action="store_true",
                         help="exit with error on unknown element in source")
-    parser.add_argument("-v", "--verbose", action="count", default=0,
+    PARSER.add_argument("-v", "--verbose", action="count", default=0,
                         help="Increase verbosity each -v up to 3")
-    parser.add_argument("--save_pgm_source", action="store_true",
+    PARSER.add_argument("--save_pgm_source", action="store_true",
                         help="Save program source in output")
-    parser.add_argument("--save_element_source", action="store_true",
+    PARSER.add_argument("--save_element_source", action="store_true",
                         help="Save element source in output")
-    parser.add_argument("--save_gate_source", action="store_true",
+    PARSER.add_argument("--save_gate_source", action="store_true",
                         help="Save gate source in output")
-    parser.add_argument("--save_source", action="store_true",
+    PARSER.add_argument("--save_source", action="store_true",
                         help="""Save all source regions of output (equivalent to
                         --save_pgm_source --save_element_source --save_gate_source)
                         """)
-    parser.add_argument("--show_gate_decls", action="store_true",
+    PARSER.add_argument("--show_gate_decls", action="store_true",
                         help="Show gate declarations in code section output")
-    parser.add_argument("--sortby", action="store", default="cumtime",
+    PARSER.add_argument("--sortby", action="store", default="cumtime",
                         help="""Sort sequence for performance data if -p switch
                         used ... one or more of the following separated by spaces
                         in a single string on the command line, e.g., --sortby
@@ -93,35 +93,35 @@ if __name__ == '__main__':
                         ... default is cumtime
                         """)
 
-    parser.add_argument("filepaths", nargs='*',
+    PARSER.add_argument("filepaths", nargs='*',
                         help="Filepath to 1 or more .qasm file(s) (default stdin)")
 
-    args = parser.parse_args()
+    ARGS = PARSER.parse_args()
 
-    epp = pprint.PrettyPrinter(indent=4, stream=sys.stderr)
+    EPP = pprint.PrettyPrinter(indent=4, stream=sys.stderr)
 
     def verbosity(text, count):
         """Verbose error messages by level"""
-        if args.verbose >= count:
-            epp.pprint(text)
+        if ARGS.verbose >= count:
+            EPP.pprint(text)
 
-    verbosity(args, 3)
+    verbosity(ARGS, 3)
 
     def handle_error(err, erring_filepath):
         """Print out exception packet"""
-        epp.pprint("Error: " + erring_filepath)
+        EPP.pprint("Error: " + erring_filepath)
         x = err.errpacket()
-        epp.pprint(x)
+        EPP.pprint(x)
         sys.exit(x['errcode'])
 
-    if args.outfile:
-        fout = open(args.outfile, 'w')
+    if ARGS.outfile:
+        FOUT = open(ARGS.outfile, 'w')
     else:
-        fout = sys.stdout
+        FOUT = sys.stdout
 
-    pp = pprint.PrettyPrinter(indent=4, stream=fout)
+    PP = pprint.PrettyPrinter(indent=4, stream=FOUT)
 
-    def profile_translate(qt_instance, sortby=args.sortby):
+    def profile_translate(qt_instance, sortby=ARGS.sortby):
         """
         Profile a translation run and write it to stderr
         and optionally to perf_filepath
@@ -134,70 +134,98 @@ if __name__ == '__main__':
         ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
         _ = ps.print_stats()
         sys.stderr.write(s.getvalue())
-        if args.perf_filepath:
-            verbosity("Performance filepath is " + args.perf_filepath, 2)
-            f = open(args.perf_filepath, 'w')
+        if ARGS.perf_filepath:
+            verbosity("Performance filepath is " + ARGS.perf_filepath, 2)
+            f = open(ARGS.perf_filepath, 'w')
             f.write(s.getvalue())
             f.close()
 
-    if args.filepaths:
-        for filepath in args.filepaths:
-            verbosity("Translating " + filepath, 1)
-            qt = QasmTranslator.fromFile(filepath, name=args.name,
-                                         no_unknown=args.unknown,
-                                         save_pgm_source=args.save_pgm_source or args.save_source,
-                                         save_element_source=args.save_element_source or args.save_source,
-                                         save_gate_source=args.save_gate_source or args.save_source,
-                                         show_gate_decls=args.show_gate_decls,
-                                         include_path=args.include_path)
-            try:
-                if args.profile:
-                    profile_translate(qt)
 
-                elif args.timeit:
+    def do_it():
+        """
+        Interpret QASM source and output nuqasm2 AST.
+        Also output circuit drawing if the -c switch calls for circuit.
+
+        Returns
+        -------
+        None.
+
+        """
+
+        qt = None
+
+        if ARGS.filepaths:
+            for filepath in ARGS.filepaths:
+                verbosity("Translating " + filepath, 1)
+                qt = QasmTranslator.fromFile(filepath, name=ARGS.name,
+                                             no_unknown=ARGS.unknown,
+                                             save_pgm_source=ARGS.save_pgm_source or ARGS.save_source,
+                                             save_element_source=ARGS.save_element_source or ARGS.save_source,
+                                             save_gate_source=ARGS.save_gate_source or ARGS.save_source,
+                                             show_gate_decls=ARGS.show_gate_decls,
+                                             include_path=ARGS.include_path)
+                try:
+                    if ARGS.profile:
+                        profile_translate(qt)
+
+                    elif ARGS.timeit:
+                        print(">>>translation time", end=':')
+                        print(timeit.timeit(stmt='qt.translate()',
+                                            setup='gc.enable()', number=1, globals=globals()))
+                    else:
+                        qt.translate()
+
+                except Qasm_Exception as exc:
+                    handle_error(exc, filepath)
+
+                translated_ast = qt.get_translation()
+
+                PP.pprint(translated_ast)
+
+                if ARGS.circuit:
+                    print("Circuit:")
+                    ast2circ = Ast2Circ(nuq2_ast=translated_ast)
+                    print(ast2circ.translate().circuit)
+
+        else:
+
+            qt = QasmTranslator.fromFileHandle(sys.stdin, name=ARGS.name, filepath=str(sys.stdin),
+                                               no_unknown=ARGS.unknown,
+                                               datetime=datetime.datetime.now().isoformat(),
+                                               save_pgm_source=ARGS.save_pgm_source or ARGS.save_source,
+                                               save_element_source=ARGS.save_element_source or ARGS.save_source,
+                                               save_gate_source=ARGS.save_gate_source or ARGS.save_source,
+                                               show_gate_decls=ARGS.show_gate_decls,
+                                               include_path=ARGS.include_path)
+            try:
+                if ARGS.profile:
+                    profile_translate(qt)
+                elif ARGS.timeit:
                     print(">>>translation time", end=':')
                     print(timeit.timeit(stmt='qt.translate()',
                                         setup='gc.enable()', number=1, globals=globals()))
                 else:
                     qt.translate()
-            except Qasm_Exception as exc:
-                handle_error(exc, filepath)
+            except Qasm_Exception as ex:
+                handle_error(ex, str(sys.stdin))
 
-            pp.pprint(qt.get_translation())
 
-    else:
+            translated_ast = qt.get_translation()
 
-        qt = QasmTranslator.fromFileHandle(sys.stdin, name=args.name, filepath=str(sys.stdin),
-                                           no_unknown=args.unknown,
-                                           datetime=datetime.datetime.now().isoformat(),
-                                           save_pgm_source=args.save_pgm_source or args.save_source,
-                                           save_element_source=args.save_element_source or args.save_source,
-                                           save_gate_source=args.save_gate_source or args.save_source,
-                                           show_gate_decls=args.show_gate_decls,
-                                           include_path=args.include_path)
-        try:
-            if args.profile:
-                profileTranslate(qt)
-            elif args.timeit:
-                print(">>>translation time", end=':')
-                print(timeit.timeit(stmt='qt.translate()',
-                                    setup='gc.enable()', number=1, globals=globals()))
-            else:
-                qt.translate()
-        except Qasm_Exception as ex:
-            handle_error(ex, str(sys.stdin))
+            PP.pprint(translated_ast)
 
-        translated_ast = qt.get_translation()
+            if ARGS.circuit:
+                print("Circuit:", FOUT)
+                ast2circ = Ast2Circ(nuq2_ast=translated_ast)
+                print(ast2circ.translate().circuit)
 
-        pp.pprint(translated_ast)
 
-        if args.circuit:
-            ast2circ = Ast2Circ(nuq2_ast=translated_ast)
-            print(ast2circ.translate().draw())
+do_it()
 
-    if fout is not sys.stdout:
-        fout.close()
+if FOUT is not sys.stdout:
+    FOUT.close()
 
-    sys.exit()
+sys.exit(0)
+
 
 # end
