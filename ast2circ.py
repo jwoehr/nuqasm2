@@ -86,18 +86,8 @@ class Ast2Circ():
         self.regdefs = []
         self.pp = pprint.PrettyPrinter(indent=4, stream=stream)
 
-    def marshall_gatedefs(self):
-        """Make dictionary of gate definitions from AST"""
-        for gatedef in self.nuq2_ast['g_sect']:
-            gate_name = gatedef['gate_name']
-            op = ASTRegEx.OP.match(gate_name).group(1)   # pylint: disable-msg=invalid-name
-            arglist_match = ASTRegEx.ARGLIST.match(gate_name)
-            arglist = arglist_match.group(1)
-            arity = 0 if len(arglist) == 0 else len(arglist.split(','))
-            self.gatedefs[op + '/' + str(arity)] = gatedef
-
     @staticmethod
-    def match_entry_type(code_entry, type_tuple):
+    def match_entry_type_tuple(code_entry, type_tuple):
         """
 
 
@@ -135,31 +125,76 @@ class Ast2Circ():
             DESCRIPTION.
 
         """
-        entry_type = code_entry.get('type')
+        entry_type = re.match(r"<(AST.*):.*", code_entry.get('type')).group(1)
         # print('Debug: code entry type: ' +  entry_type)
         # print('Debug: string list: ' + str(string_list))
         return bool(entry_type in string_list)
 
+    def match_entry_type(self, code_entry, type_tuple):
+        """
+
+
+        Parameters
+        ----------
+        code_entry : TYPE
+            DESCRIPTION.
+        type_tuple : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        matched : TYPE
+            DESCRIPTION.
+
+        """
+        matched = False
+        if self.loading_from_file:
+            type_list = []
+            if isinstance(type_tuple, tuple):
+                for elem in type_tuple:
+                    type_list.append(str(elem))
+            else:
+                type_list.append(str(type_tuple))
+            self.pp.pprint(type_list)
+            matched = self.match_entry_type_string(code_entry, type_list)
+        else:
+            Ast2Circ.matched = self.match_entry_type_tuple(code_entry, type_tuple)
+        return matched
+
     def marshall_regdefs(self):
         """Marshall the list of register declarations"""
         for entry in self.nuq2_ast['c_sect']:
-            is_regdef = False
-            if self.loading_from_file:
-                is_regdef = self.match_entry_type_string(entry,
-                                                         ['<ASTType.QREG: 20>',
-                                                          '<ASTType.CREG: 30>'
-                                                         ]
-                                                         )
-            else:
-                is_regdef = self.match_entry_type(entry,
-                                                  (ASTType.QREG,
-                                                   ASTType.CREG
-                                                   )
-                                                  )
+            is_regdef = self.match_entry_type(entry,
+                                              (ASTType.QREG,
+                                               ASTType.CREG)
+                                              )
+            # is_regdef = False
+            # if self.loading_from_file:
+            #     is_regdef = self.match_entry_type_string(entry,
+            #                                              ['<ASTType.QREG: 20>',
+            #                                               '<ASTType.CREG: 30>'
+            #                                              ]
+            #                                              )
+            # else:
+            #     is_regdef = self.match_entry_type_tuple(entry,
+            #                                       (ASTType.QREG,
+            #                                        ASTType.CREG
+            #                                        )
+            #                                       )
 
             print("is_regdef: " + str(is_regdef))
             if is_regdef:
                 self.regdefs.append(entry)
+
+    def marshall_gatedefs(self):
+        """Make dictionary of gate definitions from AST"""
+        for gatedef in self.nuq2_ast['g_sect']:
+            gate_name = gatedef['gate_name']
+            op = ASTRegEx.OP.match(gate_name).group(1)   # pylint: disable-msg=invalid-name
+            arglist_match = ASTRegEx.ARGLIST.match(gate_name)
+            arglist = arglist_match.group(1)
+            arity = 0 if len(arglist) == 0 else len(arglist.split(','))
+            self.gatedefs[op + '/' + str(arity)] = gatedef
 
     def unrollable(self, op_sig):
         """Does a op signature exist in the gate section?"""
@@ -180,14 +215,15 @@ class Ast2Circ():
         """
         reg_list = []
         for entry in self.regdefs:
-            is_qreg = False
-            if self.loading_from_file:
-                is_qreg = self.match_entry_type_string(entry,
-                                                       ['<ASTType.QREG: 20>']
-                                                       )
-            else:
-                is_qreg = self.match_entry_type(entry, (ASTType.QREG))
+            is_qreg = self.match_entry_type(entry, ASTType.QREG)
 
+            # is_qreg = False
+            # if self.loading_from_file:
+            #     is_qreg = self.match_entry_type_string(entry,
+            #                                            ['<ASTType.QREG: 20>']
+            #                                            )
+            # else:
+            #     is_qreg = self.match_entry_type_tuple(entry, (ASTType.QREG))
 
             if is_qreg:
                 reg_list.append(QuantumRegister(entry.get('qreg_num'), entry.get('qreg_name')))
@@ -196,6 +232,22 @@ class Ast2Circ():
         self.pp.pprint(reg_list)
         self.circuit = QuantumCircuit(*reg_list)
         return self.circuit
+
+    def append_op(self, entry):
+        """
+
+
+        Parameters
+        ----------
+        entry : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        None.
+
+        """
+
 
     def translate(self):
         """
