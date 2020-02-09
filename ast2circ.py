@@ -168,6 +168,35 @@ class Ast2Circ():
     def unroll(self, gate_invocation, gate_definition):
         """Expand a gate definition"""
 
+    def create_quantum_circuit(self):
+        """
+
+
+        Returns
+        -------
+        TYPE
+            DESCRIPTION.
+
+        """
+        reg_list = []
+        for entry in self.regdefs:
+            is_qreg = False
+            if self.loading_from_file:
+                is_qreg = self.match_entry_type_string(entry,
+                                                       ['<ASTType.QREG: 20>']
+                                                       )
+            else:
+                is_qreg = self.match_entry_type(entry, (ASTType.QREG))
+
+
+            if is_qreg:
+                reg_list.append(QuantumRegister(entry.get('qreg_num'), entry.get('qreg_name')))
+            else:
+                reg_list.append(ClassicalRegister(entry.get('creg_num'), entry.get('creg_name')))
+        self.pp.pprint(reg_list)
+        self.circuit = QuantumCircuit(*reg_list)
+        return self.circuit
+
     def translate(self):
         """
         Instance self.circuit from self.ast
@@ -178,8 +207,12 @@ class Ast2Circ():
             DESCRIPTION. Ast2Circ self, to access attributes after translation.
 
         """
+        self.marshall_gatedefs()
+        self.marshall_regdefs()
+
         if not self.circuit:
-            self.circuit = QuantumCircuit(1)
+            self.create_quantum_circuit()
+
         for code in self.nuq2_ast['c_sect']:
             op_type = code['type']
             if op_type is ASTType.QREG:
@@ -272,8 +305,8 @@ if __name__ == '__main__':
         AST2CIRC.pp.pprint(AST2CIRC.nuq2_ast)
         AST2CIRC.marshall_gatedefs()
         AST2CIRC.pp.pprint(AST2CIRC.gatedefs)
-        AST2CIRC.marshall_regdefs()
-        print("Regdefs:")
+        AST2CIRC.translate()
         AST2CIRC.pp.pprint(AST2CIRC.regdefs)
+        print(AST2CIRC.circuit)
 
     sys.exit(0)
