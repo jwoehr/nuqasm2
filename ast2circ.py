@@ -105,7 +105,7 @@ class Ast2Circ():
 
         """
         entry_type = code_entry['type']
-        return isinstance(entry_type, type_tuple)
+        return entry_type in type_tuple
 
     @staticmethod
     def match_entry_type_string(code_entry, string_list):
@@ -150,15 +150,11 @@ class Ast2Circ():
         matched = False
         if self.loading_from_file:
             type_list = []
-            if isinstance(type_tuple, tuple):
-                for elem in type_tuple:
-                    type_list.append(str(elem))
-            else:
-                type_list.append(str(type_tuple))
-            self.pp.pprint(type_list)
+            for elem in type_tuple:
+                type_list.append(str(elem))
             matched = self.match_entry_type_string(code_entry, type_list)
         else:
-            Ast2Circ.matched = self.match_entry_type_tuple(code_entry, type_tuple)
+            matched = self.match_entry_type_tuple(code_entry, type_tuple)
         return matched
 
     def marshall_regdefs(self):
@@ -168,21 +164,6 @@ class Ast2Circ():
                                               (ASTType.QREG,
                                                ASTType.CREG)
                                               )
-            # is_regdef = False
-            # if self.loading_from_file:
-            #     is_regdef = self.match_entry_type_string(entry,
-            #                                              ['<ASTType.QREG: 20>',
-            #                                               '<ASTType.CREG: 30>'
-            #                                              ]
-            #                                              )
-            # else:
-            #     is_regdef = self.match_entry_type_tuple(entry,
-            #                                       (ASTType.QREG,
-            #                                        ASTType.CREG
-            #                                        )
-            #                                       )
-
-            print("is_regdef: " + str(is_regdef))
             if is_regdef:
                 self.regdefs.append(entry)
 
@@ -215,20 +196,13 @@ class Ast2Circ():
         """
         reg_list = []
         for entry in self.regdefs:
-            is_qreg = self.match_entry_type(entry, ASTType.QREG)
-
-            # is_qreg = False
-            # if self.loading_from_file:
-            #     is_qreg = self.match_entry_type_string(entry,
-            #                                            ['<ASTType.QREG: 20>']
-            #                                            )
-            # else:
-            #     is_qreg = self.match_entry_type_tuple(entry, (ASTType.QREG))
+            is_qreg = self.match_entry_type(entry, [ASTType.QREG])
 
             if is_qreg:
                 reg_list.append(QuantumRegister(entry.get('qreg_num'), entry.get('qreg_name')))
             else:
                 reg_list.append(ClassicalRegister(entry.get('creg_num'), entry.get('creg_name')))
+
         self.pp.pprint(reg_list)
         self.circuit = QuantumCircuit(*reg_list)
         return self.circuit
