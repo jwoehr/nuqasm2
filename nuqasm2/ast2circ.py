@@ -13,7 +13,7 @@ import pprint
 import re
 import sys
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
-from .qasmast import ASTType
+from .qasmast import ASTType, QasmTranslator
 
 
 class ASTRegEx():  # pylint: disable-msg=too-few-public-methods
@@ -435,20 +435,17 @@ class Ast2Circ():
 
         if not self.circuit:
             self.create_quantum_circuit()
-            qregs = self.circuit.qregs
-            cregs = self.circuit.cregs
-            qubits = self.circuit.qubits
-            clbits = self.circuit.clbits
-
 
         for entry in self.nuq2_ast['c_sect']:
             op_type = entry['type']
             if op_type is ASTType.OP:
-                self.op_append(entry, qregs, cregs, qubits, clbits)
+                self.op_append(entry, self.circuit.qregs, self.circuit.cregs,
+                               self.circuit.qubits, self.circuit.clbits)
             elif op_type is ASTType.BARRIER:
-                self.barrier_append(entry, qregs, qubits)
+                self.barrier_append(entry, self.circuit.qregs, self.circuit.qubits)
             elif op_type is ASTType.MEASURE:
-                self.measure_append(entry, qregs, cregs, qubits, clbits)
+                self.measure_append(entry, self.circuit.qregs, self.circuit.cregs,
+                                    self.circuit.qubits, self.circuit.clbits)
             else:  # It's nothing we care about in this stage
                 pass
         return self
@@ -481,6 +478,46 @@ class Ast2Circ():
         text = re.sub(r'(<ASTType\.\w*\: \d*>)', r"'\g<1>'", text)
         return Ast2Circ(nuq2_ast=ast.literal_eval(text), loading_from_file=True)
 
+    @staticmethod
+    def _from_qasm_str(text):
+        text = re.sub(r'(<ASTType\.\w*\: \d*>)', r"'\g<1>'", text)
+        return Ast2Circ(nuq2_ast=ast.literal_eval(text))
+
+    @staticmethod
+    def from_qasm_str(qasmsourcelines,  # pylint: disable-msg=too-many-arguments
+                      name='main',
+                      filepath=None,
+                      no_unknown=False,
+                      save_pgm_source=False, save_element_source=False,
+                      save_gate_source=False,
+                      show_gate_decls=False,
+                      include_path='.'):
+        """
+
+
+        Parameters
+        ----------
+        text : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        TYPE
+            DESCRIPTION.
+
+        """
+        qt = QasmTranslator(qasmsourcelines,  # pylint: disable-msg=invalid-name
+                            name=name,
+                            filepath=filepath,
+                            no_unknown=no_unknown,
+                            save_pgm_source=save_pgm_source,
+                            save_element_source=save_element_source,
+                            save_gate_source=save_gate_source,
+                            show_gate_decls=show_gate_decls,
+                            include_path=include_path)
+        qt.translate()
+        ast2circ = Ast2Circ(nuq2_ast=qt.get_translation())
+        return ast2circ.translate().circuit
 
 class Ast2CircException(Exception):
     """Base class for Qasm exceptions"""
