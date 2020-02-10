@@ -221,6 +221,31 @@ class Ast2Circ():
 
         """
 
+    def op_easy(self, op, qbit, arglist):   # pylint: disable-msg=invalid-name
+        """
+
+
+        Parameters
+        ----------
+        op : TYPE
+            DESCRIPTION.
+        qbit : TYPE
+            DESCRIPTION.
+        arglist : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        True IFF QuantumCircuit has this op
+
+        """
+
+        has_op = hasattr(self.circuit, op)
+
+        if has_op:
+            getattr(self.circuit, op)(*arglist, qbit)
+
+        return has_op
 
     def translate(self):
         """
