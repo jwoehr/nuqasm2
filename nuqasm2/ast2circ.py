@@ -13,7 +13,7 @@ import pprint
 import re
 import sys
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
-from qasmast import ASTType
+from .qasmast import ASTType
 
 
 class ASTRegEx():  # pylint: disable-msg=too-few-public-methods

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 nuqasm2.py
 Implement qasm2 translation to python data structures.
@@ -18,9 +20,9 @@ if __name__ == '__main__':
     import pprint
     import datetime
     import sys
-    import argparse
-    from ast2circ import Ast2Circ
-    from qasmast import (QasmTranslator, Qasm_Exception)
+    import argparse    
+    from nuqasm2.qasmast import QasmTranslator, Qasm_Exception
+    from nuqasm2.ast2circ import Ast2Circ
 
     DESCRIPTION = """Implements qasm2 translation to python data structures.
     Working from _Open Quantum Assembly Language_
