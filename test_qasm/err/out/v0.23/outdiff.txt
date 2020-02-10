@@ -1,0 +1,34 @@
+# ####################
+# diffs from v0.22
+# 2019-Apr-05 11:24:36
+# ####################
+
+# ####################
+# entangled_comment_err.out.txt
+# ####################
+# ####################
+# gerr1.out.txt
+# ####################
+# ####################
+# gerrgate.out.txt
+# ####################
+# ####################
+# gerr.out.txt
+# ####################
+# ####################
+# gspace.out.txt
+# ####################
+--- gspace.out.txt	2019-04-05 11:24:36.102514439 -0600
++++ v0.22/gspace.out.txt	2019-02-24 22:57:02.040616136 -0700
+@@ -941,8 +941,8 @@
+                                     'u1(theta) b;',
+                                     'cx a,b;',
+                                     '}']}],
+-    't_sect': {   'datetime_finish': '2019-04-05T11:24:36.083873',
+-                  'datetime_start': '2019-04-05T11:24:36.080733',
++    't_sect': {   'datetime_finish': '2019-02-24T22:57:02.021031',
++                  'datetime_start': '2019-02-24T22:57:02.018541',
+                   'filepaths': [   'test_qasm/err/gspace.qasm',
+-                                   '../DEV/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
++                                   '/home/jax/work/QISKit/qiskit-terra/qiskit/qasm/libs/qelib1.inc'],
+                   'name': 'main'}}

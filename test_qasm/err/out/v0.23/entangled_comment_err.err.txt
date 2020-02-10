@@ -1,0 +1,7 @@
+'Error: test_qasm/err/entangled_comment_err.qasm'
+{   'errcode': 30,
+    'filename': 'test_qasm/err/entangled_comment_err.qasm',
+    'filenum': 0,
+    'line': 'cx a,',
+    'linenum': 10,
+    'message': 'Unknown element'}
