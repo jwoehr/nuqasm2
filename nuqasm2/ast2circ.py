@@ -227,15 +227,17 @@ class Ast2Circ():
         """
 
         reg = None
-        for r in qregs:  # pylint: disable-msg=invalid-name
-            if r.name == reg_name:
-                reg = r
-                break
-        if not reg:
-            for r in cregs:  # pylint: disable-msg=invalid-name
+        if qregs:
+            for r in qregs:  # pylint: disable-msg=invalid-name
                 if r.name == reg_name:
                     reg = r
                     break
+        if not reg:
+            if cregs:
+                for r in cregs:  # pylint: disable-msg=invalid-name
+                    if r.name == reg_name:
+                        reg = r
+                        break
         return reg
 
     @staticmethod
@@ -260,17 +262,20 @@ class Ast2Circ():
         reg_name = the_split[0]
         num = int(the_split[1].strip('[]'))
         bit = None
-        for b in qubits:  # pylint: disable-msg=invalid-name
-            if b.register.name == reg_name:
-                if b.index == num:
-                    bit = b
-                    break
-        if not bit:
-            for b in clbits:  # pylint: disable-msg=invalid-name
+
+        if qubits:
+            for b in qubits:  # pylint: disable-msg=invalid-name
                 if b.register.name == reg_name:
                     if b.index == num:
                         bit = b
                         break
+        if not bit:
+            if clbits:
+                for b in clbits:  # pylint: disable-msg=invalid-name
+                    if b.register.name == reg_name:
+                        if b.index == num:
+                            bit = b
+                            break
 
         return bit
 
@@ -334,7 +339,7 @@ class Ast2Circ():
 
         return has_op
 
-    def barrier_append(self, entry, qregs, qubits): # pylint: disable-msg=too-many-arguments, line-too-long
+    def barrier_append(self, entry, qregs, qubits):
         """
 
         Parameters
@@ -357,6 +362,44 @@ class Ast2Circ():
                 reg_list.append(self.string_reg_to_reg(string_reg, qregs, None))
 
         getattr(self.circuit, 'barrier')(*reg_list)
+
+    def measure_append(self, entry, qregs, cregs, qubits, clbits): # pylint: disable-msg=too-many-arguments, line-too-long
+        """
+
+
+        Parameters
+        ----------
+        entry : TYPE
+            DESCRIPTION.
+        qregs : TYPE
+            DESCRIPTION.
+        cregs : TYPE
+            DESCRIPTION.
+        qubits : TYPE
+            DESCRIPTION.
+        clbits : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        None.
+
+        """
+        source_reg = entry.get('source_reg')
+        target_reg = entry.get('target_reg')
+        reg_list = []
+
+        if source_reg.find('[') >= 0:
+            reg_list.append(self.string_reg_to_bit(source_reg, qubits, None))
+        else:
+            reg_list.append(self.string_reg_to_reg(source_reg, qregs, None))
+
+        if target_reg.find('[') >= 0:
+            reg_list.append(self.string_reg_to_bit(target_reg, None, clbits))
+        else:
+            reg_list.append(self.string_reg_to_reg(target_reg, None, cregs))
+
+        getattr(self.circuit, 'measure')(*reg_list)
 
     def op_search(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
         """
@@ -405,7 +448,7 @@ class Ast2Circ():
             elif op_type is ASTType.BARRIER:
                 self.barrier_append(entry, qregs, qubits)
             elif op_type is ASTType.MEASURE:
-                pass
+                self.measure_append(entry, qregs, cregs, qubits, clbits)
             else:  # It's nothing we care about in this stage
                 pass
         return self
