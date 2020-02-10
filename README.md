@@ -4,7 +4,7 @@ New OPENQASM 2.O translator to work with [Qiskit](https://github.com/Qiskit).
 
 The current release is [v0.23](https://github.com/jwoehr/nuqasm2/releases/tag/v0.23).
 
-`nuqasm2` now generates [`qiskit.circuit.QuantumCircuit`](https://qiskit.org/documentation/_modules/qiskit/circuit/quantumcircuit.html)
+In the master branch, post-v0.23, `nuqasm2` now generates [`qiskit.circuit.QuantumCircuit`](https://qiskit.org/documentation/_modules/qiskit/circuit/quantumcircuit.html)
 from nuqasm2 AST.
 
 Tne `nuqasm2` command itself is a test driver: the companion project [`qis_job`](https://github.com/jwoehr/qis_job)
