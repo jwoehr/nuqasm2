@@ -207,6 +207,38 @@ class Ast2Circ():
         return self.circuit
 
     @staticmethod
+    def string_reg_to_reg(reg_name, qregs, cregs):
+        """
+        Nuqasm2 AST keeps register/bit operands as string.
+        We must convert to actual reg.
+
+        Parameters
+        ----------
+        reg_name : string
+            Name of sought register
+        qregs : list of QuantumRegister
+            Seek reg here
+        cregs : list of ClassicalRegister
+            Seek reg here
+        Returns
+        -------
+        Actual reg
+
+        """
+
+        reg = None
+        for r in qregs:  # pylint: disable-msg=invalid-name
+            if r.name == reg_name:
+                reg = r
+                break
+        if not reg:
+            for r in cregs:  # pylint: disable-msg=invalid-name
+                if r.name == reg_name:
+                    reg = r
+                    break
+        return reg
+
+    @staticmethod
     def string_reg_to_bit(string_reg, qubits, clbits):
         """
         Nuqasm2 AST keeps register/bit operands as string.
@@ -242,9 +274,8 @@ class Ast2Circ():
 
         return bit
 
-    def op_append(self, entry, qubits, clbits):
+    def op_append(self, entry, qregs, cregs, qubits, clbits): # pylint: disable-msg=too-many-arguments, line-too-long
         """
-
 
         Parameters
         ----------
@@ -260,7 +291,10 @@ class Ast2Circ():
         string_reg_list = entry.get('reg_list')
         reg_list = []
         for string_reg in string_reg_list:
-            reg_list.append(self.string_reg_to_bit(string_reg, qubits, clbits))
+            if string_reg.find('[') >= 0:
+                reg_list.append(self.string_reg_to_bit(string_reg, qubits, clbits))
+            else:
+                reg_list.append(self.string_reg_to_reg(string_reg, qregs, cregs))
 
         param_list = entry.get('param_list')
 
@@ -334,13 +368,16 @@ class Ast2Circ():
 
         if not self.circuit:
             self.create_quantum_circuit()
+            qregs = self.circuit.qregs
+            cregs = self.circuit.cregs
             qubits = self.circuit.qubits
             clbits = self.circuit.clbits
+
 
         for entry in self.nuq2_ast['c_sect']:
             op_type = entry['type']
             if op_type is ASTType.OP:
-                self.op_append(entry, qubits, clbits)
+                self.op_append(entry, qregs, cregs, qubits, clbits)
             elif op_type is ASTType.BARRIER:
                 pass
             elif op_type is ASTType.MEASURE:
