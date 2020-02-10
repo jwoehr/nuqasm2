@@ -1,6 +1,13 @@
 # nuqasm2
 New qasm2 translator : qasm2 to Python dict form AST
 
+The current release is [v0.23](https://github.com/jwoehr/nuqasm2/releases/tag/v0.23).
+
+The `master` branch is unstable.
+
+We're currently developing to generate [`qiskit.circuit.QuantumCircuit`](https://qiskit.org/documentation/_modules/qiskit/circuit/quantumcircuit.html)
+from nuqasm2 AST.
+
 Based on [Open Quantum Assembly Language](https://arxiv.org/pdf/1707.03429.pdf)
 
 Translates QASM2 source into a Python dictionary with 4 keys:
@@ -16,7 +23,7 @@ Translates QASM2 source into a Python dictionary with 4 keys:
   * User gate definitions (e.g., `qelib1.inc`)
 * `s_sect`
   * Saved source
-  
+
 There are many options controlling what gets generated.
 
 Output can include
@@ -105,7 +112,7 @@ barrier q[0],q[1],q[2];
 measure q[0] -> c[0];
 measure q[1] -> c[1];
 measure q[2] -> c[2];
-$ python nuqasm2.py -i "${HOME}/work/QISKit/qiskit-terra/qiskit/qasm/libs" --save_source yiqing.qasm 
+$ python nuqasm2.py -i "${HOME}/work/QISKit/qiskit-terra/qiskit/qasm/libs" --save_source yiqing.qasm
 {   'c_sect': [   {   'filenum': 0,
                       'linenum': 0,
                       'source': '// yiqing (one of many possible)',
