@@ -206,7 +206,43 @@ class Ast2Circ():
         self.circuit = QuantumCircuit(*reg_list)
         return self.circuit
 
-    def append_op(self, entry):
+    @staticmethod
+    def string_reg_to_bit(string_reg, qubits, clbits):
+        """
+        Nuqasm2 AST keeps register/bit operands as string.
+        We must convert to actual reg.
+
+        Parameters
+        ----------
+        circuit : QuantumCircuit(regs)
+            Circuit to which the name reg belongs
+        string_reg : string
+            String representation of the reg/bit.
+
+        Returns
+        -------
+        Actual bit
+
+        """
+        the_split = string_reg.split('[')
+        reg_name = the_split[0]
+        num = int(the_split[1].strip('[]'))
+        bit = None
+        for b in qubits:  # pylint: disable-msg=invalid-name
+            if b.register.name == reg_name:
+                if b.index == num:
+                    bit = b
+                    break
+        if not bit:
+            for b in clbits:  # pylint: disable-msg=invalid-name
+                if b.register.name == reg_name:
+                    if b.index == num:
+                        bit = b
+                        break
+
+        return bit
+
+    def op_append(self, entry, qubits, clbits):
         """
 
 
@@ -221,7 +257,21 @@ class Ast2Circ():
 
         """
 
-    def op_easy(self, op, qbit, arglist):   # pylint: disable-msg=invalid-name
+        string_reg_list = entry.get('reg_list')
+        reg_list = []
+        for string_reg in string_reg_list:
+            reg_list.append(self.string_reg_to_bit(string_reg, qubits, clbits))
+
+        param_list = entry.get('param_list')
+
+        if not self.op_easy(entry.get('op'),
+                            reg_list,
+                            param_list=param_list if param_list else None):
+            self.op_search(entry.get('op'),
+                           reg_list,
+                           param_list=param_list if param_list else None)
+
+    def op_easy(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
         """
 
 
@@ -243,9 +293,31 @@ class Ast2Circ():
         has_op = hasattr(self.circuit, op)
 
         if has_op:
-            getattr(self.circuit, op)(*arglist, qbit)
+            if param_list:
+                getattr(self.circuit, op)(*param_list, *reg_list)
+            else:
+                getattr(self.circuit, op)(*reg_list)
 
         return has_op
+
+    def op_search(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
+        """
+
+
+        Parameters
+        ----------
+        op : TYPE
+            DESCRIPTION.
+        reg_list : TYPE
+            DESCRIPTION.
+        param_list : TYPE, optional
+            DESCRIPTION. The default is None.
+
+        Returns
+        -------
+        None.
+
+        """
 
     def translate(self):
         """
@@ -262,15 +334,13 @@ class Ast2Circ():
 
         if not self.circuit:
             self.create_quantum_circuit()
+            qubits = self.circuit.qubits
+            clbits = self.circuit.clbits
 
-        for code in self.nuq2_ast['c_sect']:
-            op_type = code['type']
-            if op_type is ASTType.QREG:
-                pass
-            elif op_type is ASTType.CREG:
-                pass
-            elif op_type is ASTType.OP:
-                pass
+        for entry in self.nuq2_ast['c_sect']:
+            op_type = entry['type']
+            if op_type is ASTType.OP:
+                self.op_append(entry, qubits, clbits)
             elif op_type is ASTType.BARRIER:
                 pass
             elif op_type is ASTType.MEASURE:
