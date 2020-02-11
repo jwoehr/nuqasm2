@@ -99,6 +99,11 @@ class Ast2Circ():
             if is_regdef:
                 self.regdefs.append(entry)
 
+    @staticmethod
+    def _op_sig(op, arity):  # pylint: disable-msg=invalid-name
+        """Compose operator signature to use as key with gatedefs"""
+        return op + '/' + str(arity)
+
     def _marshall_gatedefs(self):
         """Make dictionary of gate definitions from AST"""
         for gatedef in self.nuq2_ast['g_sect']:
@@ -107,14 +112,7 @@ class Ast2Circ():
             arglist_match = ASTRegEx.ARGLIST.match(gate_name)
             arglist = arglist_match.group(1)
             arity = 0 if len(arglist) == 0 else len(arglist.split(','))
-            self.gatedefs[op + '/' + str(arity)] = gatedef
-
-    # def unrollable(self, op_sig):
-    #     """Does a op signature exist in the gate section?"""
-    #     return self.gatedefs.get(op_sig)
-
-    # def unroll(self, gate_invocation, gate_definition):
-    #     """Expand a gate definition"""
+            self.gatedefs[self._op_sig(op, arity)] = gatedef
 
     def _create_quantum_circuit(self):
         """
@@ -281,10 +279,26 @@ class Ast2Circ():
 
         getattr(self.circuit, 'measure')(*reg_list)
 
+    def _unrollable(self, op_sig):
+        """Does a op signature exist in the gate section?"""
+        return self.gatedefs.get(op_sig)
+
+    def _unroll(self, gate_definition, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name, line-too-long
+        """Expand a gate definition"""
+
     def _op_search(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
         """
-
+        Find an op in the gate definitions included
         """
+
+        arity = 0
+        if param_list:
+            arity = len(param_list)
+
+        gate_definition = self._unrollable(self._op_sig(op, arity))
+
+        if gate_definition:
+            self._unroll(gate_definition, op, reg_list, param_list)
 
     def translate(self):
         """
