@@ -228,7 +228,9 @@ class Ast2Circ():
         """
         b_list = []
         for i in a_list:
-            b_list.append(i.replace('pi', str(np.pi)))
+            i = i.replace('pi', str(np.pi))
+            # ...
+            b_list.append(i)
         return b_list
 
     def _op_append(self, entry, qregs, cregs, qubits, clbits):  # pylint: disable-msg=too-many-arguments, line-too-long
