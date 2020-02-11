@@ -1,6 +1,6 @@
 # nuqasm2
 
-New OPENQASM 2.O translator to work with [Qiskit](https://github.com/Qiskit).
+New OPENQASM 2.0 translator to work with [Qiskit](https://github.com/Qiskit).
 
 The current release is [v0.30](https://github.com/jwoehr/nuqasm2/releases/tag/v0.30).
 
