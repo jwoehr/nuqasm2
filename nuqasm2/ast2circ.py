@@ -210,10 +210,10 @@ class Ast2Circ():
         return bit
 
     @staticmethod
-    def subst_transcendals(a_list):
+    def _do_the_math(a_list):
         """
-        substitute know string names of transcendentals with string literals
-        of the floating value.
+        substitute known string names of transcendentals with numpy equivs
+        and do the math.
 
         Parameters
         ----------
@@ -228,8 +228,9 @@ class Ast2Circ():
         """
         b_list = []
         for i in a_list:
-            i = i.replace('pi', str(np.pi))
+            i = i.replace('pi', "np.pi")
             # ...
+            i = str(eval(i))
             b_list.append(i)
         return b_list
 
@@ -248,7 +249,7 @@ class Ast2Circ():
 
         param_list = entry.get('param_list')
         if param_list:
-            param_list = self.subst_transcendals(param_list)
+            param_list = self._do_the_math(param_list)
 
         if not self._op_easy(entry.get('op'),
                              reg_list,
