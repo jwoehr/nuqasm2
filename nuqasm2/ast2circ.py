@@ -7,7 +7,7 @@ Turns nuqasm2 ast into Qiskit QuantumCircuit
 """
 
 import ast
-import argparse
+# import argparse
 import os
 import pprint
 import re
@@ -137,9 +137,8 @@ class Ast2Circ():
         """Marshall the list of register declarations"""
         for entry in self.nuq2_ast['c_sect']:
             is_regdef = self._match_entry_type(entry,
-                                              (ASTType.QREG,
-                                               ASTType.CREG)
-                                              )
+                                               (ASTType.QREG,
+                                                ASTType.CREG))
             if is_regdef:
                 self.regdefs.append(entry)
 
@@ -249,7 +248,7 @@ class Ast2Circ():
 
         return bit
 
-    def _op_append(self, entry, qregs, cregs, qubits, clbits): # pylint: disable-msg=too-many-arguments, line-too-long
+    def _op_append(self, entry, qregs, cregs, qubits, clbits):  # pylint: disable-msg=too-many-arguments, line-too-long
         """
 
         """
@@ -265,11 +264,11 @@ class Ast2Circ():
         param_list = entry.get('param_list')
 
         if not self._op_easy(entry.get('op'),
+                             reg_list,
+                             param_list=param_list if param_list else None):
+            self._op_search(entry.get('op'),
                             reg_list,
-                            param_list=param_list if param_list else None):
-            self.op_search(entry.get('op'),
-                           reg_list,
-                           param_list=param_list if param_list else None)
+                            param_list=param_list if param_list else None)
 
     def _op_easy(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
         """
@@ -305,7 +304,7 @@ class Ast2Circ():
 
         getattr(self.circuit, 'barrier')(*reg_list)
 
-    def _measure_append(self, entry, qregs, cregs, qubits, clbits): # pylint: disable-msg=too-many-arguments, line-too-long
+    def _measure_append(self, entry, qregs, cregs, qubits, clbits):  # pylint: disable-msg=too-many-arguments, line-too-long
         """
 
         """
@@ -325,24 +324,24 @@ class Ast2Circ():
 
         getattr(self.circuit, 'measure')(*reg_list)
 
-    # def op_search(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
-    #     """
+    def _op_search(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
+        """
 
 
-    #     Parameters
-    #     ----------
-    #     op : TYPE
-    #         DESCRIPTION.
-    #     reg_list : TYPE
-    #         DESCRIPTION.
-    #     param_list : TYPE, optional
-    #         DESCRIPTION. The default is None.
+        Parameters
+        ----------
+        op : TYPE
+            DESCRIPTION.
+        reg_list : TYPE
+            DESCRIPTION.
+        param_list : TYPE, optional
+            DESCRIPTION. The default is None.
 
-    #     Returns
-    #     -------
-    #     None.
+        Returns
+        -------
+        None.
 
-    #     """
+        """
 
     def translate(self):
         """
@@ -364,12 +363,12 @@ class Ast2Circ():
             op_type = entry['type']
             if op_type is ASTType.OP:
                 self._op_append(entry, self.circuit.qregs, self.circuit.cregs,
-                               self.circuit.qubits, self.circuit.clbits)
+                                self.circuit.qubits, self.circuit.clbits)
             elif op_type is ASTType.BARRIER:
                 self._barrier_append(entry, self.circuit.qregs, self.circuit.qubits)
             elif op_type is ASTType.MEASURE:
                 self._measure_append(entry, self.circuit.qregs, self.circuit.cregs,
-                                    self.circuit.qubits, self.circuit.clbits)
+                                     self.circuit.qubits, self.circuit.clbits)
             else:  # It's nothing we care about in this stage
                 pass
         return self
@@ -417,12 +416,30 @@ class Ast2Circ():
                       show_gate_decls=False,
                       include_path='.'):
         """
-
+        Loads qasm, translates, and returns a QuantumCircuit
 
         Parameters
         ----------
-        text : TYPE
-            DESCRIPTION.
+        qasmsourcelines : list of string
+            List of lines of OPENQASM2.0 to translate.
+        name: string, optional
+            Name of circuit.
+        filepath : string, optional
+           Filepath from which string (opt arg to the AST stage).
+           The default is None.
+        no_unknown : bool, optional
+            Exception in AST generation if unknown element.
+            The default is False.
+        save_pgm_source : bool, optional
+            Save program source in AST. The default is False.
+        save_element_source : bool, optional
+            Save element source in AST. The default is False.
+        save_gate_source : bool, optional
+            Save gate source in AST. The default is False.
+        show_gate_decls : bool, optional
+            Show gate decls in of AST c_sect. The default is False.
+        include_path : string, optional
+            Path to search for included files. The default is '.'.
 
         Returns
         -------
@@ -442,6 +459,7 @@ class Ast2Circ():
         qt.translate()
         ast2circ = Ast2Circ(nuq2_ast=qt.get_translation())
         return ast2circ.translate().circuit
+
 
 class Ast2CircException(Exception):
     """Base class for Qasm exceptions"""
