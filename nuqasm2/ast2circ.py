@@ -60,34 +60,6 @@ class Ast2Circ():
         self.regdefs = []
         self.pp = pprint.PrettyPrinter(indent=4, stream=stream)   # pylint: disable-msg=invalid-name
 
-    # def reinit(self, nuq2_ast=None,
-    #            circuit=None,
-    #            stream=sys.stdout,
-    #            loading_from_file=False):
-    #     """
-
-    #     Parameters
-    #     ----------
-    #     nuq2_ast : TYPE, optional
-    #         DESCRIPTION. The default is None.
-    #     circuit : TYPE, optional
-    #         DESCRIPTION. The default is None.
-    #     stream : TYPE, optional
-    #         DESCRIPTION. The default is sys.stdout               loading_from_file=False.
-
-    #     Returns
-    #     -------
-    #     None.
-
-    #     """
-    #     self.circuit = circuit
-    #     self.nuq2_ast = nuq2_ast
-    #     self.loading_from_file = loading_from_file
-    #     self.spool = None
-    #     self.gatedefs = {}
-    #     self.regdefs = []
-    #     self.pp = pprint.PrettyPrinter(indent=4, stream=stream)
-
     @staticmethod
     def _match_entry_type_tuple(code_entry, type_tuple):
         """
@@ -102,25 +74,10 @@ class Ast2Circ():
 
         """
         entry_type = re.match(r"<(AST.*):.*", code_entry.get('type')).group(1)
-        # print('Debug: code entry type: ' +  entry_type)
-        # print('Debug: string list: ' + str(string_list))
         return bool(entry_type in string_list)
 
     def _match_entry_type(self, code_entry, type_tuple):
         """
-
-
-        Parameters
-        ----------
-        code_entry : TYPE
-            DESCRIPTION.
-        type_tuple : TYPE
-            DESCRIPTION.
-
-        Returns
-        -------
-        matched : TYPE
-            DESCRIPTION.
 
         """
         matched = False
@@ -326,20 +283,6 @@ class Ast2Circ():
 
     def _op_search(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
         """
-
-
-        Parameters
-        ----------
-        op : TYPE
-            DESCRIPTION.
-        reg_list : TYPE
-            DESCRIPTION.
-        param_list : TYPE, optional
-            DESCRIPTION. The default is None.
-
-        Returns
-        -------
-        None.
 
         """
 
