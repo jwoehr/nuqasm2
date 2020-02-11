@@ -63,7 +63,7 @@ class Ast2Circ():
     @staticmethod
     def _match_entry_type_tuple(code_entry, type_tuple):
         """
-
+        Does type of an AST entry match the type any AST type in type_tuple
         """
         entry_type = code_entry['type']
         return entry_type in type_tuple
@@ -71,14 +71,15 @@ class Ast2Circ():
     @staticmethod
     def _match_entry_type_string(code_entry, string_list):
         """
-
+        Does string name of type of an AST entry match the
+        string name of any AST type in string_list
         """
         entry_type = re.match(r"<(AST.*):.*", code_entry.get('type')).group(1)
         return bool(entry_type in string_list)
 
     def _match_entry_type(self, code_entry, type_tuple):
         """
-
+        Is an AST entry of AST type we are looking for?
         """
         matched = False
         if self.loading_from_file:
@@ -116,7 +117,8 @@ class Ast2Circ():
 
     def _create_quantum_circuit(self):
         """
-
+        Instance a QuantumCircuit with the QRegs/CRegs called out in qasm code
+        QReg and CReg entries already marshalled.
         """
         reg_list = []
         for entry in self.regdefs:
@@ -168,7 +170,7 @@ class Ast2Circ():
     def _string_reg_to_bit(string_reg, qubits, clbits):
         """
         Nuqasm2 AST keeps register/bit operands as string.
-        We must convert to actual reg.
+        We must convert to actual bit.
 
         Parameters
         ----------
@@ -176,7 +178,10 @@ class Ast2Circ():
             Circuit to which the name reg belongs
         string_reg : string
             String representation of the reg/bit.
-
+        qubits: list
+            Individual qubits pertaining to circuit
+        clbits: list
+            Individual clbits pertaining to circuit
         Returns
         -------
         Actual bit
@@ -205,7 +210,7 @@ class Ast2Circ():
 
     def _op_append(self, entry, qregs, cregs, qubits, clbits):  # pylint: disable-msg=too-many-arguments, line-too-long
         """
-
+        Append operation to circuit
         """
 
         string_reg_list = entry.get('reg_list')
@@ -227,6 +232,7 @@ class Ast2Circ():
 
     def _op_easy(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
         """
+        Append operation to circuit where op is known to QuantumCircuit class
 
         Returns
         -------
@@ -246,7 +252,7 @@ class Ast2Circ():
 
     def _barrier_append(self, entry, qregs, qubits):
         """
-
+        Append barrier to circuit
         """
 
         string_reg_list = entry.get('reg_list')
@@ -261,7 +267,7 @@ class Ast2Circ():
 
     def _measure_append(self, entry, qregs, cregs, qubits, clbits):  # pylint: disable-msg=too-many-arguments, line-too-long
         """
-
+        Append measure to circuit
         """
         source_reg = entry.get('source_reg')
         target_reg = entry.get('target_reg')
@@ -333,6 +339,8 @@ class Ast2Circ():
     @staticmethod
     def from_file(filepath):
         """
+        Used in early testing to load stringified AST from file.
+        May no longer work correctly at present.
 
         Parameters
         ----------
@@ -341,13 +349,13 @@ class Ast2Circ():
 
         Raises
         ------
-        TYPE. Ast2CircException
-            DESCRIPTION. Raised if can't open file.
+        Ast2CircException
+            Raised if can't open file.
 
         Returns
         -------
-        TYPE Ast2Circ
-            DESCRIPTION. instance with loaded stringified nuqasm2 AST.
+        Ast2Circ
+            instance with loaded stringified nuqasm2 AST.
 
         """
         if not os.path.exists(filepath) or not os.access(filepath, os.R_OK):
@@ -373,12 +381,14 @@ class Ast2Circ():
                       show_gate_decls=False,
                       include_path='.'):
         """
-        Loads qasm, translates, and returns a QuantumCircuit
+        Loads qasm, translates, and returns a QuantumCircuit.
+        Analogous to qiskit.circuit.QuantumCircuit.from_qasm_str()
 
         Parameters
         ----------
         qasmsourcelines : list of string
             List of lines of OPENQASM2.0 to translate.
+            Probably should be strip()'ed first.
         name: string, optional
             Name of circuit.
         filepath : string, optional
