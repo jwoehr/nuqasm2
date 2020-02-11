@@ -13,6 +13,7 @@ import pprint
 import re
 import sys
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+import numpy as np
 from .qasmast import ASTType, QasmTranslator
 
 
@@ -208,6 +209,28 @@ class Ast2Circ():
 
         return bit
 
+    @staticmethod
+    def subst_transcendals(a_list):
+        """
+        substitute know string names of transcendentals with string literals
+        of the floating value.
+
+        Parameters
+        ----------
+        a_list : list of strings
+            list of strings which may contain string names of transcendentals.
+
+        Returns
+        -------
+        a_list : list
+            the input list modified
+
+        """
+        b_list = []
+        for i in a_list:
+            b_list.append(i.replace('pi', str(np.pi)))
+        return b_list
+
     def _op_append(self, entry, qregs, cregs, qubits, clbits):  # pylint: disable-msg=too-many-arguments, line-too-long
         """
         Append operation to circuit
@@ -222,6 +245,8 @@ class Ast2Circ():
                 reg_list.append(self._string_reg_to_reg(string_reg, qregs, cregs))
 
         param_list = entry.get('param_list')
+        if param_list:
+            param_list = self.subst_transcendals(param_list)
 
         if not self._op_easy(entry.get('op'),
                              reg_list,

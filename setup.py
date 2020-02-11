@@ -5,14 +5,7 @@ Created on Wed Dec 25 12:04:26 2019
 
 @author: jax
 """
-import sys
 from setuptools import setup, find_packages
-try:
-    from Cython.Build import cythonize
-except ImportError:
-    import subprocess
-    subprocess.call([sys.executable, '-m', 'pip', 'install', 'Cython>=0.27.1'])
-    from Cython.Build import cythonize
 
 setup(
     name="nuqasm2",
@@ -21,6 +14,7 @@ setup(
     url="https://github.com/jwoehr/nuqasm2",
     author="Jack Woehr",
     author_email="jwoehr@softwoehr.com",
+    install_requires=['qiskit-terra','numpy'],
     license="Apache 2.0",
     packages=find_packages(),
     # packages=['nuqasm2'],
