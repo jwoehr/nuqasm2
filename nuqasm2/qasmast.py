@@ -780,8 +780,12 @@ class QasmTranslator():
         txt = txt.strip()
         gate_decl = QTRegEx.GATE_DECL.match(txt)
         gate_name = gate_decl.group(1)
-        gate_params = gate_decl.group(2)
-        gate_param_list = gate_params.split(',')
+        possible_gate_params = gate_name.split('(')
+        gate_param_list = None
+        if len(possible_gate_params) > 1:
+            gate_param_list = possible_gate_params[1].strip(') ').split(',')
+        gate_regs = gate_decl.group(2)
+        gate_reg_list = gate_regs.split(',')
         gate_ops = QTRegEx.GATE_OPS.match(txt)
         gate_ops_raw_list = QTRegEx.GATE_OPS_LIST.findall(gate_ops.group(1))
         gate_ops_list = []
@@ -806,7 +810,9 @@ class QasmTranslator():
                 'linenum': linenum, 'gate_name': gate_name,
                 'gate_param_list': gate_param_list,
                 'gate_ops_raw_list': gate_ops_raw_list,
-                'gate_ops_list': gate_ops_list}
+                'gate_ops_list': gate_ops_list,
+                'gate_reg_list': gate_reg_list}
+
         self.append_user_gate(gate)
 
     def translate(self):

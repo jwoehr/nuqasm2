@@ -13,7 +13,7 @@ import pprint
 import re
 import sys
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
-import numpy as np
+import numpy as np  # pylint: disable-msg=unused-import
 from .qasmast import ASTType, QasmTranslator
 
 
@@ -21,6 +21,118 @@ class ASTRegEx():  # pylint: disable-msg=too-few-public-methods
     """Regexes to use in processing AST"""
     OP = re.compile(r"(\w*)")
     ARGLIST = re.compile(r"\w*(.*)")
+
+
+class ASTBinder(dict):
+    """Bind reg list and param list w/r/t gate definition
+    """
+
+    def __init__(self, gate_definition, reg_list=None, param_list=None):
+        """
+
+
+        Parameters
+        ----------
+        gate_definition : TYPE
+            DESCRIPTION.
+        reg_list : TYPE, optional
+            DESCRIPTION. The default is None.
+        param_list : TYPE, optional
+            DESCRIPTION. The default is None.
+
+        Returns
+        -------
+        None.
+
+        """
+        super(ASTBinder, self).__init__()
+        self.param_bind = {}
+        self.reg_bind = {}
+        gate_param_list = gate_definition.get('gate_param_list')
+        if gate_param_list:
+            for i in range(0, len(gate_param_list)):  # pylint: disable-msg=consider-using-enumerate
+                self.param_bind.update({gate_param_list[i]: param_list[i]})
+        gate_reg_list = gate_definition.get('gate_reg_list')
+        if gate_reg_list:
+            for i in range(0, len(gate_reg_list)):  # pylint: disable-msg=consider-using-enumerate
+                self.reg_bind.update({gate_reg_list[i]: reg_list[i]})
+
+    def param_binding(self, gate_param_name):
+        """
+        Return real param name for symbolic param name from gate definition.
+
+
+        Parameters
+        ----------
+        gate_param_name : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        None.
+
+        """
+        return self.param_bind.get(gate_param_name)
+
+    def reg_binding(self, gate_reg_name):
+        """
+        Return real reg name for symbolic reg name from gate definition.
+
+        Parameters
+        ----------
+        gate_reg_name : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        None.
+
+        """
+        return self.reg_bind.get(gate_reg_name)
+
+    def bind_regs(self, reg_list):
+        """
+        Return list of real reg names for list symbolic reg names from gate definition.
+
+        Parameters
+        ----------
+        reg_list : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        b_list : TYPE
+            DESCRIPTION.
+
+        """
+        b_list = None
+        if reg_list:
+            b_list = []
+            for reg in reg_list:
+                b_list.append(self.reg_binding(reg))
+        return b_list
+
+    def bind_params(self, param_list):
+        """
+        Return list of real param names for list symbolic param names from gate definition.
+
+        Parameters
+        ----------
+        param_list : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        b_list : TYPE
+            DESCRIPTION.
+
+        """
+        b_list = None
+        if param_list:
+            b_list = []
+            for param in param_list:
+                b_list.append(self.param_binding(param))
+        return b_list
 
 
 class Ast2Circ():
@@ -230,7 +342,7 @@ class Ast2Circ():
         for i in a_list:
             i = i.replace('pi', "np.pi")
             # ...
-            i = str(eval(i))
+            i = str(eval(i))  # pylint: disable-msg=eval-used
             b_list.append(i)
         return b_list
 
@@ -317,8 +429,19 @@ class Ast2Circ():
         """Does a op signature exist in the gate section?"""
         return self.gatedefs.get(op_sig)
 
-    def _unroll(self, gate_definition, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name, line-too-long
+    def _unroll(self, gate_definition, reg_list, param_list=None):  # pylint: disable-msg=invalid-name, line-too-long
         """Expand a gate definition"""
+        ast_binder = ASTBinder(gate_definition, reg_list, param_list)
+        for gate_op in gate_definition.get('gate_ops_list'):
+            the_op = gate_op.get('op')
+            the_reg_list = ast_binder.bind_regs(gate_op.get('op_reg_list'))
+            the_param_list = ast_binder.bind_params(gate_op.get('op_param_list'))
+            if not self._op_easy(the_op,
+                                 the_reg_list,
+                                 param_list=the_param_list if the_param_list else None):
+                self._op_search(the_op,
+                                the_reg_list,
+                                param_list=the_param_list if the_param_list else None)
 
     def _op_search(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
         """
@@ -332,7 +455,7 @@ class Ast2Circ():
         gate_definition = self._unrollable(self._op_sig(op, arity))
 
         if gate_definition:
-            self._unroll(gate_definition, op, reg_list, param_list)
+            self._unroll(gate_definition, reg_list, param_list)
 
     def translate(self):
         """

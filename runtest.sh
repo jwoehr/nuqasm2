@@ -31,7 +31,7 @@ for i in yiqing.qasm test_qasm/g*.qasm \
 	test_qasm/entangled_registers.qasm test_qasm/plaquette_check.qasm
 do
 	FNAME=`basename $i .qasm`
-	python nuqasm2.py -i $INCPATH -o test_qasm/out/${FNAME}.out.txt -p --save_source -u --perf_filepath test_qasm/out/${FNAME}.perf.out.txt $i
+	nuqasm2 -i $INCPATH -o test_qasm/out/${FNAME}.out.txt -p --save_source -u --perf_filepath test_qasm/out/${FNAME}.perf.out.txt $i
 
 done
 
@@ -39,7 +39,7 @@ done
 for i in test_qasm/err/*.qasm
 do
 	FNAME=`basename $i .qasm`
-	python nuqasm2.py -i $INCPATH -o test_qasm/err/out/${FNAME}.out.txt --save_source -u $i 2>test_qasm/err/out/${FNAME}.err.txt 
+	nuqasm2 -i $INCPATH -o test_qasm/err/out/${FNAME}.out.txt --save_source -u $i 2>test_qasm/err/out/${FNAME}.err.txt 
 done
 
 cd test_qasm/out
