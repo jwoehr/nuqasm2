@@ -35,14 +35,16 @@ class Ast2Circ():
 
         Parameters
         ----------
-        nuq2_ast : TYPE, optional
-            DESCRIPTION. The default is None.
-        circuit : TYPE, optional
-            DESCRIPTION. The default is None.
-        stream : TYPE, optional
-            DESCRIPTION. The default is sys.stdout.
-        loading_from_file : TYPE, optional
-            DESCRIPTION. The default is False.
+        nuq2_ast : list, optional
+            DESCRIPTION. nuqasm2 AST list to be turned into quantum circuite
+        circuit : qiskit.circuit.QuantumCircuit, optional
+            DESCRIPTION. Will be used if present. Otherwise, translate() creates
+            new qiskit.circuit.QuantumCircuit
+        stream : stream, optional
+            DESCRIPTION. For message output, if any.
+        loading_from_file : bool, optional
+            DESCRIPTION. Are we loading a text representation of the AST?
+            The default is False.
 
         Returns
         -------
@@ -58,71 +60,45 @@ class Ast2Circ():
         self.regdefs = []
         self.pp = pprint.PrettyPrinter(indent=4, stream=stream)   # pylint: disable-msg=invalid-name
 
-    def reinit(self, nuq2_ast=None,
-               circuit=None,
-               stream=sys.stdout,
-               loading_from_file=False):
-        """
+    # def reinit(self, nuq2_ast=None,
+    #            circuit=None,
+    #            stream=sys.stdout,
+    #            loading_from_file=False):
+    #     """
 
-        Parameters
-        ----------
-        nuq2_ast : TYPE, optional
-            DESCRIPTION. The default is None.
-        circuit : TYPE, optional
-            DESCRIPTION. The default is None.
-        stream : TYPE, optional
-            DESCRIPTION. The default is sys.stdout               loading_from_file=False.
+    #     Parameters
+    #     ----------
+    #     nuq2_ast : TYPE, optional
+    #         DESCRIPTION. The default is None.
+    #     circuit : TYPE, optional
+    #         DESCRIPTION. The default is None.
+    #     stream : TYPE, optional
+    #         DESCRIPTION. The default is sys.stdout               loading_from_file=False.
 
-        Returns
-        -------
-        None.
+    #     Returns
+    #     -------
+    #     None.
 
-        """
-        self.circuit = circuit
-        self.nuq2_ast = nuq2_ast
-        self.loading_from_file = loading_from_file
-        self.spool = None
-        self.gatedefs = {}
-        self.regdefs = []
-        self.pp = pprint.PrettyPrinter(indent=4, stream=stream)
+    #     """
+    #     self.circuit = circuit
+    #     self.nuq2_ast = nuq2_ast
+    #     self.loading_from_file = loading_from_file
+    #     self.spool = None
+    #     self.gatedefs = {}
+    #     self.regdefs = []
+    #     self.pp = pprint.PrettyPrinter(indent=4, stream=stream)
 
     @staticmethod
-    def match_entry_type_tuple(code_entry, type_tuple):
+    def _match_entry_type_tuple(code_entry, type_tuple):
         """
-
-
-        Parameters
-        ----------
-        code_entry : TYPE
-            DESCRIPTION.
-        type_tuple : TYPE
-            DESCRIPTION.
-
-        Returns
-        -------
-        TYPE
-            DESCRIPTION.
 
         """
         entry_type = code_entry['type']
         return entry_type in type_tuple
 
     @staticmethod
-    def match_entry_type_string(code_entry, string_list):
+    def _match_entry_type_string(code_entry, string_list):
         """
-
-
-        Parameters
-        ----------
-        code_entry : TYPE
-            DESCRIPTION.
-        string_list : TYPE
-            DESCRIPTION.
-
-        Returns
-        -------
-        bool
-            DESCRIPTION.
 
         """
         entry_type = re.match(r"<(AST.*):.*", code_entry.get('type')).group(1)
@@ -130,7 +106,7 @@ class Ast2Circ():
         # print('Debug: string list: ' + str(string_list))
         return bool(entry_type in string_list)
 
-    def match_entry_type(self, code_entry, type_tuple):
+    def _match_entry_type(self, code_entry, type_tuple):
         """
 
 
@@ -152,22 +128,22 @@ class Ast2Circ():
             type_list = []
             for elem in type_tuple:
                 type_list.append(str(elem))
-            matched = self.match_entry_type_string(code_entry, type_list)
+            matched = self._match_entry_type_string(code_entry, type_list)
         else:
-            matched = self.match_entry_type_tuple(code_entry, type_tuple)
+            matched = self._match_entry_type_tuple(code_entry, type_tuple)
         return matched
 
-    def marshall_regdefs(self):
+    def _marshall_regdefs(self):
         """Marshall the list of register declarations"""
         for entry in self.nuq2_ast['c_sect']:
-            is_regdef = self.match_entry_type(entry,
+            is_regdef = self._match_entry_type(entry,
                                               (ASTType.QREG,
                                                ASTType.CREG)
                                               )
             if is_regdef:
                 self.regdefs.append(entry)
 
-    def marshall_gatedefs(self):
+    def _marshall_gatedefs(self):
         """Make dictionary of gate definitions from AST"""
         for gatedef in self.nuq2_ast['g_sect']:
             gate_name = gatedef['gate_name']
@@ -177,26 +153,20 @@ class Ast2Circ():
             arity = 0 if len(arglist) == 0 else len(arglist.split(','))
             self.gatedefs[op + '/' + str(arity)] = gatedef
 
-    def unrollable(self, op_sig):
-        """Does a op signature exist in the gate section?"""
-        return self.gatedefs.get(op_sig)
+    # def unrollable(self, op_sig):
+    #     """Does a op signature exist in the gate section?"""
+    #     return self.gatedefs.get(op_sig)
 
-    def unroll(self, gate_invocation, gate_definition):
-        """Expand a gate definition"""
+    # def unroll(self, gate_invocation, gate_definition):
+    #     """Expand a gate definition"""
 
-    def create_quantum_circuit(self):
+    def _create_quantum_circuit(self):
         """
-
-
-        Returns
-        -------
-        TYPE
-            DESCRIPTION.
 
         """
         reg_list = []
         for entry in self.regdefs:
-            is_qreg = self.match_entry_type(entry, [ASTType.QREG])
+            is_qreg = self._match_entry_type(entry, [ASTType.QREG])
 
             if is_qreg:
                 reg_list.append(QuantumRegister(entry.get('qreg_num'), entry.get('qreg_name')))
@@ -207,7 +177,7 @@ class Ast2Circ():
         return self.circuit
 
     @staticmethod
-    def string_reg_to_reg(reg_name, qregs, cregs):
+    def _string_reg_to_reg(reg_name, qregs, cregs):
         """
         Nuqasm2 AST keeps register/bit operands as string.
         We must convert to actual reg.
@@ -241,7 +211,7 @@ class Ast2Circ():
         return reg
 
     @staticmethod
-    def string_reg_to_bit(string_reg, qubits, clbits):
+    def _string_reg_to_bit(string_reg, qubits, clbits):
         """
         Nuqasm2 AST keeps register/bit operands as string.
         We must convert to actual reg.
@@ -279,17 +249,8 @@ class Ast2Circ():
 
         return bit
 
-    def op_append(self, entry, qregs, cregs, qubits, clbits): # pylint: disable-msg=too-many-arguments, line-too-long
+    def _op_append(self, entry, qregs, cregs, qubits, clbits): # pylint: disable-msg=too-many-arguments, line-too-long
         """
-
-        Parameters
-        ----------
-        entry : TYPE
-            DESCRIPTION.
-
-        Returns
-        -------
-        None.
 
         """
 
@@ -297,31 +258,21 @@ class Ast2Circ():
         reg_list = []
         for string_reg in string_reg_list:
             if string_reg.find('[') >= 0:
-                reg_list.append(self.string_reg_to_bit(string_reg, qubits, clbits))
+                reg_list.append(self._string_reg_to_bit(string_reg, qubits, clbits))
             else:
-                reg_list.append(self.string_reg_to_reg(string_reg, qregs, cregs))
+                reg_list.append(self._string_reg_to_reg(string_reg, qregs, cregs))
 
         param_list = entry.get('param_list')
 
-        if not self.op_easy(entry.get('op'),
+        if not self._op_easy(entry.get('op'),
                             reg_list,
                             param_list=param_list if param_list else None):
             self.op_search(entry.get('op'),
                            reg_list,
                            param_list=param_list if param_list else None)
 
-    def op_easy(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
+    def _op_easy(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
         """
-
-
-        Parameters
-        ----------
-        op : TYPE
-            DESCRIPTION.
-        qbit : TYPE
-            DESCRIPTION.
-        arglist : TYPE
-            DESCRIPTION.
 
         Returns
         -------
@@ -339,17 +290,8 @@ class Ast2Circ():
 
         return has_op
 
-    def barrier_append(self, entry, qregs, qubits):
+    def _barrier_append(self, entry, qregs, qubits):
         """
-
-        Parameters
-        ----------
-        entry : TYPE
-            DESCRIPTION.
-
-        Returns
-        -------
-        None.
 
         """
 
@@ -357,32 +299,14 @@ class Ast2Circ():
         reg_list = []
         for string_reg in string_reg_list:
             if string_reg.find('[') >= 0:
-                reg_list.append(self.string_reg_to_bit(string_reg, qubits, None))
+                reg_list.append(self._string_reg_to_bit(string_reg, qubits, None))
             else:
-                reg_list.append(self.string_reg_to_reg(string_reg, qregs, None))
+                reg_list.append(self._string_reg_to_reg(string_reg, qregs, None))
 
         getattr(self.circuit, 'barrier')(*reg_list)
 
-    def measure_append(self, entry, qregs, cregs, qubits, clbits): # pylint: disable-msg=too-many-arguments, line-too-long
+    def _measure_append(self, entry, qregs, cregs, qubits, clbits): # pylint: disable-msg=too-many-arguments, line-too-long
         """
-
-
-        Parameters
-        ----------
-        entry : TYPE
-            DESCRIPTION.
-        qregs : TYPE
-            DESCRIPTION.
-        cregs : TYPE
-            DESCRIPTION.
-        qubits : TYPE
-            DESCRIPTION.
-        clbits : TYPE
-            DESCRIPTION.
-
-        Returns
-        -------
-        None.
 
         """
         source_reg = entry.get('source_reg')
@@ -390,35 +314,35 @@ class Ast2Circ():
         reg_list = []
 
         if source_reg.find('[') >= 0:
-            reg_list.append(self.string_reg_to_bit(source_reg, qubits, None))
+            reg_list.append(self._string_reg_to_bit(source_reg, qubits, None))
         else:
-            reg_list.append(self.string_reg_to_reg(source_reg, qregs, None))
+            reg_list.append(self._string_reg_to_reg(source_reg, qregs, None))
 
         if target_reg.find('[') >= 0:
-            reg_list.append(self.string_reg_to_bit(target_reg, None, clbits))
+            reg_list.append(self._string_reg_to_bit(target_reg, None, clbits))
         else:
-            reg_list.append(self.string_reg_to_reg(target_reg, None, cregs))
+            reg_list.append(self._string_reg_to_reg(target_reg, None, cregs))
 
         getattr(self.circuit, 'measure')(*reg_list)
 
-    def op_search(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
-        """
+    # def op_search(self, op, reg_list, param_list=None):  # pylint: disable-msg=invalid-name
+    #     """
 
 
-        Parameters
-        ----------
-        op : TYPE
-            DESCRIPTION.
-        reg_list : TYPE
-            DESCRIPTION.
-        param_list : TYPE, optional
-            DESCRIPTION. The default is None.
+    #     Parameters
+    #     ----------
+    #     op : TYPE
+    #         DESCRIPTION.
+    #     reg_list : TYPE
+    #         DESCRIPTION.
+    #     param_list : TYPE, optional
+    #         DESCRIPTION. The default is None.
 
-        Returns
-        -------
-        None.
+    #     Returns
+    #     -------
+    #     None.
 
-        """
+    #     """
 
     def translate(self):
         """
@@ -430,21 +354,21 @@ class Ast2Circ():
             DESCRIPTION. Ast2Circ self, to access attributes after translation.
 
         """
-        self.marshall_gatedefs()
-        self.marshall_regdefs()
+        self._marshall_gatedefs()
+        self._marshall_regdefs()
 
         if not self.circuit:
-            self.create_quantum_circuit()
+            self._create_quantum_circuit()
 
         for entry in self.nuq2_ast['c_sect']:
             op_type = entry['type']
             if op_type is ASTType.OP:
-                self.op_append(entry, self.circuit.qregs, self.circuit.cregs,
+                self._op_append(entry, self.circuit.qregs, self.circuit.cregs,
                                self.circuit.qubits, self.circuit.clbits)
             elif op_type is ASTType.BARRIER:
-                self.barrier_append(entry, self.circuit.qregs, self.circuit.qubits)
+                self._barrier_append(entry, self.circuit.qregs, self.circuit.qubits)
             elif op_type is ASTType.MEASURE:
-                self.measure_append(entry, self.circuit.qregs, self.circuit.cregs,
+                self._measure_append(entry, self.circuit.qregs, self.circuit.cregs,
                                     self.circuit.qubits, self.circuit.clbits)
             else:  # It's nothing we care about in this stage
                 pass
@@ -541,33 +465,33 @@ class Ast2CircException(Exception):
         return ex
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    DESCRIPTION = """Implements qasm2 translation to python data structures.
-    Working from _Open Quantum Assembly Language_
-    https://arxiv.org/pdf/1707.03429.pdf ......
-    Copyright 2019 Jack Woehr jwoehr@softwoehr.com PO Box 51, Golden, CO 80402-0051.
-    Apache-2.0 license -- See LICENSE which you should have received with this code.
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-    """
-    PARSER = argparse.ArgumentParser(description=DESCRIPTION)
+#     DESCRIPTION = """Implements qasm2 translation to python data structures.
+#     Working from _Open Quantum Assembly Language_
+#     https://arxiv.org/pdf/1707.03429.pdf ......
+#     Copyright 2019 Jack Woehr jwoehr@softwoehr.com PO Box 51, Golden, CO 80402-0051.
+#     Apache-2.0 license -- See LICENSE which you should have received with this code.
+#     Unless required by applicable law or agreed to in writing, software
+#     distributed under the License is distributed on an "AS IS" BASIS,
+#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#     See the License for the specific language governing permissions and
+#     limitations under the License.
+#     """
+#     PARSER = argparse.ArgumentParser(description=DESCRIPTION)
 
-    PARSER.add_argument("-f", "--filepath", action="store",
-                        help="nuqasm2 AST file to process")
+#     PARSER.add_argument("-f", "--filepath", action="store",
+#                         help="nuqasm2 AST file to process")
 
-    ARGS = PARSER.parse_args()
+#     ARGS = PARSER.parse_args()
 
-    if ARGS.filepath:
-        AST2CIRC = Ast2Circ.from_file(ARGS.filepath)
-        AST2CIRC.pp.pprint(AST2CIRC.nuq2_ast)
-        AST2CIRC.marshall_gatedefs()
-        AST2CIRC.pp.pprint(AST2CIRC.gatedefs)
-        AST2CIRC.translate()
-        AST2CIRC.pp.pprint(AST2CIRC.regdefs)
-        print(AST2CIRC.circuit)
+#     if ARGS.filepath:
+#         AST2CIRC = Ast2Circ.from_file(ARGS.filepath)
+#         AST2CIRC.pp.pprint(AST2CIRC.nuq2_ast)
+#         AST2CIRC._marshall_gatedefs()
+#         AST2CIRC.pp.pprint(AST2CIRC.gatedefs)
+#         AST2CIRC.translate()
+#         AST2CIRC.pp.pprint(AST2CIRC.regdefs)
+#         print(AST2CIRC.circuit)
 
-    sys.exit(0)
+#     sys.exit(0)
