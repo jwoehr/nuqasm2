@@ -33,12 +33,12 @@ class ASTBinder(dict):
 
         Parameters
         ----------
-        gate_definition : TYPE
-            DESCRIPTION.
-        reg_list : TYPE, optional
-            DESCRIPTION. The default is None.
-        param_list : TYPE, optional
-            DESCRIPTION. The default is None.
+        gate_definition : dict
+            nuqasm2 ast gate def.
+        reg_list : list, optional
+            list of c_sect code entry's registers, optional. The default is None.
+        param_list : list, optional
+            list of c_sect code entry's params, optional. The default is None.
 
         Returns
         -------
@@ -59,17 +59,17 @@ class ASTBinder(dict):
 
     def param_binding(self, gate_param_name):
         """
-        Return real param name for symbolic param name from gate definition.
+        Return real param value for symbolic param name from gate definition.
 
 
         Parameters
         ----------
-        gate_param_name : TYPE
-            DESCRIPTION.
+        gate_param_name : string
+            symbolic param name from g_sect gate def.
 
         Returns
         -------
-        None.
+        Actual param value passed by caller of gate definition .
 
         """
         return self.param_bind.get(gate_param_name)
@@ -80,12 +80,12 @@ class ASTBinder(dict):
 
         Parameters
         ----------
-        gate_reg_name : TYPE
-            DESCRIPTION.
+        gate_reg_name : string
+            symbolic reg name from g_sect gate def.
 
         Returns
         -------
-        None.
+        Actual reg passed by caller of gate defintion.
 
         """
         return self.reg_bind.get(gate_reg_name)
@@ -96,13 +96,13 @@ class ASTBinder(dict):
 
         Parameters
         ----------
-        reg_list : TYPE
-            DESCRIPTION.
+        reg_list : list
+            list of symbolic reg names used in gate definition.
 
         Returns
         -------
-        b_list : TYPE
-            DESCRIPTION.
+        b_list : list
+            list of actual reg values from caller of gate definition.
 
         """
         b_list = None
@@ -118,13 +118,14 @@ class ASTBinder(dict):
 
         Parameters
         ----------
-        param_list : TYPE
-            DESCRIPTION.
+        param_list : list
+            list of symbolic param names used in gate definition.
 
         Returns
         -------
-        b_list : TYPE
-            DESCRIPTION.
+        b_list : list
+            list of actual param values from caller of gate definition.
+
 
         """
         b_list = None

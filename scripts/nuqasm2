@@ -221,7 +221,7 @@ def do_it():
             print("Circuit:", FOUT)
             ast2circ = Ast2Circ(nuq2_ast=translated_ast)
             print(ast2circ.translate().circuit)
-            PP.pprint(ast2circ.regdefs)
+            # PP.pprint(ast2circ.regdefs)
 
 do_it()
 
