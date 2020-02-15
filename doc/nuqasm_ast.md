@@ -20,6 +20,8 @@ as a proposal, but to facilitate Qiskit development.
 
 The current as-is implementation is described unless otherwise noted.
 
+This document is in the `master` branch of the project, and thus may reflect changes that have occcurred since the last release.
+
 AST Structure
 =============
 
