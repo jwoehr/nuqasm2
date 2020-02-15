@@ -53,10 +53,11 @@ either to be in the current directory, or in a directory mentioned to the ` -i -
 
 ```
 $ nuqasm2 -h
-usage: nuqasm2 [-h] [-n NAME] [-o OUTFILE] [-i INCLUDE_PATH] [-c] [-p | -t]
-               [--perf_filepath PERF_FILEPATH] [-u] [-v] [--save_pgm_source]
-               [--save_element_source] [--save_gate_source] [--save_source]
-               [--show_gate_decls] [--sortby SORTBY]
+usage: nuqasm2 [-h] [-n NAME] [-o OUTFILE] [-i INCLUDE_PATH] [-a] [-c] [-d]
+               [-p | -t] [--perf_filepath PERF_FILEPATH] [-u] [-v]
+               [--save_pgm_source] [--save_element_source]
+               [--save_gate_source] [--save_source] [--show_gate_decls]
+               [--sortby SORTBY]
                [filepaths [filepaths ...]]
 
 Implements qasm2 translation to python data structures. Working from _Open
@@ -81,7 +82,9 @@ optional arguments:
   -i INCLUDE_PATH, --include_path INCLUDE_PATH
                         Search path for includes, paths separated by ':',
                         default include path is '.'
-  -c, --circuit         Generate circuit and draw-print result
+  -a, --ast             print the AST
+  -c, --circuit         Generate circuit
+  -d, --draw            Draw generated circuit
   -p, --profile         Profile translator run, writing to stderr and also to
                         file if --perf_filepath switch is also used (-p,
                         --profile is mutually exclusive with -t, --timeit)
@@ -135,20 +138,20 @@ qreg q[3];
 creg c[3];
 rx(pi/2) q[0];
 foo q[0], q[1], q[2];
-measure q -> c
+measure q -> c;
 
-Circuit:
-        ┌────────────────────────┐                                             ┌───┐      
-q_0: |0>┤ Rx(1.5707963267948966) ├──────────────■─────────────────────■────■───┤ T ├───■──
-        └────────────────────────┘              │             ┌───┐   │  ┌─┴─┐┌┴───┴┐┌─┴─┐
-q_1: |0>────────────────────────────■───────────┼─────────■───┤ T ├───┼──┤ X ├┤ Tdg ├┤ X ├
-                  ┌───┐           ┌─┴─┐┌─────┐┌─┴─┐┌───┐┌─┴─┐┌┴───┴┐┌─┴─┐├───┤└┬───┬┘└───┘
-q_2: |0>──────────┤ H ├───────────┤ X ├┤ Tdg ├┤ X ├┤ T ├┤ X ├┤ Tdg ├┤ X ├┤ T ├─┤ H ├──────
-                  └───┘           └───┘└─────┘└───┘└───┘└───┘└─────┘└───┘└───┘ └───┘      
- c_0: 0 ══════════════════════════════════════════════════════════════════════════════════
-                                                                                          
- c_1: 0 ══════════════════════════════════════════════════════════════════════════════════
-                                                                                          
- c_2: 0 ══════════════════════════════════════════════════════════════════════════════════
+$ nuqasm2 -c -d -i ~/work/QISKit/DEV/qiskit-terra/qiskit/qasm/libs:. foo.qasm
+        ┌────────────────────────┐                                             ┌───┐      ┌─┐   
+q_0: |0>┤ Rx(1.5707963267948966) ├──────────────■─────────────────────■────■───┤ T ├───■──┤M├───
+        └────────────────────────┘              │             ┌───┐   │  ┌─┴─┐┌┴───┴┐┌─┴─┐└╥┘┌─┐
+q_1: |0>────────────────────────────■───────────┼─────────■───┤ T ├───┼──┤ X ├┤ Tdg ├┤ X ├─╫─┤M├
+                  ┌───┐           ┌─┴─┐┌─────┐┌─┴─┐┌───┐┌─┴─┐┌┴───┴┐┌─┴─┐├───┤└┬───┬┘└┬─┬┘ ║ └╥┘
+q_2: |0>──────────┤ H ├───────────┤ X ├┤ Tdg ├┤ X ├┤ T ├┤ X ├┤ Tdg ├┤ X ├┤ T ├─┤ H ├──┤M├──╫──╫─
+                  └───┘           └───┘└─────┘└───┘└───┘└───┘└─────┘└───┘└───┘ └───┘  └╥┘  ║  ║ 
+ c_0: 0 ═══════════════════════════════════════════════════════════════════════════════╬═══╩══╬═
+                                                                                       ║      ║ 
+ c_1: 0 ═══════════════════════════════════════════════════════════════════════════════╬══════╩═
+                                                                                       ║        
+ c_2: 0 ═══════════════════════════════════════════════════════════════════════════════╩════════
 
 ```
