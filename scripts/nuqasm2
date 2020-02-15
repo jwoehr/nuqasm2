@@ -20,7 +20,7 @@ import cProfile
 import pprint
 import datetime
 import sys
-import argparse    
+import argparse
 from nuqasm2.qasmast import QasmTranslator, Qasm_Exception
 from nuqasm2.ast2circ import Ast2Circ
 
@@ -45,8 +45,12 @@ PARSER.add_argument("-o", "--outfile", action="store",
 PARSER.add_argument("-i", "--include_path", action="store", default='.',
                     help="Search path for includes, paths separated by '" +
                     os.pathsep + "', default include path is '.'")
+PARSER.add_argument("-a", "--ast", action="store_true",
+                    help="print the AST")
 PARSER.add_argument("-c", "--circuit", action="store_true",
-                    help="Generate circuit and draw-print result")
+                    help="Generate circuit")
+PARSER.add_argument("-d", "--draw", action="store_true",
+                    help="Draw generated circuit")
 PERFGROUP = PARSER.add_mutually_exclusive_group()
 PERFGROUP.add_argument("-p", "--profile", action="store_true",
                        help="""Profile translator run, writing to stderr and also
@@ -102,12 +106,15 @@ ARGS = PARSER.parse_args()
 
 EPP = pprint.PrettyPrinter(indent=4, stream=sys.stderr)
 
+
 def verbosity(text, count):
     """Verbose error messages by level"""
     if ARGS.verbose >= count:
         EPP.pprint(text)
 
+
 verbosity(ARGS, 3)
+
 
 def handle_error(err, erring_filepath):
     """Print out exception packet"""
@@ -116,12 +123,14 @@ def handle_error(err, erring_filepath):
     EPP.pprint(x)
     sys.exit(x['errcode'])
 
+
 if ARGS.outfile:
     FOUT = open(ARGS.outfile, 'w')
 else:
     FOUT = sys.stdout
 
 PP = pprint.PrettyPrinter(indent=4, stream=FOUT)
+
 
 def profile_translate(qt_instance, sortby=ARGS.sortby):
     """
@@ -182,13 +191,14 @@ def do_it():
 
             translated_ast = qt.get_translation()
 
-            PP.pprint(translated_ast)
+            if ARGS.ast:
+                PP.pprint(translated_ast)
 
             if ARGS.circuit:
-                print("Circuit:")
                 ast2circ = Ast2Circ(nuq2_ast=translated_ast)
-                print(ast2circ.translate().circuit)
-                PP.pprint(ast2circ.regdefs)
+                circ = ast2circ.translate().circuit
+                if ARGS.draw:
+                    print(circ.draw())
 
     else:
 
@@ -212,16 +222,17 @@ def do_it():
         except Qasm_Exception as ex:
             handle_error(ex, str(sys.stdin))
 
-
         translated_ast = qt.get_translation()
 
-        PP.pprint(translated_ast)
+        if ARGS.ast:
+            PP.pprint(translated_ast)
 
         if ARGS.circuit:
-            print("Circuit:", FOUT)
             ast2circ = Ast2Circ(nuq2_ast=translated_ast)
-            print(ast2circ.translate().circuit)
-            # PP.pprint(ast2circ.regdefs)
+            circ = ast2circ.translate().circuit
+            if ARGS.draw:
+                print(circ.draw(), FOUT)
+
 
 do_it()
 
