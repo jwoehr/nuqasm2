@@ -144,8 +144,7 @@ gate foo a,b,c
   cx a,b;
 }
 
-$ nuqasm2 -c -i ${HOME}/work/QISKit/DEV/qiskit-terra/qiskit/qasm/libs:. foo.qasm 
-
+$ nuqasm2 -c -a -d -i ${HOME}/work/QISKit/DEV/qiskit-terra/qiskit/qasm/libs:. foo.qasm 
 {   'c_sect': [   {   'filenum': 0,
                       'linenum': 0,
                       'source': None,
@@ -303,6 +302,14 @@ $ nuqasm2 -c -i ${HOME}/work/QISKit/DEV/qiskit-terra/qiskit/qasm/libs:. foo.qasm
                       'linenum': 135,
                       'source': None,
                       'type': <ASTType.COMMENT: 100>},
+                  {   'filenum': 1,
+                      'linenum': 142,
+                      'source': None,
+                      'type': <ASTType.COMMENT: 100>},
+                  {   'filenum': 1,
+                      'linenum': 155,
+                      'source': None,
+                      'type': <ASTType.COMMENT: 100>},
                   {   'filenum': 0,
                       'include': 'foogate.inc',
                       'linenum': 3,
@@ -349,7 +356,9 @@ $ nuqasm2 -c -i ${HOME}/work/QISKit/DEV/qiskit-terra/qiskit/qasm/libs:. foo.qasm
                   {   'filenum': 0,
                       'linenum': 8,
                       'source': None,
-                      'type': <ASTType.UNKNOWN: 0>}],
+                      'source_reg': 'q',
+                      'target_reg': 'c',
+                      'type': <ASTType.MEASURE: 40>}],
     'g_sect': [   {   'filenum': 1,
                       'gate_name': 'u3(theta,phi,lambda)',
                       'gate_ops_list': [   {   'op': 'U',
@@ -906,6 +915,126 @@ $ nuqasm2 -c -i ${HOME}/work/QISKit/DEV/qiskit-terra/qiskit/qasm/libs:. foo.qasm
                       'gate_reg_list': ['a', 'b'],
                       'linenum': 136,
                       'source': None},
+                  {   'filenum': 1,
+                      'gate_name': 'rccx',
+                      'gate_ops_list': [   {   'op': 'u2',
+                                               'op_param_list': ['0', 'pi'],
+                                               'op_reg_list': ['c']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['pi/4'],
+                                               'op_reg_list': ['c']},
+                                           {   'op': 'cx',
+                                               'op_param_list': None,
+                                               'op_reg_list': ['b', 'c']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['-pi/4'],
+                                               'op_reg_list': ['c']},
+                                           {   'op': 'cx',
+                                               'op_param_list': None,
+                                               'op_reg_list': ['a', 'c']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['pi/4'],
+                                               'op_reg_list': ['c']},
+                                           {   'op': 'cx',
+                                               'op_param_list': None,
+                                               'op_reg_list': ['b', 'c']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['-pi/4'],
+                                               'op_reg_list': ['c']},
+                                           {   'op': 'u2',
+                                               'op_param_list': ['0', 'pi'],
+                                               'op_reg_list': ['c']}],
+                      'gate_ops_raw_list': [   'u2(0,pi) c;',
+                                               'u1(pi/4) c;',
+                                               'cx b,c;',
+                                               'u1(-pi/4) c;',
+                                               'cx a,c;',
+                                               'u1(pi/4) c;',
+                                               'cx b,c;',
+                                               'u1(-pi/4) c;',
+                                               'u2(0,pi) c;'],
+                      'gate_param_list': None,
+                      'gate_reg_list': ['a', 'b', 'c'],
+                      'linenum': 143,
+                      'source': None},
+                  {   'filenum': 1,
+                      'gate_name': 'rcccx',
+                      'gate_ops_list': [   {   'op': 'u2',
+                                               'op_param_list': ['0', 'pi'],
+                                               'op_reg_list': ['d']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['pi/4'],
+                                               'op_reg_list': ['d']},
+                                           {   'op': 'cx',
+                                               'op_param_list': None,
+                                               'op_reg_list': ['c', 'd']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['-pi/4'],
+                                               'op_reg_list': ['d']},
+                                           {   'op': 'u2',
+                                               'op_param_list': ['0', 'pi'],
+                                               'op_reg_list': ['d']},
+                                           {   'op': 'cx',
+                                               'op_param_list': None,
+                                               'op_reg_list': ['a', 'd']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['pi/4'],
+                                               'op_reg_list': ['d']},
+                                           {   'op': 'cx',
+                                               'op_param_list': None,
+                                               'op_reg_list': ['b', 'd']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['-pi/4'],
+                                               'op_reg_list': ['d']},
+                                           {   'op': 'cx',
+                                               'op_param_list': None,
+                                               'op_reg_list': ['a', 'd']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['pi/4'],
+                                               'op_reg_list': ['d']},
+                                           {   'op': 'cx',
+                                               'op_param_list': None,
+                                               'op_reg_list': ['b', 'd']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['-pi/4'],
+                                               'op_reg_list': ['d']},
+                                           {   'op': 'u2',
+                                               'op_param_list': ['0', 'pi'],
+                                               'op_reg_list': ['d']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['pi/4'],
+                                               'op_reg_list': ['d']},
+                                           {   'op': 'cx',
+                                               'op_param_list': None,
+                                               'op_reg_list': ['c', 'd']},
+                                           {   'op': 'u1',
+                                               'op_param_list': ['-pi/4'],
+                                               'op_reg_list': ['d']},
+                                           {   'op': 'u2',
+                                               'op_param_list': ['0', 'pi'],
+                                               'op_reg_list': ['d']}],
+                      'gate_ops_raw_list': [   'u2(0,pi) d;',
+                                               'u1(pi/4) d;',
+                                               'cx c,d;',
+                                               'u1(-pi/4) d;',
+                                               'u2(0,pi) d;',
+                                               'cx a,d;',
+                                               'u1(pi/4) d;',
+                                               'cx b,d;',
+                                               'u1(-pi/4) d;',
+                                               'cx a,d;',
+                                               'u1(pi/4) d;',
+                                               'cx b,d;',
+                                               'u1(-pi/4) d;',
+                                               'u2(0,pi) d;',
+                                               'u1(pi/4) d;',
+                                               'cx c,d;',
+                                               'u1(-pi/4) d;',
+                                               'u2(0,pi) d;'],
+                      'gate_param_list': None,
+                      'gate_reg_list': ['a', 'b', 'c', 'd'],
+                      'linenum': 156,
+                      'source': None},
                   {   'filenum': 2,
                       'gate_name': 'foo',
                       'gate_ops_list': [   {   'op': 'h',
@@ -973,49 +1102,23 @@ $ nuqasm2 -c -i ${HOME}/work/QISKit/DEV/qiskit-terra/qiskit/qasm/libs:. foo.qasm
                       'linenum': 3,
                       'source': None}],
     's_sect': [],
-    't_sect': {   'datetime_finish': '2020-02-11T13:22:19.613315',
-                  'datetime_start': '2020-02-11T13:22:19.610603',
+    't_sect': {   'datetime_finish': '2020-02-15T11:39:47.297935',
+                  'datetime_start': '2020-02-15T11:39:47.292894',
                   'filepaths': [   'foo.qasm',
                                    '/home/jax/work/QISKit/DEV/qiskit-terra/qiskit/qasm/libs/qelib1.inc',
                                    './foogate.inc'],
                   'name': 'main'}}
-Circuit:
-        ┌────────────────────────┐                                            »
-q_0: |0>┤ Rx(1.5707963267948966) ├──────────────■─────────────────────■────■──»
-        └────────────────────────┘              │             ┌───┐   │  ┌─┴─┐»
-q_1: |0>────────────────────────────■───────────┼─────────■───┤ T ├───┼──┤ X ├»
-                  ┌───┐           ┌─┴─┐┌─────┐┌─┴─┐┌───┐┌─┴─┐┌┴───┴┐┌─┴─┐├───┤»
-q_2: |0>──────────┤ H ├───────────┤ X ├┤ Tdg ├┤ X ├┤ T ├┤ X ├┤ Tdg ├┤ X ├┤ T ├»
-                  └───┘           └───┘└─────┘└───┘└───┘└───┘└─────┘└───┘└───┘»
- c_0: 0 ══════════════════════════════════════════════════════════════════════»
-                                                                              »
- c_1: 0 ══════════════════════════════════════════════════════════════════════»
-                                                                              »
- c_2: 0 ══════════════════════════════════════════════════════════════════════»
-                                                                              »
-«      ┌───┐      
-«q_0: ─┤ T ├───■──
-«     ┌┴───┴┐┌─┴─┐
-«q_1: ┤ Tdg ├┤ X ├
-«     └┬───┬┘└───┘
-«q_2: ─┤ H ├──────
-«      └───┘      
-«c_0: ════════════
-«                 
-«c_1: ════════════
-«                 
-«c_2: ════════════
-«                 
-[   {   'filenum': 0,
-        'linenum': 4,
-        'qreg_name': 'q',
-        'qreg_num': '3',
-        'source': None,
-        'type': <ASTType.QREG: 20>},
-    {   'creg_name': 'c',
-        'creg_num': '3',
-        'filenum': 0,
-        'linenum': 5,
-        'source': None,
-        'type': <ASTType.CREG: 30>}]
+        ┌────────────────────────┐                                             ┌───┐      ┌─┐   
+q_0: |0>┤ Rx(1.5707963267948966) ├──────────────■─────────────────────■────■───┤ T ├───■──┤M├───
+        └────────────────────────┘              │             ┌───┐   │  ┌─┴─┐┌┴───┴┐┌─┴─┐└╥┘┌─┐
+q_1: |0>────────────────────────────■───────────┼─────────■───┤ T ├───┼──┤ X ├┤ Tdg ├┤ X ├─╫─┤M├
+                  ┌───┐           ┌─┴─┐┌─────┐┌─┴─┐┌───┐┌─┴─┐┌┴───┴┐┌─┴─┐├───┤└┬───┬┘└┬─┬┘ ║ └╥┘
+q_2: |0>──────────┤ H ├───────────┤ X ├┤ Tdg ├┤ X ├┤ T ├┤ X ├┤ Tdg ├┤ X ├┤ T ├─┤ H ├──┤M├──╫──╫─
+                  └───┘           └───┘└─────┘└───┘└───┘└───┘└─────┘└───┘└───┘ └───┘  └╥┘  ║  ║ 
+ c_0: 0 ═══════════════════════════════════════════════════════════════════════════════╬═══╩══╬═
+                                                                                       ║      ║ 
+ c_1: 0 ═══════════════════════════════════════════════════════════════════════════════╬══════╩═
+                                                                                       ║        
+ c_2: 0 ═══════════════════════════════════════════════════════════════════════════════╩════════
+
 ```
