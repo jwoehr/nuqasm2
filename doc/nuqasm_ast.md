@@ -1,4 +1,4 @@
-__nuqasm2_ast.md 2020-02-11__
+__nuqasm2_ast.md 2020-02-16__
 
 nuqasm2 OPENQASM 2.0 Assembler
 -------------------------------------------
@@ -6,9 +6,9 @@ nuqasm2 OPENQASM 2.0 Assembler
 Intro
 =====
 
-nuqasm2 is a proof of concept of an OPENQASM parser generating an abstract syntax tree (AST) to be consumed by a code generator.
+nuqasm2 is a proof-of-concept OPENQASM 2.0 parser generating an abstract syntax tree (AST) to be consumed by a code generator.
 
-It has its own code generator `ast2circ` which can be invoked for demo purposes from the `nuqasm2` command.
+It comes with its own code generator `ast2circ` which can be invoked for demo purposes from the `nuqasm2` command.
 
 That code generator is optionally used in place of Qiskit `qiskit-terra/qiskit/qasm` by the companion project,
 [`qis_job`](https://github.com/jwoehr/qis_job) which compiles and runs qasm and Qiskit `QuantumCircuit` code on a
