@@ -1,0 +1,10 @@
+CHANGES.TXT
+
+v0.31
+	
+	* clean up example because nuqasm2 doesn't handle `measure q -> c`
+	* fixed bug in file output
+	* param binding now will pass unbound param if no param can be bound in
+	  expanding gate definition
+	* created regression test examples
+	* fixed bug error no space after gate reg list before curly

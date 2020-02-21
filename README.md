@@ -2,7 +2,7 @@
 
 New OPENQASM 2.0 translator to work with [Qiskit](https://github.com/Qiskit).
 
-The current release is [v0.30](https://github.com/jwoehr/nuqasm2/releases/tag/v0.30). This README is on the `master` branch and may reflect changes that have occurred since the last release.
+The current release is [v0.31](https://github.com/jwoehr/nuqasm2/releases/tag/v0.31). This README is on the `master` branch and may reflect changes that have occurred since the last release.
 
 `nuqasm2` comes with NO WARRANTY and NO GUARANTEE of correctness nor of applicability of use. See LICENSE.
 
@@ -77,8 +77,8 @@ optional arguments:
   -h, --help            show this help message and exit
   -n NAME, --name NAME  Give a name to the translation unit (default 'main'
   -o OUTFILE, --outfile OUTFILE
-                        Write AST to outfile overwriting silently, default is
-                        stdout
+                        File to which to write output overwriting silently,
+                        default is stdout
   -i INCLUDE_PATH, --include_path INCLUDE_PATH
                         Search path for includes, paths separated by ':',
                         default include path is '.'

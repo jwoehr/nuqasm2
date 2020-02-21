@@ -41,7 +41,8 @@ PARSER = argparse.ArgumentParser(description=DESCRIPTION)
 PARSER.add_argument("-n", "--name", action="store", default='main',
                     help="Give a name to the translation unit (default 'main'")
 PARSER.add_argument("-o", "--outfile", action="store",
-                    help="Write AST to outfile overwriting silently, default is stdout")
+                    help="""File to which to write output overwriting silently,
+                    default is stdout""")
 PARSER.add_argument("-i", "--include_path", action="store", default='.',
                     help="Search path for includes, paths separated by '" +
                     os.pathsep + "', default include path is '.'")
