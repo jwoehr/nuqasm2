@@ -132,7 +132,8 @@ class ASTBinder(dict):
         if param_list:
             b_list = []
             for param in param_list:
-                b_list.append(self.param_binding(param))
+                bound_param = self.param_binding(param)
+                b_list.append(bound_param if bound_param else param)
         return b_list
 
 
@@ -385,6 +386,9 @@ class Ast2Circ():
 
         if has_op:
             if param_list:
+                # DEBUG
+                # print("********** op {} param_list {} reg_list {}".format(op, param_list, reg_list))
+                # END-DEBUG
                 getattr(self.circuit, op)(*param_list, *reg_list)
             else:
                 getattr(self.circuit, op)(*reg_list)
@@ -437,6 +441,9 @@ class Ast2Circ():
             the_op = gate_op.get('op')
             the_reg_list = ast_binder.bind_regs(gate_op.get('op_reg_list'))
             the_param_list = ast_binder.bind_params(gate_op.get('op_param_list'))
+            # DEBUG
+            # print("******the_op {} the_reg_list {} the_param_list {}".format(the_op, the_reg_list,the_param_list))
+            # END-DEBUG
             if not self._op_easy(the_op,
                                  the_reg_list,
                                  param_list=the_param_list if the_param_list else None):
