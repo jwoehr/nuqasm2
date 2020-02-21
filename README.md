@@ -54,7 +54,7 @@ either to be in the current directory, or in a directory mentioned to the ` -i -
 ```
 $ nuqasm2 -h
 usage: nuqasm2 [-h] [-n NAME] [-o OUTFILE] [-i INCLUDE_PATH] [-a] [-c] [-d]
-               [-p | -t] [--perf_filepath PERF_FILEPATH] [-u] [-v]
+               [-p | -t] [--perf_filepath PERF_FILEPATH] [-q] [-u] [-v]
                [--save_pgm_source] [--save_element_source]
                [--save_gate_source] [--save_source] [--show_gate_decls]
                [--sortby SORTBY]
@@ -92,6 +92,7 @@ optional arguments:
                         --timeit is mutually exclusive with -p, --profile)
   --perf_filepath PERF_FILEPATH
                         Save -p --profile data to provided filename
+  -q, --qasm            with -c, output qasm from completed circuit
   -u, --unknown         exit with error on unknown element in source
   -v, --verbose         Increase verbosity each -v up to 3
   --save_pgm_source     Save program source in output

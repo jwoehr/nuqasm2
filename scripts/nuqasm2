@@ -63,6 +63,8 @@ PERFGROUP.add_argument("-t", "--timeit", action="store_true",
                        """)
 PARSER.add_argument("--perf_filepath", action="store",
                     help="Save -p --profile data to provided filename")
+PARSER.add_argument("-q", "--qasm", action="store_true",
+                    help="with -c, output qasm from completed circuit")
 PARSER.add_argument("-u", "--unknown", action="store_true",
                     help="exit with error on unknown element in source")
 PARSER.add_argument("-v", "--verbose", action="count", default=0,
@@ -198,7 +200,9 @@ def do_it():
                 ast2circ = Ast2Circ(nuq2_ast=translated_ast)
                 circ = ast2circ.translate().circuit
                 if ARGS.draw:
-                    print(circ.draw())
+                    print(circ.draw(), file=FOUT)
+                if ARGS.qasm:
+                    print(circ.qasm(), file=FOUT)
 
     else:
 
@@ -231,7 +235,9 @@ def do_it():
             ast2circ = Ast2Circ(nuq2_ast=translated_ast)
             circ = ast2circ.translate().circuit
             if ARGS.draw:
-                print(circ.draw(), FOUT)
+                print(circ.draw(), file=FOUT)
+            if ARGS.qasm:
+                print(circ.qasm(), file=FOUT)
 
 
 do_it()
