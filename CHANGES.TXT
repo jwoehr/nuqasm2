@@ -2,6 +2,7 @@ CHANGES.TXT
 
 v0.31
 	
+	* -q flag with -c outputs OPENQASM 2.0 source after unrolling custom gates
 	* clean up example because nuqasm2 doesn't handle `measure q -> c`
 	* fixed bug in file output
 	* param binding now will pass unbound param if no param can be bound in
