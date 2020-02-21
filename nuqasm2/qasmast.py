@@ -784,7 +784,7 @@ class QasmTranslator():
         gate_param_list = None
         if len(possible_gate_params) > 1:
             gate_param_list = possible_gate_params[1].strip(') ').split(',')
-        gate_regs = gate_decl.group(2)
+        gate_regs = gate_decl.group(2).strip("{}") # watch out for no space before '{' !!
         gate_reg_list = gate_regs.split(',')
         gate_ops = QTRegEx.GATE_OPS.match(txt)
         gate_ops_raw_list = QTRegEx.GATE_OPS_LIST.findall(gate_ops.group(1))
