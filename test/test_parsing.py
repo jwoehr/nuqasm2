@@ -13,8 +13,8 @@ import nuqasm2 as nq
 
 class TestParsing(unittest.TestCase):
 
-    include_path = os.getenv('NUQASM2_INCLUDE_PATH', '.')
-    
+    include_path = os.getenv('NUQASM2_INCLUDE_PATH') + ':test/qasm_src'
+
     def test_test(self):
         self.assertFalse(nq.qasmast.ASTType.UNKNOWN.value)
 
@@ -42,3 +42,6 @@ class TestParsing(unittest.TestCase):
 
     def test_no_space_before_curly_gatedef(self):
         self._test_circ_qasm_file_compare('no_space_before_curly_gatedef')
+
+    def test_local_gate_include(self):
+        self._test_circ_qasm_file_compare('local_gate_include')
