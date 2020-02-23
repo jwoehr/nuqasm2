@@ -1,3 +1,5 @@
+# Makefile for NuQasm2
+#
 # This code is part of nuqasm2.
 #
 # (C) Copyright Jack J. Woehr 2020.
@@ -10,10 +12,13 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
-.PHONY:	install test
+.PHONY:	install install-dev test
 
 install:
 	python3 ./setup.py install
+	
+install-test:
+	pip3 install -e .
 	
 test:
 	@echo "To make test you need environment var NUQASM2_INCLUDE_PATH"

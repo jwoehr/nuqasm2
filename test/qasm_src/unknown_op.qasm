@@ -11,7 +11,8 @@ cx q[2], q[0] ;
 h q[0] ;
 h q[1] ;
 h q[2] ;
-u3(pi/2,pi/4,pi/15) q[0] ;
+// Here's an unknown op 'u(a,b,c)'
+u(pi/2,pi/4,pi/15) q[0] ;
 // Pauli gate: bit and phase flip
 gate y a { u3(pi, pi/2, pi/2) a ; }
 gate ch a,b {
