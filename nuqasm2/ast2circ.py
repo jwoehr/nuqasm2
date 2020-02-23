@@ -482,15 +482,21 @@ class Ast2Circ():
             self._create_quantum_circuit()
 
         for entry in self.nuq2_ast['c_sect']:
-            op_type = entry['type']
-            if op_type is ASTType.OP:
-                self._op_append(entry, self.circuit.qregs, self.circuit.cregs,
-                                self.circuit.qubits, self.circuit.clbits)
-            elif op_type is ASTType.BARRIER:
-                self._barrier_append(entry, self.circuit.qregs, self.circuit.qubits)
-            elif op_type is ASTType.MEASURE:
-                self._measure_append(entry, self.circuit.qregs, self.circuit.cregs,
-                                     self.circuit.qubits, self.circuit.clbits)
+            try:
+                op_type = entry['type']
+                if op_type is ASTType.OP:
+                    self._op_append(entry, self.circuit.qregs, self.circuit.cregs,
+                                    self.circuit.qubits, self.circuit.clbits)
+                elif op_type is ASTType.BARRIER:
+                    self._barrier_append(entry, self.circuit.qregs, self.circuit.qubits)
+                elif op_type is ASTType.MEASURE:
+                    self._measure_append(entry, self.circuit.qregs, self.circuit.cregs,
+                                         self.circuit.qubits, self.circuit.clbits)
+            except NameError as ex:
+                raise Ast2CircTranslationException(section='c_sect',
+                                                   entry=entry,
+                                                   prev_ex=ex)
+
             else:  # It's nothing we care about in this stage
                 pass
         return self
@@ -590,25 +596,68 @@ class Ast2Circ():
 class Ast2CircException(Exception):
     """Base class for Qasm exceptions"""
 
-    def __init__(self, filepath=None, linenum=None, line=None):
+    def __init__(self,
+                 filepath=None,
+                 section=None,
+                 entry=None,
+                 content=None,
+                 prev_ex=None,
+                 message=None):
         super(Ast2CircException, self).__init__()
         self.filepath = filepath
-        self.linenum = linenum
-        self.line = line
-        self.message = "Ast2Circ_Exception"
-        self.errcode = 10
+        self.section = section
+        self.entry = entry
+        self.content = content
+        self.prev_ex = prev_ex
+        self.message = message if message else str(type(self))
+        self.errcode = 210
 
     def errpacket(self):
         "Get the error packet from exception as dict"
         ex = {'message': self.message,
-              'filename': self.filepath,
-              'linenum': self.linenum,
-              'line': self.line,
-              'errcode': self.errcode
+              'section': self.section,
+              'entry': self.entry,
+              'content': self.content,
+              'errcode': self.errcode,
+              'prev_ex': self.prev_ex
               }
         return ex
 
+class Ast2CircTranslationException(Ast2CircException):
+    """Error on translation"""
 
+    def __init__(self,
+                 filepath=None,
+                 section=None,
+                 entry=None,
+                 content=None,
+                 prev_ex=None,
+                 message=None):
+        super(Ast2CircTranslationException, self).__init__(filepath=filepath,
+                                                           section=section,
+                                                           entry=entry,
+                                                           content=content,
+                                                           prev_ex=prev_ex,
+                                                           message=message)
+        self.errcode = 220
+
+class Ast2CircOpNotFoundException(Ast2CircException):
+    """Error on translation"""
+
+    def __init__(self,
+                 filepath=None,
+                 section=None,
+                 entry=None,
+                 content=None,
+                 prev_ex=None,
+                 message=None):
+        super(Ast2CircOpNotFoundException, self).__init__(filepath=filepath,
+                                                          section=section,
+                                                          entry=entry,
+                                                          content=content,
+                                                          prev_ex=prev_ex,
+                                                          message=message)
+        self.errcode = 221
 # if __name__ == '__main__':
 
 #     DESCRIPTION = """Implements qasm2 translation to python data structures.
