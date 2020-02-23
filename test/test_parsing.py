@@ -21,6 +21,7 @@ class TestParsing(unittest.TestCase):
         self.assertFalse(nq.qasmast.ASTType.UNKNOWN.value)
 
     def _test_circ_qasm_file_compare(self, regression_name):
+        """Factor to run translation and do file compare"""
         self.maxDiff = None  #pylint: disable-msg=invalid-name
         from_file_path = 'test/qasm_src/' + regression_name + '.qasm'
         validation_file_path = 'test/validation_output/' + regression_name + '.output.txt'
