@@ -1,7 +1,14 @@
 CHANGES.TXT
 
+v0.32
+
+	* Regression test suite started
+	* Handle Ast2CircException
+	* Raises Ast2CircOpNotFoundException if operation not appended to circuit
+	* Now makefile won't make test if variable not defined, message instead
+
 v0.31
-	
+
 	* -q flag with -c outputs OPENQASM 2.0 source after unrolling custom gates
 	* clean up example because nuqasm2 doesn't handle `measure q -> c`
 	* fixed bug in file output
