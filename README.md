@@ -2,7 +2,7 @@
 
 New OPENQASM 2.0 translator to work with [Qiskit](https://github.com/Qiskit).
 
-The current release is [v0.31](https://github.com/jwoehr/nuqasm2/releases/tag/v0.31). This README is on the `master` branch and may reflect changes that have occurred since the last release.
+The current release is [v0.32](https://github.com/jwoehr/nuqasm2/releases/tag/v0.32). This README is on the `master` branch and may reflect changes that have occurred since the last release.
 
 `nuqasm2` comes with NO WARRANTY and NO GUARANTEE of correctness nor of applicability of use. See LICENSE.
 
