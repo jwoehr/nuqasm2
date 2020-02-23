@@ -22,7 +22,7 @@ import datetime
 import sys
 import argparse
 from nuqasm2.qasmast import QasmTranslator, Qasm_Exception
-from nuqasm2.ast2circ import Ast2Circ
+from nuqasm2.ast2circ import Ast2Circ, Ast2CircException
 
 DESCRIPTION = """Implements qasm2 translation to python data structures.
 Working from _Open Quantum Assembly Language_
@@ -171,14 +171,16 @@ def do_it():
     if ARGS.filepaths:
         for filepath in ARGS.filepaths:
             verbosity("Translating " + filepath, 1)
-            qt = QasmTranslator.fromFile(filepath, name=ARGS.name,
-                                         no_unknown=ARGS.unknown,
-                                         save_pgm_source=ARGS.save_pgm_source or ARGS.save_source,
-                                         save_element_source=ARGS.save_element_source or ARGS.save_source,
-                                         save_gate_source=ARGS.save_gate_source or ARGS.save_source,
-                                         show_gate_decls=ARGS.show_gate_decls,
-                                         include_path=ARGS.include_path)
             try:
+                qt = QasmTranslator.fromFile(filepath,
+                                             name=ARGS.name,
+                                             no_unknown=ARGS.unknown,
+                                             save_pgm_source=ARGS.save_pgm_source or ARGS.save_source,
+                                             save_element_source=ARGS.save_element_source or ARGS.save_source,
+                                             save_gate_source=ARGS.save_gate_source or ARGS.save_source,
+                                             show_gate_decls=ARGS.show_gate_decls,
+                                             include_path=ARGS.include_path)
+
                 if ARGS.profile:
                     profile_translate(qt)
 
@@ -197,25 +199,28 @@ def do_it():
             if ARGS.ast:
                 PP.pprint(translated_ast)
 
-            if ARGS.circuit:
-                ast2circ = Ast2Circ(nuq2_ast=translated_ast)
-                circ = ast2circ.translate().circuit
-                if ARGS.draw:
-                    print(circ.draw(), file=FOUT)
-                if ARGS.qasm:
-                    print(circ.qasm(), file=FOUT)
+            try:
+                if ARGS.circuit:
+                    ast2circ = Ast2Circ(nuq2_ast=translated_ast)
+                    circ = ast2circ.translate().circuit
+                    if ARGS.draw:
+                        print(circ.draw(), file=FOUT)
+                    if ARGS.qasm:
+                        print(circ.qasm(), file=FOUT)
 
+            except Ast2CircException as ex:
+                handle_error(ex, filepath)
     else:
-
-        qt = QasmTranslator.fromFileHandle(sys.stdin, name=ARGS.name, filepath=str(sys.stdin),
-                                           no_unknown=ARGS.unknown,
-                                           datetime=datetime.datetime.now().isoformat(),
-                                           save_pgm_source=ARGS.save_pgm_source or ARGS.save_source,
-                                           save_element_source=ARGS.save_element_source or ARGS.save_source,
-                                           save_gate_source=ARGS.save_gate_source or ARGS.save_source,
-                                           show_gate_decls=ARGS.show_gate_decls,
-                                           include_path=ARGS.include_path)
         try:
+            qt = QasmTranslator.fromFileHandle(sys.stdin, name=ARGS.name,
+                                               filepath=str(sys.stdin),
+                                               no_unknown=ARGS.unknown,
+                                               datetime=datetime.datetime.now().isoformat(),
+                                               save_pgm_source=ARGS.save_pgm_source or ARGS.save_source,
+                                               save_element_source=ARGS.save_element_source or ARGS.save_source,
+                                               save_gate_source=ARGS.save_gate_source or ARGS.save_source,
+                                               show_gate_decls=ARGS.show_gate_decls,
+                                               include_path=ARGS.include_path)
             if ARGS.profile:
                 profile_translate(qt)
             elif ARGS.timeit:
@@ -224,6 +229,7 @@ def do_it():
                                     setup='gc.enable()', number=1, globals=globals()))
             else:
                 qt.translate()
+
         except Qasm_Exception as ex:
             handle_error(ex, str(sys.stdin))
 
@@ -232,14 +238,17 @@ def do_it():
         if ARGS.ast:
             PP.pprint(translated_ast)
 
-        if ARGS.circuit:
-            ast2circ = Ast2Circ(nuq2_ast=translated_ast)
-            circ = ast2circ.translate().circuit
-            if ARGS.draw:
-                print(circ.draw(), file=FOUT)
-            if ARGS.qasm:
-                print(circ.qasm(), file=FOUT)
+        try:
+            if ARGS.circuit:
+                ast2circ = Ast2Circ(nuq2_ast=translated_ast)
+                circ = ast2circ.translate().circuit
+                if ARGS.draw:
+                    print(circ.draw(), file=FOUT)
+                if ARGS.qasm:
+                    print(circ.qasm(), file=FOUT)
 
+        except Ast2CircException as ex:
+            handle_error(ex, str(sys.stdin))
 
 do_it()
 
