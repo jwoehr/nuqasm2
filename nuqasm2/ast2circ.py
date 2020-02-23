@@ -387,7 +387,7 @@ class Ast2Circ():
         if has_op:
             if param_list:
                 # DEBUG
-                # print("********** op {} param_list {} reg_list {}".format(op, param_list, reg_list))
+                # print("********** op {} param_list {} reg_list {}".format(op, param_list, reg_list))  # pylint: disable-msg=line-too-long
                 # END-DEBUG
                 getattr(self.circuit, op)(*param_list, *reg_list)
             else:
@@ -442,7 +442,7 @@ class Ast2Circ():
             the_reg_list = ast_binder.bind_regs(gate_op.get('op_reg_list'))
             the_param_list = ast_binder.bind_params(gate_op.get('op_param_list'))
             # DEBUG
-            # print("******the_op {} the_reg_list {} the_param_list {}".format(the_op, the_reg_list,the_param_list))
+            # print("******the_op {} the_reg_list {} the_param_list {}".format(the_op, the_reg_list,the_param_list))  # pylint: disable-msg=line-too-long
             # END-DEBUG
             if not self._op_easy(the_op,
                                  the_reg_list,
@@ -485,8 +485,12 @@ class Ast2Circ():
             try:
                 op_type = entry['type']
                 if op_type is ASTType.OP:
+                    starting_circuit_size = self.circuit.size()
                     self._op_append(entry, self.circuit.qregs, self.circuit.cregs,
                                     self.circuit.qubits, self.circuit.clbits)
+                    if self.circuit.size() == starting_circuit_size:
+                        raise Ast2CircOpNotFoundException(section='c_sect',
+                                                          entry=entry)
                 elif op_type is ASTType.BARRIER:
                     self._barrier_append(entry, self.circuit.qregs, self.circuit.qubits)
                 elif op_type is ASTType.MEASURE:
@@ -596,7 +600,7 @@ class Ast2Circ():
 class Ast2CircException(Exception):
     """Base class for Qasm exceptions"""
 
-    def __init__(self,
+    def __init__(self,  # pylint: disable-msg=too-many-arguments
                  filepath=None,
                  section=None,
                  entry=None,
@@ -626,7 +630,7 @@ class Ast2CircException(Exception):
 class Ast2CircTranslationException(Ast2CircException):
     """Error on translation"""
 
-    def __init__(self,
+    def __init__(self,  # pylint: disable-msg=too-many-arguments
                  filepath=None,
                  section=None,
                  entry=None,
@@ -644,7 +648,7 @@ class Ast2CircTranslationException(Ast2CircException):
 class Ast2CircOpNotFoundException(Ast2CircException):
     """Error on translation"""
 
-    def __init__(self,
+    def __init__(self,  # pylint: disable-msg=too-many-arguments
                  filepath=None,
                  section=None,
                  entry=None,
