@@ -689,7 +689,7 @@ class QasmTranslator():
         include_path is path for include file search
         """
         if not os.path.exists(filepath) or not os.access(filepath, os.R_OK):
-            raise Qasm_Cannot_Read_File_Exception(None, None, None, filepath)
+            raise Qasm_Cannot_Read_File_Exception(None, None, None, None, filepath)
         qasmsourcelines = []
         file_handle = open(filepath, 'r')
         for line in file_handle:
