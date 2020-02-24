@@ -15,11 +15,13 @@
 .PHONY:	install install-dev test
 
 install:
+	rm -rf build dist nuqasm2.egg-info
 	python3 ./setup.py install
-	
+
 install-dev:
+	rm -rf build dist nuqasm2.egg-info
 	pip3 install -e .
-	
+
 test:
 ifeq ($(NUQASM2_INCLUDE_PATH),)
 	@echo "To make test you need environment var NUQASM2_INCLUDE_PATH"
