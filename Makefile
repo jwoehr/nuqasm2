@@ -12,7 +12,7 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
-.PHONY:	install install-dev test
+.PHONY:	install install-dev uninstall test
 
 install:
 	rm -rf build dist nuqasm2.egg-info
@@ -21,6 +21,9 @@ install:
 install-dev:
 	rm -rf build dist nuqasm2.egg-info
 	pip3 install -e .
+
+uninstall:
+	pip3 uninstall nuqasm2
 
 test:
 ifeq ($(NUQASM2_INCLUDE_PATH),)

@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="nuqasm2",
-    version="0.3",
+    version="0.33",
     description="Compile OPENQASM2 to QuantumCircuit",
     url="https://github.com/jwoehr/nuqasm2",
     author="Jack Woehr",
