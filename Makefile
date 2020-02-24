@@ -17,7 +17,7 @@
 install:
 	python3 ./setup.py install
 	
-install-test:
+install-dev:
 	pip3 install -e .
 	
 test:
