@@ -1,5 +1,8 @@
 CHANGES.TXT
 
+v0.33
+	* Add nuqasm2.load_string() function for proposed Qiskit interface
+
 v0.32
 
 	* Regression test suite started
