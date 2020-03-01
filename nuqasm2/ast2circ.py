@@ -51,7 +51,8 @@ class ASTBinder(dict):
         gate_param_list = gate_definition.get('gate_param_list')
         if gate_param_list:
             for i in range(0, len(gate_param_list)):  # pylint: disable-msg=consider-using-enumerate
-                self.param_bind.update({gate_param_list[i]: param_list[i]})
+                # self.param_bind.update({gate_param_list[i]: param_list[i]})
+                self.param_bind.update({param_list[i]: gate_param_list[i]}) # bind backwards!
         gate_reg_list = gate_definition.get('gate_reg_list')
         if gate_reg_list:
             for i in range(0, len(gate_reg_list)):  # pylint: disable-msg=consider-using-enumerate
@@ -133,6 +134,9 @@ class ASTBinder(dict):
             b_list = []
             for param in param_list:
                 bound_param = self.param_binding(param)
+                # DEBUG
+                print("******bound_param {} param {} b_list {}".format(bound_param, param, b_list))  # pylint: disable-msg=line-too-long
+                # END-DEBUG
                 b_list.append(bound_param if bound_param else param)
         return b_list
 
@@ -440,9 +444,16 @@ class Ast2Circ():
         for gate_op in gate_definition.get('gate_ops_list'):
             the_op = gate_op.get('op')
             the_reg_list = ast_binder.bind_regs(gate_op.get('op_reg_list'))
-            the_param_list = ast_binder.bind_params(gate_op.get('op_param_list'))
+            the_param_list = None
+            gate_op_param_list = gate_op.get('op_param_list')
+            if gate_op_param_list:
+                the_param_list = []
+                param_symbolic_names = ast_binder.bind_params(param_list)
+                for i in range(0, len(gate_op_param_list)):
+                    the_param_list.append(gate_op_param_list[i].replace(param_symbolic_names[i],
+                                                                        param_list[i]))
             # DEBUG
-            # print("******the_op {} the_reg_list {} the_param_list {}".format(the_op, the_reg_list,the_param_list))  # pylint: disable-msg=line-too-long
+            print("******the_op {} the_reg_list {} the_param_list {}".format(the_op, the_reg_list, the_param_list))  # pylint: disable-msg=line-too-long
             # END-DEBUG
             if not self._op_easy(the_op,
                                  the_reg_list,
