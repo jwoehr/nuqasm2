@@ -454,9 +454,17 @@ class Ast2Circ():
             if gate_op_param_list:  # Have to subst in the full param for symbolic name.
                 the_param_list = []
                 param_symbolic_names = ast_binder.bind_params(param_list)
+                # DEBUG
+                # print('gate_op_param_list: {}'.format(str(gate_op_param_list)))
+                # print(param_symbolic_names)
+                # EMD=DEBUG
                 for i in range(0, len(gate_op_param_list)):
-                    the_param_list.append(gate_op_param_list[i].replace(param_symbolic_names[i],
-                                                                        param_list[i]))
+                    if param_symbolic_names:
+                        the_param_list.append(gate_op_param_list[i].replace(param_symbolic_names[i],
+                                                                            param_list[i]))
+                    else:
+                        if gate_op_param_list:
+                            the_param_list.append(gate_op_param_list[i])
             # DEBUG
             # print("******the_op {} the_reg_list {} the_param_list {}".format(the_op, the_reg_list, the_param_list))  # pylint: disable-msg=line-too-long
             # END-DEBUG

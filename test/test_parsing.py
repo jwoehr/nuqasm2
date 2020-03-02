@@ -55,3 +55,8 @@ class TestParsing(unittest.TestCase):
     def test_extra_spaces(self):
         """Test extra spaces in input lines e.g., before a semicolon."""
         self._test_circ_qasm_file_compare('extra_spaces')
+        
+    def test_gate_parameter_substitution(self):
+        """Test gate parameter substitution at runtime
+        by params to gate invocation."""
+        self._test_circ_qasm_file_compare('gate_parameter_substitution')
