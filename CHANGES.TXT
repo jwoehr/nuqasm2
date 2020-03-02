@@ -2,6 +2,8 @@ CHANGES.TXT
 
 v0.33
 	* Add nuqasm2.load_string() function for proposed Qiskit interface
+	* Fix issue #1 "Ops which cannot be unrolled are silently ignored"
+	* Fix issue #2 "Parameters of custom gates not recognized"
 
 v0.32
 
