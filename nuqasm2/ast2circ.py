@@ -579,8 +579,8 @@ class Ast2Circ():
 
         Parameters
         ----------
-        qasmsourcelines : list of string
-            List of lines of OPENQASM2.0 to translate.
+        qasmsourcelines : string or list of string
+            Lines of OPENQASM2.0 to translate.
             Probably should be strip()'ed first.
         name: string, optional
             Name of circuit.
@@ -607,6 +607,8 @@ class Ast2Circ():
             DESCRIPTION.
 
         """
+        if type(qasmsourcelines) is str: # turn into list of string
+            qasmsourcelines = qasmsourcelines.split(os.linesep)
         qt = QasmTranslator(qasmsourcelines,  # pylint: disable-msg=invalid-name
                             name=name,
                             filepath=filepath,

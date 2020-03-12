@@ -23,7 +23,6 @@ def load_string(qasm_string, include_path=None):
        qiskit.QuantumCircuit representing the qasm string passed in to func.
 
     """
-
     circ = Ast2Circ.from_qasm_str(qasm_string,
                                   include_path=include_path,
                                   no_unknown=True)
