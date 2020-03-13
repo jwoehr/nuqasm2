@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Feb 27 13:41:36 2020
-
+Implement load interface proposed for Qiskit OpenQASM loading
 @author: jax
 """
 from typing import List
