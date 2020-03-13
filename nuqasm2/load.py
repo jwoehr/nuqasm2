@@ -55,7 +55,7 @@ def load_from_file(path: str, include_path: str = None) -> QuantumCircuit:
     return circ
 
 def load(filename: str = None,
-         data: str = None,
+         data: str or List[str] = None,
          include_path: str = None) -> QuantumCircuit:
     """
 
