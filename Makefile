@@ -37,3 +37,9 @@ else
 	@echo "NUQASM2_INCLUDE_PATH=${NUQASM2_INCLUDE_PATH}"
 	python3 -m unittest discover -s test -v
 endif
+
+clean:
+	rm -rf build/
+	rm -rf dist/
+	rm -rf nuqasm2.egg-info/
+	rm -rf nuqasm2/__pycache__/
